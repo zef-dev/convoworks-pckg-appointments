@@ -4,6 +4,10 @@ namespace Convo\Pckg\Appointments;
 
 use Convo\Core\DataItemNotFoundException;
 
+/**
+ * @author Tole
+ * This interface describes interaction between Convoworks workflow components and underlying appointments system.
+ */
 interface IAppointmentsContext
 {
     const LOAD_MODE_CURRENT =   'current';
@@ -58,7 +62,7 @@ interface IAppointmentsContext
      * ```
 	 * @param string $email
 	 * @param string $appointmentId
-	 * @return array
+	 * @return array For the details of appointment structure check {@see IAppointmentsContext::getAppointment()}
 	 * @throws DataItemNotFoundException
 	 */
 	public function getAppointment( $email, $appointmentId);
