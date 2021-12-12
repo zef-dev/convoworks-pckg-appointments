@@ -16,30 +16,30 @@ interface IAppointmentsContext
     
 	/**
 	 * Checks if given slot is available.
-	 * @param int $timestamp
+	 * @param \DateTime $time
 	 * @return bool
 	 */
-	public function isSlotAvailable( $timestamp);
+    public function isSlotAvailable( $time);
 
 	/**
 	 * Creates new appointment and returns it's id.
 	 * @param string $email
-	 * @param int $timestamp
+	 * @param \DateTime $time
 	 * @param array $payload
 	 * @return string created appointment id
 	 * @throws SlotNotAvailableException
 	 */
-	public function createAppointment( $email, $timestamp, $payload=[]);
+    public function createAppointment( $email, $time, $payload=[]);
 
 	/**
 	 * @param string $email
 	 * @param string $appointmentId
-	 * @param int $timestamp
+	 * @param \DateTime $time
 	 * @param array $payload
 	 * @throws SlotNotAvailableException
 	 * @throws DataItemNotFoundException
 	 */
-	public function updateAppointment( $email, $appointmentId, $timestamp, $payload=[]);
+	public function updateAppointment( $email, $appointmentId, $time, $payload=[]);
 	
 	/**
 	 * @param string $email
@@ -79,9 +79,9 @@ interface IAppointmentsContext
 	
 	/**
 	 * Iterator returns timestamp of the free slots. 
-	 * @param int $startTimestamp
+	 * @param \DateTime $startTime
 	 * @return \Iterator
 	 */
-	public function getFreeSlotsIterator( $startTimestamp=null);
+	public function getFreeSlotsIterator( $startTime=null);
 	
 }
