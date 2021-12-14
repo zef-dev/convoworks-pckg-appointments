@@ -102,16 +102,18 @@ class CheckAppointmentElement extends AbstractWorkflowContainerComponent impleme
 	public function read( IConvoRequest $request, IConvoResponse $response)
 	{
 		$context      =   $this->_getSimpleSchedulingContext();
-		
 		$date         =   $this->evaluateString( $this->_appointmentDate);
 		$time         =   $this->evaluateString( $this->_appointmentTime);
-		
 		$timezone     =   $this->_alexaSettingsApi->getSetting( $request, AlexaSettingsApi::ALEXA_SYSTEM_TIMEZONE);
+		
+		$this->_logger->info( 'Checking time ['.$date.']['.$time.']['.$timezone.']');
+		
 		$slot_time    =   new \DateTime( $date.' '.$time, new \DateTimeZone( $timezone));
 		
 		if ( $date && $time) 
 		{
 		    if ( $context->isSlotAvailable( $slot_time)) {
+		        $this->_logger->info( 'Requested slot is available');
 		        foreach ( $this->_availableFlow as $element) {
 		            $element->read( $request, $response);
 		        }
@@ -133,6 +135,8 @@ class CheckAppointmentElement extends AbstractWorkflowContainerComponent impleme
 		$params       =   $this->getService()->getComponentParams( $scope_type, $this);
 		$params->setServiceParam( $this->_resultVar, [ 'suggestions' => $queue->values()]);
 
+		$this->_logger->info( 'Got ['.$queue->getCount().'] suggestions');
+		
 		if ( $queue->getCount() === 0) {
 		    $selected_flow   =   $this->_noSuggestionsFlow;
 		} else if ( $queue->getCount() === 1) {
@@ -148,6 +152,7 @@ class CheckAppointmentElement extends AbstractWorkflowContainerComponent impleme
 	
 	
 	/**
+	 * If the target flow is empty, it will return another one. That way we are not orceing operators to fill in all three flows if their service workflow is a simple one.
 	 * @param \Convo\Core\Workflow\IConversationElement[] $flow
 	 * @return \Convo\Core\Workflow\IConversationElement[]
 	 */
@@ -156,8 +161,10 @@ class CheckAppointmentElement extends AbstractWorkflowContainerComponent impleme
 	        return $this->_fallbackSuggestionFlows( $this->_suggestionsFlow);
 	    }
 	    if ( $flow === $this->_suggestionsFlow && empty( $flow)) {
+	        $this->_logger->debug( 'Returning no suggestions flow');
 	        return $this->_noSuggestionsFlow;
 	    }
+	    $this->_logger->debug( 'Returning original flow');
 	    return $flow;
 	}
 
