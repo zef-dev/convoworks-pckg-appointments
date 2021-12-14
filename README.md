@@ -3,6 +3,10 @@
 
 This package contains conversational workflow elements for managing appointment scheduling scenarios in the [Convoworks framework](https://github.com/zef-dev/convoworks-core). This is not full inmplementation. It contains elemenst that you can use in the conversation workflow, but the underlying datsource is just described via `IAppointmentsContext` interface.
 
+When we are talking about workflow components (elements), we have to primarily consider voice designer needs. What kind of properties, sub-flows and general behaviour it should have to be optimal for usage.
+
+Context is on the other hand focused on the technical and developer needs. Here we take care of user identification, data formats, time zones. The interface is more technical. Data adaptation to human and conversation friendly manner is on the workflow elements.
+
 
 ## Appointments context interface
 
@@ -10,8 +14,20 @@ This package contains conversational workflow elements for managing appointment 
 
 Most of the methods are requiring user identification and we use `email` for it. Email works just well with WordPress, while it enables us to have passthrough implementations which are not requireing the actual user to be created in it.
 
- 
+To be used in the Convoworks, it also has to implement `IBasicServiceComponent` and `IServiceContext`. You might consider to start your implementation like this:
+```php
 
+class MyCustomAppointmentsContext extends AbstractBasicComponent implements IAppointmentsContext, IServiceContext
+{
+
+}
+```
+
+If your target system has several appointment types, they should be configured on this, Context type component. 
+
+
+Implementing and having your own `IAppointmentsContext` component is a basic requirement that you have to have to use the COnvoworoks appointments system.
+You might also consider adding additional elements which will expose different appointment types or actual working hours periods.
 
 ## Workflow elements
 
@@ -19,27 +35,46 @@ All workflow elements have `context_id` property which hooks them to the context
 
 ### `CheckAppointmentElement`
 
-This element has two sub flows, `OK` when the requested time is available and `NOK` when it is not. When the requested slot is not available, elment exposes suggestions, array of time slots that could be offered to the end user.  
+This element has several sub flows, depending is the requested time available or not. When the requested slot is not available, elment exposes suggestions, array of time slots that could be offered to the end user. 
+
+
+Flows:
+
+* `available_flow`
+* `no_suggestions_flow`- default not available flow.
+* `suggestions_flow` - if it is empty, `no_suggestions_flow` will be executed
+* `single_suggestion_flow` - if it is empty, `suggestions_flow` will be executed
+
+Suggestion rules (TODO):
+* `first_next`
+* `first_same_time`
+* `first_same_day_and_time`
+* `first_next_week`
 
 
 
 ### `CreateAppointmentsElement`
+
+This element will try to create an appointment for given time slot. It can happen (rarely) that the slot is not free anymore and you can use `not_available` flow to handle it. If general, unexpected errror occurs, the system handler will handle it.
+
 Flows:
-* OK
+* `ok`
+* `not_available`
 
 ### `UpdateAppointmentsElement`
 
-Flows:
-* OK
-* NOT_FOUND
-* NOT_AVAILABLE
+Element which updates exiting appointment time. 
 
+Flows:
+* `ok`
+* `not_available`
+* `not_found` - if it is empty, `not_available` will be executed
 
 ### `CancelAppointmentsElement`
 
 Flows:
-* OK
-* NOT_FOUND
+* `ok`
+* `not_found`
 
 ### `LoadAppointmentsElement`
 
@@ -48,18 +83,32 @@ Flows:
 
 
 Flows:
-* OK
-* SINGLE
+* `empty`
+* `multiple`
+* `single` - if it is empty, `multiple` will be executed
 
 
 
 ### `GetAppointmentElement`
 
 Returns single appointment data.
+Appointment representation.
+
+```json
+{
+      "appointment_id" : "123",
+      "timestamp" : 123345678,
+      "payload" : {
+          "some_other_fields" : "That is used by implementing appointment context & WP plugin",
+          "more_fields" : "Some other data"
+      }
+}
+```
+
 
 Flows:
-* OK
-* NOK
+* `ok`
+* `not_found`
 
 
 
