@@ -1,5 +1,6 @@
-<?php declare(strict_types=1);
+<?php 
 
+declare(strict_types=1);
 namespace Convo\Pckg\Appointments;
 
 use Convo\Core\Workflow\IConvoRequest;
@@ -7,6 +8,7 @@ use Convo\Core\Workflow\IConvoResponse;
 use Convo\Core\Workflow\IConversationElement;
 use Convo\Core\Workflow\AbstractWorkflowContainerComponent;
 use Convo\Core\Adapters\Alexa\Api\AlexaSettingsApi;
+use Convo\Core\Params\IServiceParamsScope;
 
 
 class CheckAppointmentElement extends AbstractWorkflowContainerComponent implements IConversationElement
@@ -99,16 +101,16 @@ class CheckAppointmentElement extends AbstractWorkflowContainerComponent impleme
 	 */
 	public function read( IConvoRequest $request, IConvoResponse $response)
 	{
-		$context  =   $this->_getSimpleSchedulingContext();
+		$context      =   $this->_getSimpleSchedulingContext();
 		
-		$date     =   $this->evaluateString( $this->_appointmentDate);
-		$time     =   $this->evaluateString( $this->_appointmentTime);
+		$date         =   $this->evaluateString( $this->_appointmentDate);
+		$time         =   $this->evaluateString( $this->_appointmentTime);
+		
+		$timezone     =   $this->_alexaSettingsApi->getSetting( $request, AlexaSettingsApi::ALEXA_SYSTEM_TIMEZONE);
+		$slot_time    =   new \DateTime( $date.' '.$time, new \DateTimeZone( $timezone));
 		
 		if ( $date && $time) 
 		{
-		    $timezone     =   $this->_alexaSettingsApi->getSetting( $request, AlexaSettingsApi::ALEXA_SYSTEM_TIMEZONE);
-		    $slot_time    =   new \DateTime( $date.' '.$time, new \DateTimeZone( $timezone));
-		    
 		    if ( $context->isSlotAvailable( $slot_time)) {
 		        foreach ( $this->_availableFlow as $element) {
 		            $element->read( $request, $response);
@@ -116,12 +118,47 @@ class CheckAppointmentElement extends AbstractWorkflowContainerComponent impleme
 		        return ;
 		    }
 		}
-	
-
 		
-		foreach ( $this->_noSuggestionsFlow as $element) {
+		$MAX      =   3;
+		$queue    =   new FreeSlotQueue( $MAX);
+		foreach ( $context->getFreeSlotsIterator( $slot_time) as $time) 
+		{
+		    $queue->add( $time);
+		    if ( $queue->isFull()) {
+		        break;
+		    }
+		}
+        
+		$scope_type	  =   IServiceParamsScope::SCOPE_TYPE_REQUEST;
+		$params       =   $this->getService()->getComponentParams( $scope_type, $this);
+		$params->setServiceParam( $this->_resultVar, [ 'suggestions' => $queue->values()]);
+
+		if ( $queue->getCount() === 0) {
+		    $selected_flow   =   $this->_noSuggestionsFlow;
+		} else if ( $queue->getCount() === 1) {
+		    $selected_flow   =   $this->_fallbackSuggestionFlows( $this->_singleSuggestionFlow);
+		} else {
+		    $selected_flow   =   $this->_fallbackSuggestionFlows( $this->_suggestionsFlow);
+		}
+		
+		foreach ( $selected_flow as $element) {
 		    $element->read( $request, $response);
 		}
+	}
+	
+	
+	/**
+	 * @param \Convo\Core\Workflow\IConversationElement[] $flow
+	 * @return \Convo\Core\Workflow\IConversationElement[]
+	 */
+	private function _fallbackSuggestionFlows( $flow) {
+	    if ( $flow === $this->_singleSuggestionFlow && empty( $flow)) {
+	        return $this->_fallbackSuggestionFlows( $this->_suggestionsFlow);
+	    }
+	    if ( $flow === $this->_suggestionsFlow && empty( $flow)) {
+	        return $this->_noSuggestionsFlow;
+	    }
+	    return $flow;
 	}
 
 	/**

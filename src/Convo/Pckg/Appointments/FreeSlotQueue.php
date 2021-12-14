@@ -34,6 +34,11 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate
         $this->_items[] = $item;
     }
     
+    public function values()
+    {
+        return $this->_items;
+    }
+    
     public function isFull()
     {
         return $this->count() >= $this->_maxCount;
