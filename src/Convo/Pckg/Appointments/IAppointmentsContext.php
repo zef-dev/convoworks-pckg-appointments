@@ -1,4 +1,5 @@
-<?php
+<?php declare(strict_types=1);
+
 namespace Convo\Pckg\Appointments;
 
 
@@ -10,9 +11,11 @@ use Convo\Core\DataItemNotFoundException;
  */
 interface IAppointmentsContext
 {
-    const LOAD_MODE_CURRENT =   'current';
-    const LOAD_MODE_PAST    =   'past';
-    const LOAD_MODE_ALL     =   'all';
+    const LOAD_MODE_CURRENT             =   'current';
+    const LOAD_MODE_PAST                =   'past';
+    const LOAD_MODE_ALL                 =   'all';
+    
+    const DEFAULT_APPOINTMENTS_COUNT    =   10;
     
 	/**
 	 * Checks if given slot is available.
@@ -49,14 +52,16 @@ interface IAppointmentsContext
 	public function cancelAppointment( $email, $appointmentId);
 	
 	/**
-	 * Returns single appointment, otherwise throws not found exception.
+	 * Returns single appointment, otherwise throws a not found exception.
 	 * Returned appointment structure:
      * ```json
      * {
      *      "appointment_id" : "123",
      *      "timestamp" : 123345678,
+     *      "timezone" : "America/New_York",
      *      "payload" : {
-     *          "some_other_fields" : "That is used by implementing appointment context & WP plugin"
+     *          "some_other_fields" : "That is used by implementing appointment context & WP plugin",
+     *          "more_fields" : "Some other data"
      *      }
      * }
      * ```
@@ -72,13 +77,24 @@ interface IAppointmentsContext
 	 * 
 	 * @param string $email
 	 * @param string $mode
+	 * @param int $count
 	 * @return array of appointments. For the details of appointment structure check {@see IAppointmentsContext::getAppointment()}
 	 * @throws DataItemNotFoundException
 	 */
-	public function loadAppointments( $email, $mode=self::LOAD_MODE_CURRENT);
+	public function loadAppointments( $email, $mode=self::LOAD_MODE_CURRENT, $count=self::DEFAULT_APPOINTMENTS_COUNT);
 	
 	/**
-	 * Iterator returns timestamp of the free slots. 
+	 * TBD.
+	 * Iterator returns timestamp of the free slots.
+     * ```json
+     * [{
+     *      "timestamp" : 123345678,
+     *      "timezone" : "America/New_York"
+     * }, {
+     *      "timestamp" : 123347678,
+     *      "timezone" : "America/New_York"
+     * }]
+     * ```
 	 * @param \DateTime $startTime
 	 * @return \Iterator
 	 */
