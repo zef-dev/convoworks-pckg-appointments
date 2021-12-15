@@ -37,6 +37,13 @@ All workflow elements have the `context_id` property which hooks them to the con
 
 This element has several sub flows, depending on the requested time available or not. When the requested slot is not available, element exposes suggestions, an array of time slots that could be offered to the end user. 
 
+Parameters:
+
+* `context_id` - Id of the referenced `IAppointmentsContext`
+* `date` - Optional, requested date in the `Y-m-d` format (the MySQL DATE format)
+* `time` - Optional, requested time in the `H:i:s` format (the MySQL TIME format)
+* `email` - Optional, user identification. If present, it might serve for better suggestions
+* `return_var` - Default `status`, name of the variable that contains additional information (`suggestions` array)
 
 Flows:
 
@@ -44,6 +51,7 @@ Flows:
 * `no_suggestions_flow`- default not available flow.
 * `suggestions_flow` - if it is empty, `no_suggestions_flow` will be executed
 * `single_suggestion_flow` - if it is empty, `suggestions_flow` will be executed
+
 
 Suggestion rules (TODO):
 * `first_next`
@@ -57,6 +65,15 @@ Suggestion rules (TODO):
 
 This element will try to create an appointment for a given time slot. It can happen (rarely) that the slot is not free anymore and you can use `not_available` flow to handle it. If a general, unexpected error occurs, the system handler will handle it.
 
+Parameters:
+
+* `context_id` - Id of the referenced `IAppointmentsContext`
+* `email` - User identification. 
+* `date` - Requested date in the `Y-m-d` format (the MySQL DATE format)
+* `time` - Requested time in the `H:i:s` format (the MySQL TIME format)
+* `payload` - Various other properties that might be used with implementing plugin.
+* `return_var` - Default `status`, name of the variable that contains additional information (`appointment_id`)
+
 Flows:
 * `ok`
 * `not_available`
@@ -65,6 +82,16 @@ Flows:
 
 Element which updates existing appointment time. 
 
+Parameters:
+
+* `context_id` - Id of the referenced `IAppointmentsContext`
+* `appointment_id` - Id of the existing appointment
+* `email` - User identification. 
+* `date` - Requested date in the `Y-m-d` format (the MySQL DATE format)
+* `time` - Requested time in the `H:i:s` format (the MySQL TIME format)
+* `payload` - Various other properties that might be used with implementing plugin.
+* `return_var` - Default `status`, name of the variable that contains additional information (`appointment_id`)
+
 Flows:
 * `ok`
 * `not_available`
@@ -72,15 +99,23 @@ Flows:
 
 ### `CancelAppointmentsElement`
 
+Parameters:
+
+* `context_id` - Id of the referenced `IAppointmentsContext`
+* `appointment_id` - Id of the existing appointment
+* `email` - User identification. 
+
 Flows:
 * `ok`
 * `not_found`
 
 ### `LoadAppointmentsElement`
 
-* `mode` : `current` default, `past` or `all`
-* return array of existing appointments associated to the given user
+Parameters:
 
+* `context_id` - Id of the referenced `IAppointmentsContext`
+* `mode` : `current` default, `past` or `all`
+* `return_var` - Default `status`, name of the variable that contains additional information (`appointments`)
 
 Flows:
 * `empty`
@@ -105,6 +140,12 @@ Appointment representation.
 }
 ```
 
+Parameters:
+
+* `context_id` - Id of the referenced `IAppointmentsContext`
+* `appointment_id` - Id of the existing appointment
+* `email` - User identification. 
+* `return_var` - Default `status`, name of the variable that contains additional information (`appointment`)
 
 Flows:
 * `ok`
