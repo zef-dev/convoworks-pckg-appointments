@@ -11,7 +11,7 @@ use Convo\Core\Adapters\Alexa\Api\AlexaSettingsApi;
 use Convo\Core\Params\IServiceParamsScope;
 
 
-class CheckAppointmentElement extends AbstractWorkflowContainerComponent implements IConversationElement
+class CheckAppointmentTimeElement extends AbstractWorkflowContainerComponent implements IConversationElement
 {
     
     /**

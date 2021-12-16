@@ -33,7 +33,7 @@ You might also consider adding additional elements which will expose different a
 
 All workflow elements have the `context_id` property which hooks them to the context which implements the `IAppointmentsContext` interface. That way elements are concentrated on the conversation workflow needs, while the real business logic is delegated to the concrete implementation.
 
-### `CheckAppointmentElement`
+### `CheckAppointmentTimeElement`
 
 This element has several sub flows, depending on the requested time available or not. When the requested slot is not available, element exposes suggestions, an array of time slots that could be offered to the end user. 
 
@@ -61,7 +61,7 @@ Suggestion rules (TODO):
 
 
 
-### `CreateAppointmentsElement`
+### `CreateAppointmentElement`
 
 This element will try to create an appointment for a given time slot. It can happen (rarely) that the slot is not free anymore and you can use `not_available` flow to handle it. If a general, unexpected error occurs, the system handler will handle it.
 
@@ -78,7 +78,7 @@ Flows:
 * `ok`
 * `not_available`
 
-### `UpdateAppointmentsElement`
+### `UpdateAppointmentElement`
 
 Element which updates existing appointment time. 
 
@@ -97,7 +97,7 @@ Flows:
 * `not_available`
 * `not_found` - if it is empty, `not_available` will be executed
 
-### `CancelAppointmentsElement`
+### `CancelAppointmentElement`
 
 Parameters:
 
