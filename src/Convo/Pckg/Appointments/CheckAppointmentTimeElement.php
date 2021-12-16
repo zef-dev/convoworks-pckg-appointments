@@ -14,6 +14,7 @@ use Convo\Core\Params\IServiceParamsScope;
 class CheckAppointmentTimeElement extends AbstractWorkflowContainerComponent implements IConversationElement
 {
     
+    // PROPERTIES
     /**
      * @var string
      */
@@ -34,6 +35,7 @@ class CheckAppointmentTimeElement extends AbstractWorkflowContainerComponent imp
      */
     private $_resultVar;
     
+    // FLOWS
     /**
      * @var IConversationElement[]
      */
@@ -54,6 +56,8 @@ class CheckAppointmentTimeElement extends AbstractWorkflowContainerComponent imp
      */
     private $_singleSuggestionFlow = array();
     
+    
+    // INFRASTRUCTURE
     /**
      * @var AlexaSettingsApi
      */
@@ -101,7 +105,7 @@ class CheckAppointmentTimeElement extends AbstractWorkflowContainerComponent imp
      */
     public function read( IConvoRequest $request, IConvoResponse $response)
     {
-        $context      =   $this->_getSimpleSchedulingContext();
+        $context      =   $this->_getAppointmentsContext();
         $date         =   $this->evaluateString( $this->_appointmentDate);
         $time         =   $this->evaluateString( $this->_appointmentTime);
         $timezone     =   $this->_alexaSettingsApi->getSetting( $request, AlexaSettingsApi::ALEXA_SYSTEM_TIMEZONE);
@@ -171,7 +175,7 @@ class CheckAppointmentTimeElement extends AbstractWorkflowContainerComponent imp
     /**
      * @return IAppointmentsContext
      */
-    private function _getSimpleSchedulingContext()
+    private function _getAppointmentsContext()
     {
         return $this->getService()->findContext(
             $this->evaluateString( $this->_contextId),
