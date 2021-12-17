@@ -122,7 +122,7 @@ class CheckAppointmentTimeElement extends AbstractWorkflowContainerComponent imp
         }
         
         $MAX      =   3;
-        $queue    =   new FreeSlotQueue( $MAX);
+        $queue    =   new FreeSlotQueue( $MAX, []);
         foreach ( $context->getFreeSlotsIterator( $slot_time) as $time)
         {
             $queue->add( $time);
@@ -134,12 +134,13 @@ class CheckAppointmentTimeElement extends AbstractWorkflowContainerComponent imp
         $scope_type   =   IServiceParamsScope::SCOPE_TYPE_REQUEST;
         $params       =   $this->getService()->getComponentParams( $scope_type, $this);
         $params->setServiceParam( $this->_resultVar, [ 'suggestions' => $queue->values()]);
+
+		$queueCount = $queue->count();
+        $this->_logger->info( 'Got ['.$queueCount.'] suggestions');
         
-        $this->_logger->info( 'Got ['.$queue->getCount().'] suggestions');
-        
-        if ( $queue->getCount() === 0) {
+        if ( $queueCount === 0) {
             $selected_flow   =   $this->_noSuggestionsFlow;
-        } else if ( $queue->getCount() === 1) {
+        } else if ( $queueCount === 1) {
             $selected_flow   =   $this->_fallbackSuggestionFlows( $this->_singleSuggestionFlow);
         } else {
             $selected_flow   =   $this->_fallbackSuggestionFlows( $this->_suggestionsFlow);
