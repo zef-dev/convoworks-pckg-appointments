@@ -1,6 +1,6 @@
 <?php
 
-namespace Convo\Pckg\Appointments\Elements;
+namespace Convo\Pckg\Appointments;
 
 use Convo\Core\Adapters\Alexa\Api\AlexaSettingsApi;
 use Convo\Core\DataItemNotFoundException;
