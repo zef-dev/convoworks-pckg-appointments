@@ -103,7 +103,14 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'name' => 'Single Suggestion',
 						'description' => 'Flow to be executed if the requested appointment date is available.',
 						'valueType' => 'class'
-					]
+					],
+					'_workflow' => 'read',
+					'_preview_angular' => array(
+						'type' => 'html',
+						'template' => '<div class="code">' .
+							'Check time slot <b>{{ component.properties.appointment_date }} {{ component.properties.appointment_time }}</b> for appointment type <b>{{ component.properties.context_id }}</b>' .
+							'</div>'
+					)
 				)
 			),
 			new \Convo\Core\Factory\ComponentDefinition(
@@ -167,7 +174,14 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'name' => 'Not Found',
 						'description' => 'Flow to be executed if the appointment under ID was not found.',
 						'valueType' => 'class'
-					]
+					],
+					'_workflow' => 'read',
+					'_preview_angular' => array(
+						'type' => 'html',
+						'template' => '<div class="code">' .
+							'Load <b>{{ component.properties.context_id }}</b> <b>{{ component.properties.appointment_id }}</b> for <b>{{ component.properties.email }}</b>' .
+							'</div>'
+					)
 				)
 			),
 			new \Convo\Core\Factory\ComponentDefinition(
@@ -257,7 +271,14 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'name' => 'Empty',
 						'description' => 'Flow to be executed if no appointment could be found.',
 						'valueType' => 'class'
-					]
+					],
+					'_workflow' => 'read',
+					'_preview_angular' => array(
+						'type' => 'html',
+						'template' => '<div class="code">' .
+							'Load <b>{{ component.properties.mode }}</b> <b>{{ component.properties.context_id }}</b> for <b>{{ component.properties.email }}</b>' .
+							'</div>'
+					)
 				)
 			),
 			new \Convo\Core\Factory\ComponentDefinition(
@@ -339,7 +360,14 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'name' => 'Not Available',
 						'description' => 'Flow to be executed if the appointment could not be created.',
 						'valueType' => 'class'
-					]
+					],
+					'_workflow' => 'read',
+					'_preview_angular' => array(
+						'type' => 'html',
+						'template' => '<div class="code">' .
+							'Create <b>{{ component.properties.context_id }}</b> for <b>{{ component.properties.email }}</b>' .
+							'</div>'
+					)
 				)
 			),
 			new \Convo\Core\Factory\ComponentDefinition(
@@ -441,7 +469,14 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'name' => 'Not available',
 						'description' => 'Flow to be executed if the appointment date is not available for the specified time slot.',
 						'valueType' => 'class'
-					]
+					],
+					'_workflow' => 'read',
+					'_preview_angular' => array(
+						'type' => 'html',
+						'template' => '<div class="code">' .
+							'Update <b>{{ component.properties.context_id }}</b> <b>{{ component.properties.appointment_id }}</b> for <b>{{ component.properties.email }}</b> ' .
+							'</div>'
+					)
 				)
 			),
 			new \Convo\Core\Factory\ComponentDefinition(
@@ -497,7 +532,14 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'name' => 'Not Found',
 						'description' => 'Flow to be executed if the appointment under the ID could not be found.',
 						'valueType' => 'class'
-					]
+					],
+					'_workflow' => 'read',
+					'_preview_angular' => array(
+						'type' => 'html',
+						'template' => '<div class="code">' .
+							'Cancel <b>{{ component.properties.context_id }}</b> <b>{{ component.properties.appointment_id }}</b> for <b>{{ component.properties.email }}</b>' .
+							'</div>'
+					)
 				)
 			)
 		];
