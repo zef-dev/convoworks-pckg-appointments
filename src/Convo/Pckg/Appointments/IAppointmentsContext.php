@@ -8,6 +8,10 @@ use Convo\Core\DataItemNotFoundException;
 /**
  * @author Tole
  * This interface describes interaction between Convoworks workflow components and underlying appointments system.
+ * Some methods should throw an exception if required condition is meet.
+ *  DataItemNotFoundException - when the appointment with requested appointment_id is not found.
+ *  BadRequestException - When required data in payload is not populated.
+ *  SlotNotAvailableException - When the requested time is not available.
  */
 interface IAppointmentsContext
 {
@@ -30,21 +34,25 @@ interface IAppointmentsContext
 	 * @param \DateTime $time
 	 * @param array $payload
 	 * @return string created appointment id
+	 * @throws BadRequestException
 	 * @throws SlotNotAvailableException
 	 */
     public function createAppointment( $email, $time, $payload=[]);
 
 	/**
+	 * Updates existing appointment.
 	 * @param string $email
 	 * @param string $appointmentId
 	 * @param \DateTime $time
 	 * @param array $payload
-	 * @throws SlotNotAvailableException
 	 * @throws DataItemNotFoundException
+	 * @throws BadRequestException
+	 * @throws SlotNotAvailableException
 	 */
 	public function updateAppointment( $email, $appointmentId, $time, $payload=[]);
 	
 	/**
+	 * Cancels existing appointment
 	 * @param string $email
 	 * @param string $appointmentId
 	 * @throws DataItemNotFoundException
@@ -79,7 +87,6 @@ interface IAppointmentsContext
 	 * @param string $mode
 	 * @param int $count
 	 * @return array of appointments. For the details of appointment structure check {@see IAppointmentsContext::getAppointment()}
-	 * @throws DataItemNotFoundException
 	 */
 	public function loadAppointments( $email, $mode=self::LOAD_MODE_CURRENT, $count=self::DEFAULT_APPOINTMENTS_COUNT);
 	
