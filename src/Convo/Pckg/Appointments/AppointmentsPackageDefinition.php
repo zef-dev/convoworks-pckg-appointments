@@ -259,7 +259,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Status variable of the loaded appointment.',
 						'valueType' => 'string'
 					),
-					'single' => [
+					'empty' => [
 						'editor_type' => 'service_components',
 						'editor_properties' => [
 							'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
@@ -267,8 +267,8 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						],
 						'defaultValue' => [],
 						'defaultOpen' => false,
-						'name' => 'Single',
-						'description' => 'Flow to be executed if one appointment could be found.',
+						'name' => 'Empty',
+						'description' => 'Flow to be executed if no appointment could be found.',
 						'valueType' => 'class'
 					],
 					'multiple' => [
@@ -283,7 +283,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Flow to be executed if more than one appointments could be found.',
 						'valueType' => 'class'
 					],
-					'empty' => [
+					'single' => [
 						'editor_type' => 'service_components',
 						'editor_properties' => [
 							'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
@@ -291,8 +291,8 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						],
 						'defaultValue' => [],
 						'defaultOpen' => false,
-						'name' => 'Empty',
-						'description' => 'Flow to be executed if no appointment could be found.',
+						'name' => 'Single',
+						'description' => 'Flow to be executed if one appointment could be found.',
 						'valueType' => 'class'
 					],
 					'_workflow' => 'read',
@@ -469,18 +469,6 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Flow to be executed if the appointment could be updated.',
 						'valueType' => 'class'
 					],
-					'not_found' => [
-						'editor_type' => 'service_components',
-						'editor_properties' => [
-							'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
-							'multiple' => true
-						],
-						'defaultValue' => [],
-						'defaultOpen' => false,
-						'name' => 'Not Found',
-						'description' => 'Flow to be executed if the appointment under the ID could not be found.',
-						'valueType' => 'class'
-					],
 					'not_available' => [
 						'editor_type' => 'service_components',
 						'editor_properties' => [
@@ -491,6 +479,18 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'defaultOpen' => false,
 						'name' => 'Not available',
 						'description' => 'Flow to be executed if the appointment date is not available for the specified time slot.',
+						'valueType' => 'class'
+					],
+					'not_found' => [
+						'editor_type' => 'service_components',
+						'editor_properties' => [
+							'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
+							'multiple' => true
+						],
+						'defaultValue' => [],
+						'defaultOpen' => false,
+						'name' => 'Not Found',
+						'description' => 'Flow to be executed if the appointment under the ID could not be found.',
 						'valueType' => 'class'
 					],
 					'_workflow' => 'read',
