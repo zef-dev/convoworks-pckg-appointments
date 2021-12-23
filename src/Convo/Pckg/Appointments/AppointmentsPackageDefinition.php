@@ -2,16 +2,25 @@
 
 namespace Convo\Pckg\Appointments;
 
+use Convo\Core\Adapters\Alexa\Api\AlexaSettingsApi;
 use Convo\Core\Factory\AbstractPackageDefinition;
+use Convo\Core\Factory\IComponentFactory;
 
 class AppointmentsPackageDefinition extends AbstractPackageDefinition
 {
 	const NAMESPACE = 'convo-appointments';
 
+	/**
+	 * @var AlexaCustomerProfileApi
+	 */
+	private $_alexaSettingsApi;
+
 	public function __construct(
-		\Psr\Log\LoggerInterface $logger
+		\Psr\Log\LoggerInterface $logger,
+		AlexaSettingsApi $alexaSettingsApi
 	)
 	{
+		$this->_alexaSettingsApi = $alexaSettingsApi;
 		parent::__construct($logger, self::NAMESPACE, __DIR__);
 	}
 
@@ -104,6 +113,20 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Flow to be executed if the requested appointment date is available.',
 						'valueType' => 'class'
 					],
+					'_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
+					{
+						private $_alexaSettingsApi;
+
+						public function __construct($alexaCustomerProfileApi)
+						{
+							$this->_alexaSettingsApi = $alexaCustomerProfileApi;
+						}
+
+						public function createComponent($properties, $service)
+						{
+							return new \Convo\Pckg\Appointments\CheckAppointmentTimeElement($properties, $this->_alexaSettingsApi);
+						}
+					},
 					'_workflow' => 'read',
 					'_preview_angular' => array(
 						'type' => 'html',
