@@ -104,7 +104,11 @@ class CheckAppointmentTimeElement extends AbstractWorkflowContainerComponent imp
         $context      =   $this->_getSimpleSchedulingContext();
         $date         =   $this->evaluateString( $this->_appointmentDate);
         $time         =   $this->evaluateString( $this->_appointmentTime);
-        $timezone     =   $this->_alexaSettingsApi->getSetting( $request, AlexaSettingsApi::ALEXA_SYSTEM_TIMEZONE);
+		$timezone     =   date_default_timezone_get();
+
+		if (is_a($request,\Convo\Core\Adapters\Alexa\AmazonCommandRequest::class)) {
+			$timezone = $this->_alexaSettingsApi->getSetting( $request, AlexaSettingsApi::ALEXA_SYSTEM_TIMEZONE);
+		}
         
         $this->_logger->info( 'Checking time ['.$date.']['.$time.']['.$timezone.']');
         
