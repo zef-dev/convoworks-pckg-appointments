@@ -41,9 +41,9 @@ class LoadAppointmentElement extends AbstractAppointmentElement
 	 * @param array $properties
 	 * @param AlexaSettingsApi $alexaSettingsApi
 	 */
-	public function __construct( $properties)
+	public function __construct( $properties, AlexaSettingsApi $alexaSettingsApi)
 	{
-		parent::__construct( $properties);
+	    parent::__construct( $properties, $alexaSettingsApi);
 
 		$this->_appointmentId     		  	=   $properties['appointment_id'];
 		$this->_email     		  			=   $properties['email'];
@@ -56,35 +56,35 @@ class LoadAppointmentElement extends AbstractAppointmentElement
 
 		foreach ( $properties['not_found'] as $element) {
 			$this->_notFoundFlow[] = $element;
-			$this->addChild($element);
-		}
-	}
+            $this->addChild($element);
+        }
+    }
 
-	/**
-	 * @param IConvoRequest $request
-	 * @param IConvoResponse $response
-	 */
-	public function read(IConvoRequest $request, IConvoResponse $response)
-	{
-		$context      	=   $this->_getAppointmentsContext();
-		$email  =   $this->evaluateString($this->_email);
-		$appointmentId  =   $this->evaluateString($this->_appointmentId);
+    /**
+     *
+     * @param IConvoRequest $request
+     * @param IConvoResponse $response
+     */
+    public function read(IConvoRequest $request, IConvoResponse $response)
+    {
+        $context        =   $this->_getAppointmentsContext();
+        $email          =   $this->evaluateString($this->_email);
+		$appointmentId  =   $this->evaluateString( $this->_appointmentId);
+        $timezone       =   $this->_getTimezone( $request);
+		$returnVar      =   $this->evaluateString( $this->_returnVar);
 
-		$returnVar  =   $this->evaluateString($this->_returnVar);
-
-		$this->_logger->info('Loading appointment with id ['.$appointmentId.'] for customer email [' . $email . ']');
+		$this->_logger->info( 'Loading appointment with id ['.$appointmentId.'] for customer email ['.$email.']');
 
 		try {
-			$appointment = $context->getAppointment($email, $appointmentId);
+			$appointment = $context->getAppointment( $email, $appointmentId);
 
 			$this->_logger->info('Loaded appointment with id ['.$appointmentId.'] appointments for customer email [' . $email . ']');
 
-			$scope_type   =   IServiceParamsScope::SCOPE_TYPE_REQUEST;
-			$params       =   $this->getService()->getComponentParams($scope_type, $this);
-			$params->setServiceParam($returnVar, ['appointment' => $appointment]);
+			$params       =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
+			$params->setServiceParam( $returnVar, ['appointment' => $appointment, 'timezone' => $timezone->getName()]);
 
 			$selected_flow = $this->_okFlow;
-		}  catch (DataItemNotFoundException $e) {
+		}  catch ( DataItemNotFoundException $e) {
 			$this->_logger->info($e->getMessage());
 			$selected_flow = $this->_notFoundFlow;
 		}
