@@ -6,18 +6,12 @@ namespace Convo\Pckg\Appointments;
 use Convo\Core\Workflow\IConvoRequest;
 use Convo\Core\Workflow\IConvoResponse;
 use Convo\Core\Workflow\IConversationElement;
-use Convo\Core\Workflow\AbstractWorkflowContainerComponent;
 use Convo\Core\Adapters\Alexa\Api\AlexaSettingsApi;
 use Convo\Core\Params\IServiceParamsScope;
 
 
-class CheckAppointmentTimeElement extends AbstractWorkflowContainerComponent implements IConversationElement
+class CheckAppointmentTimeElement extends AbstractAppointmentElement
 {
-    
-    /**
-     * @var string
-     */
-    private $_contextId;
     
     /**
      * @var string
@@ -68,8 +62,6 @@ class CheckAppointmentTimeElement extends AbstractWorkflowContainerComponent imp
         parent::__construct( $properties);
         
         $this->_alexaSettingsApi  =   $alexaSettingsApi;
-        
-        $this->_contextId         =   $properties['context_id'];
         $this->_resultVar         =   $properties['result_var'];
         $this->_appointmentDate   =   $properties['appointment_date'];
         $this->_appointmentTime   =   $properties['appointment_time'];
@@ -173,13 +165,4 @@ class CheckAppointmentTimeElement extends AbstractWorkflowContainerComponent imp
         return $flow;
     }
     
-    /**
-     * @return IAppointmentsContext
-     */
-    private function _getSimpleSchedulingContext()
-    {
-        return $this->getService()->findContext(
-            $this->evaluateString( $this->_contextId),
-            IAppointmentsContext::class);
-    }
 }
