@@ -115,7 +115,7 @@ Parameters:
 
 * `context_id` - Id of the referenced `IAppointmentsContext`
 * `mode` : `current` default, `past` or `all`
-* `number_of_appointments_to_load` : default `10`
+* `limit` : default `10`
 * `return_var` - Default `status`, name of the variable that contains additional information (`appointments`)
 
 Flows:

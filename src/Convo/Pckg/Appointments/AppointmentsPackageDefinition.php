@@ -243,7 +243,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Loads appointments which are currently active, already finished or both.',
 						'valueType' => 'string'
 					),
-					'number_of_appointments_to_load' => array(
+					'limit' => array(
 						'editor_type' => 'number',
 						'editor_properties' => array(),
 						'defaultValue' => 10,

@@ -18,7 +18,7 @@ class LoadAppointmentsElement extends AbstractAppointmentElement
 	/**
 	 * @var string
 	 */
-	private $_numberOfAppointmentsToLoad;
+	private $_limit;
 
 	/**
 	 * @var string
@@ -54,7 +54,7 @@ class LoadAppointmentsElement extends AbstractAppointmentElement
 
 		$this->_mode     		  			=   $properties['mode'];
 		$this->_email     		  			=   $properties['email'];
-		$this->_numberOfAppointmentsToLoad  =   $properties['number_of_appointments_to_load'];
+		$this->_limit                       =   $properties['limit'];
 		$this->_returnVar         			=   $properties['return_var'];
 
 		foreach ( $properties['empty'] as $element) {
@@ -82,7 +82,7 @@ class LoadAppointmentsElement extends AbstractAppointmentElement
 		$context      	=   $this->_getAppointmentsContext();
 		$email  =   $this->evaluateString($this->_email);
 		$mode  =   $this->evaluateString($this->_mode);
-		$numberOfAppointmentsToLoad  =   $this->evaluateString($this->_numberOfAppointmentsToLoad);
+		$numberOfAppointmentsToLoad  =   $this->evaluateString($this->_limit);
 		$returnVar  =   $this->evaluateString($this->_returnVar);
 
 		$this->_logger->info('Loading ['.$mode.'] appointments for customer email [' . $email . ']');
