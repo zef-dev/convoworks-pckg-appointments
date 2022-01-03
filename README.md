@@ -72,7 +72,7 @@ Parameters:
 * `appointment_date` - Requested date in the `Y-m-d` format (the MySQL DATE format)
 * `appointment_time` - Requested time in the `H:i:s` format (the MySQL TIME format)
 * `payload` - Various other properties that might be used with implementing plugin.
-* `return_var` - Default `status`, name of the variable that contains additional information (`appointment_id`)
+* `return_var` - Default `status`, name of the variable that contains additional information (`appointment_id`, `timezone` string timezone, `requested_time` timestamp)
 
 Flows:
 * `ok`

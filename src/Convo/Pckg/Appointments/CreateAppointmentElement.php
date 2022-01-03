@@ -6,6 +6,7 @@ use Convo\Core\Params\IServiceParamsScope;
 use Convo\Core\Workflow\IConversationElement;
 use Convo\Core\Workflow\IConvoRequest;
 use Convo\Core\Workflow\IConvoResponse;
+use Convo\Core\Adapters\Alexa\Api\AlexaSettingsApi;
 
 class CreateAppointmentElement extends AbstractAppointmentElement
 {
@@ -47,10 +48,11 @@ class CreateAppointmentElement extends AbstractAppointmentElement
 
 	/**
 	 * @param array $properties
+	 * @param AlexaSettingsApi $alexaSettingsApi
 	 */
-	public function __construct( $properties)
+	public function __construct( $properties, AlexaSettingsApi $alexaSettingsApi)
 	{
-		parent::__construct( $properties);
+	    parent::__construct( $properties, $alexaSettingsApi);
 
 		$this->_email   		  =   $properties['email'];
 		$this->_appointmentDate   =   $properties['appointment_date'];
@@ -73,32 +75,34 @@ class CreateAppointmentElement extends AbstractAppointmentElement
 	 * @param IConvoRequest $request
 	 * @param IConvoResponse $response
 	 */
-	public function read(IConvoRequest $request, IConvoResponse $response)
+	public function read( IConvoRequest $request, IConvoResponse $response)
 	{
 		$context      =   $this->_getAppointmentsContext();
-		$email        =   $this->evaluateString($this->_email);
-		$date         =   $this->evaluateString($this->_appointmentDate);
-		$time         =   $this->evaluateString($this->_appointmentTime);
-		$payload      =   $this->_evaluateArgs($this->_payload);
-		$resultVar    =   $this->evaluateString($this->_resultVar);
+		$timezone     =   $this->_getTimezone( $request);
+		$email        =   $this->evaluateString( $this->_email);
+		$date         =   $this->evaluateString( $this->_appointmentDate);
+		$time         =   $this->evaluateString( $this->_appointmentTime);
+		$payload      =   $this->_evaluateArgs( $this->_payload);
 
 		$this->_logger->info('Creating appointment at ['.$date.']['.$time.'] for customer email [' . $email . ']');
-		$slot_time    =   new \DateTime($date.' '.$time);
+		$slot_time    =   new \DateTime( $date.' '.$time, $timezone);
 
+		$params       =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
+		
 		// TODO add exception for invalid data
 		try {
-			$createdAppointment = $context->createAppointment($email, $slot_time, $payload);
-
-			$scope_type   =   IServiceParamsScope::SCOPE_TYPE_REQUEST;
-			$params       =   $this->getService()->getComponentParams($scope_type, $this);
-			$params->setServiceParam($resultVar, $createdAppointment);
-
-			$this->_logger->info('Created appointment successfully ['.json_encode($createdAppointment).']');
-
+		    $appointment_id   =   $context->createAppointment($email, $slot_time, $payload);
+			$params->setServiceParam( 
+			    $this->_resultVar, 
+			    ['appointment_id' => $appointment_id, 'timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()]);
+			$this->_logger->info( 'Created appointment successfully ['.$appointment_id.']');
 			$selected_flow = $this->_okFlow;
-		} catch (SlotNotAvailableException $e) {
-			$this->_logger->info($e->getMessage());
+		} catch ( SlotNotAvailableException $e) {
+			$this->_logger->info( $e->getMessage());
 			$selected_flow = $this->_notAvailableFlow;
+			$params->setServiceParam(
+			    $this->_resultVar,
+			    ['appointment_id' => null, 'timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()]);
 		}
 
 		foreach ($selected_flow as $element) {

@@ -400,6 +400,8 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Status variable of the result of appointment creation.',
 						'valueType' => 'string'
 					),
+				    'timezone_mode' => $timezone_mode_param,
+				    'timezone' => $timezone_param,
 					'ok' => [
 						'editor_type' => 'service_components',
 						'editor_properties' => [
@@ -424,6 +426,20 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Flow to be executed if the appointment could not be created.',
 						'valueType' => 'class'
 					],
+				    '_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
+				    {
+				        private $_alexaSettingsApi;
+				        
+				        public function __construct($alexaCustomerProfileApi)
+				        {
+				            $this->_alexaSettingsApi = $alexaCustomerProfileApi;
+				        }
+				        
+				        public function createComponent($properties, $service)
+				        {
+				            return new \Convo\Pckg\Appointments\CreateAppointmentElement( $properties, $this->_alexaSettingsApi);
+				        }
+					},
 					'_workflow' => 'read',
 					'_preview_angular' => array(
 						'type' => 'html',
