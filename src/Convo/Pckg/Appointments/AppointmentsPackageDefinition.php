@@ -357,14 +357,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				'Create Appointment Element',
 				'Creates an appointment for the user.',
 				array(
-					'context_id' => array(
-						'editor_type' => 'context_id',
-						'editor_properties' => array(),
-						'defaultValue' => 'your_appointment',
-						'name' => 'Context ID',
-						'description' => 'Unique ID by which this context is referenced',
-						'valueType' => 'string'
-					),
+				    'context_id' => $context_id_param,
 					'email' => array(
 						'editor_type' => 'text',
 						'editor_properties' => array(),
@@ -446,14 +439,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				'Update Appointment Element',
 				'Updates an appointment for the user.',
 				array(
-					'context_id' => array(
-						'editor_type' => 'context_id',
-						'editor_properties' => array(),
-						'defaultValue' => 'your_appointment',
-						'name' => 'Context ID',
-						'description' => 'Unique ID by which this context is referenced',
-						'valueType' => 'string'
-					),
+				    'context_id' => $context_id_param,
 					'appointment_id' => array(
 						'editor_type' => 'text',
 						'editor_properties' => array(),
@@ -555,14 +541,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				'Cancel Appointment Element',
 				'Cancels an appointment for the user.',
 				array(
-					'context_id' => array(
-						'editor_type' => 'context_id',
-						'editor_properties' => array(),
-						'defaultValue' => 'your_appointment',
-						'name' => 'Context ID',
-						'description' => 'Unique ID by which this context is referenced',
-						'valueType' => 'string'
-					),
+				    'context_id' => $context_id_param,
 					'appointment_id' => array(
 						'editor_type' => 'text',
 						'editor_properties' => array(),
