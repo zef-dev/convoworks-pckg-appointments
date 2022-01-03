@@ -8,10 +8,24 @@ use Convo\Core\Workflow\IConversationElement;
 
 abstract class AbstractAppointmentElement extends AbstractWorkflowContainerComponent implements IConversationElement
 {
+    const TIMEZONE_MODE_DEFAULT  =   'DEFAULT';
+    const TIMEZONE_MODE_CLIENT   =   'CLIENT';
+    const TIMEZONE_MODE_SET      =   'SET';
+    
 	/**
 	 * @var string
 	 */
 	protected $_contextId;
+    
+	/**
+	 * @var string
+	 */
+	protected $_timezoneMode;
+    
+	/**
+	 * @var string
+	 */
+	protected $_timezone;
 
 
 	/**
@@ -22,6 +36,30 @@ abstract class AbstractAppointmentElement extends AbstractWorkflowContainerCompo
 		parent::__construct( $properties);
 
 		$this->_contextId         =   $properties['context_id'];
+		$this->_timezoneMode      =   $properties['timezone_mode'];
+		$this->_timezone          =   $properties['timezone'];
+	}
+	
+	/**
+	 * @return \DateTimeZone
+	 */
+	protected function _getTimezone()
+	{
+	    $mode      =   $this->evaluateString( $this->_timezoneMode);
+	    
+	    if ( $mode === self::TIMEZONE_MODE_DEFAULT) {
+	        return $this->_getAppointmentsContext()->getDefaultTimezone();
+	    }
+	    
+	    if ( $mode === self::TIMEZONE_MODE_CLIENT) {
+	        return $this->_getAppointmentsContext()->getDefaultTimezone();
+	    } 
+	    
+	    if ( $mode === self::TIMEZONE_MODE_SET) {
+	        return new \DateTimeZone( $this->evaluateString( $this->_timezone));
+	    }
+	    
+	    throw new \Exception( 'Unexpected timezone mode ['.$mode.'] from ['.$this->_timezoneMode.']');
 	}
 
 	/**
