@@ -107,4 +107,12 @@ interface IAppointmentsContext
 	 */
 	public function getFreeSlotsIterator( $startTime=null);
 	
+	
+	
+	/**
+	 * Returns default timezone used by the implementing system. It can be appointment type timezone, it might be server default, depends on the underlying logic.
+	 * @return \DateTimeZone
+	 */
+	public function getDefaultTimezone();
+	
 }
