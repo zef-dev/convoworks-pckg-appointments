@@ -9,12 +9,8 @@ use Convo\Core\Workflow\IConversationElement;
 use Convo\Core\Workflow\IConvoRequest;
 use Convo\Core\Workflow\IConvoResponse;
 
-class CancelAppointmentElement extends AbstractWorkflowContainerComponent implements IConversationElement
+class CancelAppointmentElement extends AbstractAppointmentElement
 {
-	/**
-	 * @var string
-	 */
-	private $_contextId;
 
 	/**
 	 * @var string
@@ -44,7 +40,6 @@ class CancelAppointmentElement extends AbstractWorkflowContainerComponent implem
 	{
 		parent::__construct( $properties);
 
-		$this->_contextId         =   $properties['context_id'];
 		$this->_appointmentId     =   $properties['appointment_id'];
 		$this->_email   		  =   $properties['email'];
 
@@ -85,13 +80,4 @@ class CancelAppointmentElement extends AbstractWorkflowContainerComponent implem
 		}
 	}
 
-	/**
-	 * @return IAppointmentsContext
-	 */
-	private function _getSimpleSchedulingContext()
-	{
-		return $this->getService()->findContext(
-			$this->evaluateString( $this->_contextId),
-			IAppointmentsContext::class);
-	}
 }
