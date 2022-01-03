@@ -5,6 +5,8 @@ namespace Convo\Pckg\Appointments;
 use Convo\Core\Util\ArrayUtil;
 use Convo\Core\Workflow\AbstractWorkflowContainerComponent;
 use Convo\Core\Workflow\IConversationElement;
+use Convo\Core\Workflow\IConvoRequest;
+use Convo\Core\Adapters\Alexa\Api\AlexaSettingsApi;
 
 abstract class AbstractAppointmentElement extends AbstractWorkflowContainerComponent implements IConversationElement
 {
@@ -27,23 +29,30 @@ abstract class AbstractAppointmentElement extends AbstractWorkflowContainerCompo
 	 */
 	protected $_timezone;
 
+	/**
+	 * @var AlexaSettingsApi
+	 */
+	private $_alexaSettingsApi;
 
 	/**
 	 * @param array $properties
 	 */
-	public function __construct( $properties)
+	public function __construct( $properties, AlexaSettingsApi $alexaSettingsApi)
 	{
 		parent::__construct( $properties);
 
 		$this->_contextId         =   $properties['context_id'];
 		$this->_timezoneMode      =   $properties['timezone_mode'];
 		$this->_timezone          =   $properties['timezone'];
+		
+		$this->_alexaSettingsApi  =   $alexaSettingsApi;
 	}
 	
 	/**
+	 * @param IConvoRequest $request
 	 * @return \DateTimeZone
 	 */
-	protected function _getTimezone()
+	protected function _getTimezone( IConvoRequest $request)
 	{
 	    $mode      =   $this->evaluateString( $this->_timezoneMode);
 	    
@@ -52,6 +61,9 @@ abstract class AbstractAppointmentElement extends AbstractWorkflowContainerCompo
 	    }
 	    
 	    if ( $mode === self::TIMEZONE_MODE_CLIENT) {
+	        if (is_a($request,\Convo\Core\Adapters\Alexa\AmazonCommandRequest::class)) {
+	            return $this->_alexaSettingsApi->getTimezone( $request);
+	        }
 	        return $this->_getAppointmentsContext()->getDefaultTimezone();
 	    } 
 	    
