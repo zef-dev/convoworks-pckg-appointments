@@ -11,7 +11,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 	const NAMESPACE = 'convo-appointments';
 
 	/**
-	 * @var AlexaCustomerProfileApi
+	 * @var AlexaSettingsApi
 	 */
 	private $_alexaSettingsApi;
 
