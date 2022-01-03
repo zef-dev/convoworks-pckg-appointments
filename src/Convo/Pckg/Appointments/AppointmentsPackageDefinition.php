@@ -251,14 +251,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				'Load Appointments Element',
 				'Loads appointments for the user.',
 				array(
-					'context_id' => array(
-						'editor_type' => 'context_id',
-						'editor_properties' => array(),
-						'defaultValue' => 'your_appointment',
-						'name' => 'Context ID',
-						'description' => 'Unique ID by which this context is referenced',
-						'valueType' => 'string'
-					),
+				    'context_id' => $context_id_param,
 					'email' => array(
 						'editor_type' => 'text',
 						'editor_properties' => array(),
@@ -297,6 +290,8 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Status variable of the loaded appointment.',
 						'valueType' => 'string'
 					),
+				    'timezone_mode' => $timezone_mode_param,
+				    'timezone' => $timezone_param,
 					'empty' => [
 						'editor_type' => 'service_components',
 						'editor_properties' => [
@@ -333,6 +328,20 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Flow to be executed if one appointment could be found.',
 						'valueType' => 'class'
 					],
+				    '_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
+				    {
+				        private $_alexaSettingsApi;
+				        
+				        public function __construct($alexaCustomerProfileApi)
+				        {
+				            $this->_alexaSettingsApi = $alexaCustomerProfileApi;
+				        }
+				        
+				        public function createComponent($properties, $service)
+				        {
+				            return new \Convo\Pckg\Appointments\LoadAppointmentsElement( $properties, $this->_alexaSettingsApi);
+				        }
+					},
 					'_workflow' => 'read',
 					'_preview_angular' => array(
 						'type' => 'html',

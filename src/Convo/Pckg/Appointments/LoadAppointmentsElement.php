@@ -6,6 +6,7 @@ use Convo\Core\Params\IServiceParamsScope;
 use Convo\Core\Workflow\IConversationElement;
 use Convo\Core\Workflow\IConvoRequest;
 use Convo\Core\Workflow\IConvoResponse;
+use Convo\Core\Adapters\Alexa\Api\AlexaSettingsApi;
 
 class LoadAppointmentsElement extends AbstractAppointmentElement
 {
@@ -47,10 +48,11 @@ class LoadAppointmentsElement extends AbstractAppointmentElement
 
 	/**
 	 * @param array $properties
+	 * @param AlexaSettingsApi $alexaSettingsApi
 	 */
-	public function __construct( $properties)
+	public function __construct( $properties, AlexaSettingsApi $alexaSettingsApi)
 	{
-		parent::__construct( $properties);
+	    parent::__construct( $properties, $alexaSettingsApi);
 
 		$this->_mode     		  			=   $properties['mode'];
 		$this->_email     		  			=   $properties['email'];
@@ -77,24 +79,23 @@ class LoadAppointmentsElement extends AbstractAppointmentElement
 	 * @param IConvoRequest $request
 	 * @param IConvoResponse $response
 	 */
-	public function read(IConvoRequest $request, IConvoResponse $response)
+	public function read( IConvoRequest $request, IConvoResponse $response)
 	{
-		$context      	=   $this->_getAppointmentsContext();
-		$email  =   $this->evaluateString($this->_email);
-		$mode  =   $this->evaluateString($this->_mode);
-		$numberOfAppointmentsToLoad  =   $this->evaluateString($this->_limit);
-		$returnVar  =   $this->evaluateString($this->_returnVar);
+		$context          =   $this->_getAppointmentsContext();
+		$timezone         =   $this->_getTimezone( $request);
+		$email            =   $this->evaluateString( $this->_email);
+		$mode             =   $this->evaluateString( $this->_mode);
+		$limit            =   $this->evaluateString( $this->_limit);
+		$returnVar        =   $this->evaluateString( $this->_returnVar);
 
-		$this->_logger->info('Loading ['.$mode.'] appointments for customer email [' . $email . ']');
+		$this->_logger->info( 'Loading ['.$mode.'] appointments for customer email [' . $email . ']');
 
-
-		$appointments = $context->loadAppointments($email, $mode, $numberOfAppointmentsToLoad);
-		$appointmentsCount = count($appointments);
+		$appointments         =   $context->loadAppointments( $email, $mode, $limit);
+		$appointmentsCount    =   count( $appointments);
 		$this->_logger->info('Loaded ['.$appointmentsCount.'] appointments for customer email [' . $email . ']');
 
-		$scope_type   =   IServiceParamsScope::SCOPE_TYPE_REQUEST;
-		$params       =   $this->getService()->getComponentParams($scope_type, $this);
-		$params->setServiceParam($returnVar, ['appointments' => $appointments]);
+		$params       =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
+		$params->setServiceParam( $returnVar, ['appointments' => $appointments, 'timezone' => $timezone->getName()]);
 
 		if ($appointmentsCount === 1) {
 			$selected_flow = $this->_singleFlow;

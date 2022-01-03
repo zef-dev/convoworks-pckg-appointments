@@ -43,7 +43,7 @@ Parameters:
 * `appointment_date` - Optional, requested date in the `Y-m-d` format (the MySQL DATE format)
 * `appointment_time` - Optional, requested time in the `H:i:s` format (the MySQL TIME format)
 * `email` - Optional, user identification. If present, it might serve for better suggestions
-* `return_var` - Default `status`, name of the variable that contains additional information (`suggestions` array)
+* `return_var` - Default `status`, name of the variable that contains additional information (`suggestions` : array of suggestions, `requested_time`: requested appoinitment as timestamp, `timezone`: prefered timezone)
 
 Flows:
 
@@ -116,7 +116,7 @@ Parameters:
 * `context_id` - Id of the referenced `IAppointmentsContext`
 * `mode` : `current` default, `past` or `all`
 * `limit` : default `10`
-* `return_var` - Default `status`, name of the variable that contains additional information (`appointments` : array of appointments, `timezone`: preffered timezone, `requested_time`: requested appoinitment as timestamp)
+* `return_var` - Default `status`, name of the variable that contains additional information (`appointments` : array of appointments, `timezone`: preffered timezone)
 
 Flows:
 * `empty`
@@ -125,7 +125,7 @@ Flows:
 
 
 
-### `GetAppointmentElement`
+### `LoadAppointmentElement`
 
 Returns single appointment data.
 Appointment representation.
@@ -146,7 +146,7 @@ Parameters:
 * `context_id` - Id of the referenced `IAppointmentsContext`
 * `appointment_id` - Id of the existing appointment
 * `email` - User identification. 
-* `return_var` - Default `status`, name of the variable that contains additional information (`appointment`)
+* `return_var` - Default `status`, name of the variable that contains additional information (`appointment`, `timezone`)
 
 Flows:
 * `ok`
