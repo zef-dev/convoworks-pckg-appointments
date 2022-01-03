@@ -40,8 +40,8 @@ This element has several sub flows, depending on the requested time available or
 Parameters:
 
 * `context_id` - Id of the referenced `IAppointmentsContext`
-* `date` - Optional, requested date in the `Y-m-d` format (the MySQL DATE format)
-* `time` - Optional, requested time in the `H:i:s` format (the MySQL TIME format)
+* `appointment_date` - Optional, requested date in the `Y-m-d` format (the MySQL DATE format)
+* `appointment_time` - Optional, requested time in the `H:i:s` format (the MySQL TIME format)
 * `email` - Optional, user identification. If present, it might serve for better suggestions
 * `return_var` - Default `status`, name of the variable that contains additional information (`suggestions` array)
 
@@ -69,8 +69,8 @@ Parameters:
 
 * `context_id` - Id of the referenced `IAppointmentsContext`
 * `email` - User identification. 
-* `date` - Requested date in the `Y-m-d` format (the MySQL DATE format)
-* `time` - Requested time in the `H:i:s` format (the MySQL TIME format)
+* `appointment_date` - Requested date in the `Y-m-d` format (the MySQL DATE format)
+* `appointment_time` - Requested time in the `H:i:s` format (the MySQL TIME format)
 * `payload` - Various other properties that might be used with implementing plugin.
 * `return_var` - Default `status`, name of the variable that contains additional information (`appointment_id`)
 
@@ -87,8 +87,8 @@ Parameters:
 * `context_id` - Id of the referenced `IAppointmentsContext`
 * `appointment_id` - Id of the existing appointment
 * `email` - User identification. 
-* `date` - Requested date in the `Y-m-d` format (the MySQL DATE format)
-* `time` - Requested time in the `H:i:s` format (the MySQL TIME format)
+* `appointment_date` - Requested date in the `Y-m-d` format (the MySQL DATE format)
+* `appointment_time` - Requested time in the `H:i:s` format (the MySQL TIME format)
 * `payload` - Various other properties that might be used with implementing plugin.
 * `return_var` - Default `status`, name of the variable that contains additional information (`appointment_id`)
 
@@ -115,6 +115,7 @@ Parameters:
 
 * `context_id` - Id of the referenced `IAppointmentsContext`
 * `mode` : `current` default, `past` or `all`
+* `number_of_appointments_to_load` : default `10`
 * `return_var` - Default `status`, name of the variable that contains additional information (`appointments`)
 
 Flows:
