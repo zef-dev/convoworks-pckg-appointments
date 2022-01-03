@@ -26,6 +26,40 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 
 	protected function _initDefintions()
 	{
+	    $context_id_param =   [
+	        'editor_type' => 'context_id',
+	        'editor_properties' => array(),
+	        'defaultValue' => 'your_appointment',
+	        'name' => 'Context ID',
+	        'description' => 'Unique ID by which this context is referenced',
+	        'valueType' => 'string'
+	    ];
+	    
+	    $timezone_mode_param =   [
+	        'editor_type' => 'select',
+	        'editor_properties' => [
+	            'options' => [
+	                AbstractAppointmentElement::TIMEZONE_MODE_DEFAULT => 'Default',
+	                AbstractAppointmentElement::TIMEZONE_MODE_CLIENT => 'Client',
+	                AbstractAppointmentElement::TIMEZONE_MODE_SET => 'Set'
+	            ]
+	        ],
+	        'defaultValue' => AbstractAppointmentElement::TIMEZONE_MODE_DEFAULT,
+	        'name' => 'Timezone Mode',
+	        'description' => 'By default you will use timezone provided by context. Client will try to get client\'s timezone, while set will allow you to set it manualy',
+	        'valueType' => 'string'
+	    ];
+	    $timezone_param =   [
+	        'editor_type' => 'text',
+	        'editor_properties' => array(
+	            'dependency' => "component.properties.timezone_mode === '".AbstractAppointmentElement::TIMEZONE_MODE_SET."'"
+	        ),
+	        'defaultValue' => '',
+	        'name' => 'Timezone',
+	        'description' => 'Enabled only when timezone mode is on "Set". Enter explicit timezone value.',
+	        'valueType' => 'string'
+	    ];
+	    
 		return [
 			new \Convo\Core\Factory\ComponentDefinition(
 				$this->getNamespace(),
@@ -33,14 +67,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				'Check Appointment Time Element',
 				'Checks if the time for an appointment is available.',
 				array(
-					'context_id' => array(
-						'editor_type' => 'context_id',
-						'editor_properties' => array(),
-						'defaultValue' => 'your_appointment',
-						'name' => 'Context ID',
-						'description' => 'Unique ID by which this context is referenced',
-						'valueType' => 'string'
-					),
+				    'context_id' => $context_id_param,
 					'appointment_date' => array(
 						'editor_type' => 'text',
 						'editor_properties' => array(),
@@ -65,6 +92,8 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Status variable of the result from appointment checking.',
 						'valueType' => 'string'
 					),
+				    'timezone_mode' => $timezone_mode_param,
+				    'timezone' => $timezone_param,
 					'available_flow' => [
 						'editor_type' => 'service_components',
 						'editor_properties' => [

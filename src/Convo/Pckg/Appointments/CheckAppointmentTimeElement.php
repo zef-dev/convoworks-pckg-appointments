@@ -48,10 +48,6 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
      */
     private $_singleSuggestionFlow = array();
     
-    /**
-     * @var AlexaSettingsApi
-     */
-    private $_alexaSettingsApi;
     
     /**
      * @param array $properties
@@ -59,9 +55,8 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
      */
     public function __construct( $properties, $alexaSettingsApi)
     {
-        parent::__construct( $properties);
+        parent::__construct( $properties, $alexaSettingsApi);
         
-        $this->_alexaSettingsApi  =   $alexaSettingsApi;
         $this->_resultVar         =   $properties['result_var'];
         $this->_appointmentDate   =   $properties['appointment_date'];
         $this->_appointmentTime   =   $properties['appointment_time'];
@@ -96,15 +91,11 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
         $context      =   $this->_getAppointmentsContext();
         $date         =   $this->evaluateString( $this->_appointmentDate);
         $time         =   $this->evaluateString( $this->_appointmentTime);
-		$timezone     =   date_default_timezone_get();
+		$timezone     =   $this->_getTimezone( $request);
 
-		if (is_a($request,\Convo\Core\Adapters\Alexa\AmazonCommandRequest::class)) {
-			$timezone = $this->_alexaSettingsApi->getSetting( $request, AlexaSettingsApi::ALEXA_SYSTEM_TIMEZONE);
-		}
+        $this->_logger->info( 'Checking time ['.$date.']['.$time.']['.$timezone->getName().']');
         
-        $this->_logger->info( 'Checking time ['.$date.']['.$time.']['.$timezone.']');
-        
-        $slot_time    =   new \DateTime( $date.' '.$time, new \DateTimeZone( $timezone));
+        $slot_time    =   new \DateTime( $date.' '.$time, $timezone);
         
         if ( $date && $time)
         {
