@@ -590,6 +590,16 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Email of the user to cancel the appointment.',
 						'valueType' => 'string'
 					),
+				    'result_var' => array(
+				        'editor_type' => 'text',
+				        'editor_properties' => array(),
+				        'defaultValue' => 'status',
+				        'name' => 'Result Variable Name',
+				        'description' => 'Status variable of the result of appointment update.',
+				        'valueType' => 'string'
+				    ),
+				    'timezone_mode' => $timezone_mode_param,
+				    'timezone' => $timezone_param,
 					'ok' => [
 						'editor_type' => 'service_components',
 						'editor_properties' => [
@@ -614,6 +624,20 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Flow to be executed if the appointment under the ID could not be found.',
 						'valueType' => 'class'
 					],
+				    '_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
+				    {
+				        private $_alexaSettingsApi;
+				        
+				        public function __construct($alexaCustomerProfileApi)
+				        {
+				            $this->_alexaSettingsApi = $alexaCustomerProfileApi;
+				        }
+				        
+				        public function createComponent($properties, $service)
+				        {
+				            return new \Convo\Pckg\Appointments\CreateAppointmentElement( $properties, $this->_alexaSettingsApi);
+				        }
+					},
 					'_workflow' => 'read',
 					'_preview_angular' => array(
 						'type' => 'html',

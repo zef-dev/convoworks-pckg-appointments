@@ -7,6 +7,7 @@ use Convo\Core\DataItemNotFoundException;
 use Convo\Core\Workflow\IConversationElement;
 use Convo\Core\Workflow\IConvoRequest;
 use Convo\Core\Workflow\IConvoResponse;
+use Convo\Core\Params\IServiceParamsScope;
 
 class CancelAppointmentElement extends AbstractAppointmentElement
 {
@@ -35,9 +36,9 @@ class CancelAppointmentElement extends AbstractAppointmentElement
 	 * @param array $properties
 	 * @param AlexaSettingsApi $alexaSettingsApi
 	 */
-	public function __construct( $properties)
+	public function __construct( $properties, AlexaSettingsApi $alexaSettingsApi)
 	{
-		parent::__construct( $properties);
+	    parent::__construct( $properties, $alexaSettingsApi);
 
 		$this->_appointmentId     =   $properties['appointment_id'];
 		$this->_email   		  =   $properties['email'];
@@ -57,15 +58,19 @@ class CancelAppointmentElement extends AbstractAppointmentElement
 	 * @param IConvoRequest $request
 	 * @param IConvoResponse $response
 	 */
-	public function read(IConvoRequest $request, IConvoResponse $response)
+	public function read( IConvoRequest $request, IConvoResponse $response)
 	{
 		$context      	=   $this->_getAppointmentsContext();
+		$timezone       =   $this->_getTimezone( $request);
 		$appointmentId  =   $this->evaluateString($this->_appointmentId);
 		$email          =   $this->evaluateString($this->_email);
 
 		$this->_logger->info('Canceling appointment with id ['.$appointmentId.'] for customer email [' . $email . ']');
 
+		$eval_data      =   ['timezone' => $timezone->getName()];
+		
 		try {
+		    $eval_data['existing']     =   $context->getAppointment( $email, $appointmentId);
 			$context->cancelAppointment($email, $appointmentId);
 			$this->_logger->info('Canceled appointment with id ['. $appointmentId .'] for the customers email [' . $email . ']');
 			$selected_flow = $this->_okFlow;
@@ -73,6 +78,9 @@ class CancelAppointmentElement extends AbstractAppointmentElement
 			$this->_logger->info($e->getMessage());
 			$selected_flow = $this->_notFoundFlow;
 		}
+		
+		$params         =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
+		$params->setServiceParam( $this->_resultVar, $eval_data);
 
 		foreach ($selected_flow as $element) {
 			$element->read( $request, $response);

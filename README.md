@@ -104,6 +104,7 @@ Parameters:
 * `context_id` - Id of the referenced `IAppointmentsContext`
 * `appointment_id` - Id of the existing appointment
 * `email` - User identification. 
+* `return_var` - Default `status`, name of the variable that contains additional information (`existing` previous appointment version as you would get it with load appointment element, `timezone`)
 
 Flows:
 * `ok`
