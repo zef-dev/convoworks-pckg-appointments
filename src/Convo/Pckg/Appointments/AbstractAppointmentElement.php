@@ -27,7 +27,7 @@ abstract class AbstractAppointmentElement extends AbstractWorkflowContainerCompo
 	/**
 	 * @return IAppointmentsContext
 	 */
-	protected function _getSimpleSchedulingContext()
+	protected function _getAppointmentsContext()
 	{
 		return $this->getService()->findContext(
 			$this->evaluateString( $this->_contextId),

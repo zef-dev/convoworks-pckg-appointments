@@ -79,7 +79,7 @@ class LoadAppointmentsElement extends AbstractAppointmentElement
 	 */
 	public function read(IConvoRequest $request, IConvoResponse $response)
 	{
-		$context      	=   $this->_getSimpleSchedulingContext();
+		$context      	=   $this->_getAppointmentsContext();
 		$email  =   $this->evaluateString($this->_email);
 		$mode  =   $this->evaluateString($this->_mode);
 		$numberOfAppointmentsToLoad  =   $this->evaluateString($this->_numberOfAppointmentsToLoad);

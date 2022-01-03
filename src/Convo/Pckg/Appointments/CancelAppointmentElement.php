@@ -4,7 +4,6 @@ namespace Convo\Pckg\Appointments;
 
 use Convo\Core\Adapters\Alexa\Api\AlexaSettingsApi;
 use Convo\Core\DataItemNotFoundException;
-use Convo\Core\Workflow\AbstractWorkflowContainerComponent;
 use Convo\Core\Workflow\IConversationElement;
 use Convo\Core\Workflow\IConvoRequest;
 use Convo\Core\Workflow\IConvoResponse;
@@ -60,7 +59,7 @@ class CancelAppointmentElement extends AbstractAppointmentElement
 	 */
 	public function read(IConvoRequest $request, IConvoResponse $response)
 	{
-		$context      	=   $this->_getSimpleSchedulingContext();
+		$context      	=   $this->_getAppointmentsContext();
 		$appointmentId  =   $this->evaluateString($this->_appointmentId);
 		$email          =   $this->evaluateString($this->_email);
 

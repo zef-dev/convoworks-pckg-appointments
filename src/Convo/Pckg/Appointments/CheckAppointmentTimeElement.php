@@ -93,7 +93,7 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
      */
     public function read( IConvoRequest $request, IConvoResponse $response)
     {
-        $context      =   $this->_getSimpleSchedulingContext();
+        $context      =   $this->_getAppointmentsContext();
         $date         =   $this->evaluateString( $this->_appointmentDate);
         $time         =   $this->evaluateString( $this->_appointmentTime);
 		$timezone     =   date_default_timezone_get();

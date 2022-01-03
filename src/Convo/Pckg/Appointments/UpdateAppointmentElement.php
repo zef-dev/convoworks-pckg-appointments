@@ -92,7 +92,7 @@ class UpdateAppointmentElement extends AbstractAppointmentElement
 	 */
 	public function read(IConvoRequest $request, IConvoResponse $response)
 	{
-		$context      	=   $this->_getSimpleSchedulingContext();
+		$context      	=   $this->_getAppointmentsContext();
 		$appointmentId  =   $this->evaluateString($this->_appointmentId);
 		$email          =   $this->evaluateString($this->_email);
 		$date           =   $this->evaluateString($this->_appointmentDate);
