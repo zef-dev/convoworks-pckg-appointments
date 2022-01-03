@@ -2,20 +2,13 @@
 
 namespace Convo\Pckg\Appointments;
 
-use Convo\Core\Adapters\Alexa\Api\AlexaSettingsApi;
-use Convo\Core\DataItemNotFoundException;
 use Convo\Core\Params\IServiceParamsScope;
-use Convo\Core\Workflow\AbstractWorkflowContainerComponent;
 use Convo\Core\Workflow\IConversationElement;
 use Convo\Core\Workflow\IConvoRequest;
 use Convo\Core\Workflow\IConvoResponse;
 
-class LoadAppointmentsElement extends AbstractWorkflowContainerComponent implements IConversationElement
+class LoadAppointmentsElement extends AbstractAppointmentElement
 {
-	/**
-	 * @var string
-	 */
-	private $_contextId;
 
 	/**
 	 * @var string
@@ -54,13 +47,11 @@ class LoadAppointmentsElement extends AbstractWorkflowContainerComponent impleme
 
 	/**
 	 * @param array $properties
-	 * @param AlexaSettingsApi $alexaSettingsApi
 	 */
 	public function __construct( $properties)
 	{
 		parent::__construct( $properties);
 
-		$this->_contextId         			=   $properties['context_id'];
 		$this->_mode     		  			=   $properties['mode'];
 		$this->_email     		  			=   $properties['email'];
 		$this->_numberOfAppointmentsToLoad  =   $properties['number_of_appointments_to_load'];
@@ -118,13 +109,4 @@ class LoadAppointmentsElement extends AbstractWorkflowContainerComponent impleme
 		}
 	}
 
-	/**
-	 * @return IAppointmentsContext
-	 */
-	private function _getSimpleSchedulingContext()
-	{
-		return $this->getService()->findContext(
-			$this->evaluateString( $this->_contextId),
-			IAppointmentsContext::class);
-	}
 }
