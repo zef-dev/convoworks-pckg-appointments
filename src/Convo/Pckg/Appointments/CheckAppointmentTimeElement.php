@@ -92,7 +92,9 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
         $date         =   $this->evaluateString( $this->_appointmentDate);
         $time         =   $this->evaluateString( $this->_appointmentTime);
 		$timezone     =   $this->_getTimezone( $request);
-
+		$scope_type   =   IServiceParamsScope::SCOPE_TYPE_REQUEST;
+		$params       =   $this->getService()->getComponentParams( $scope_type, $this);
+		
         $this->_logger->info( 'Checking time ['.$date.']['.$time.']['.$timezone->getName().']');
         
         $slot_time    =   new \DateTime( $date.' '.$time, $timezone);
@@ -101,6 +103,7 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
         {
             if ( $context->isSlotAvailable( $slot_time)) {
                 $this->_logger->info( 'Requested slot is available');
+                $params->setServiceParam( $this->_resultVar, [ 'suggestions' => [], 'timezone' => $timezone->getName()]);
                 foreach ( $this->_availableFlow as $element) {
                     $element->read( $request, $response);
                 }
@@ -118,9 +121,7 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
             }
         }
         
-        $scope_type   =   IServiceParamsScope::SCOPE_TYPE_REQUEST;
-        $params       =   $this->getService()->getComponentParams( $scope_type, $this);
-        $params->setServiceParam( $this->_resultVar, [ 'suggestions' => $queue->values()]);
+        $params->setServiceParam( $this->_resultVar, [ 'suggestions' => $queue->values(), 'timezone' => $timezone->getName()]);
 
 		$queueCount = $queue->count();
         $this->_logger->info( 'Got ['.$queueCount.'] suggestions');
