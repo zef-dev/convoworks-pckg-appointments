@@ -103,7 +103,9 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
         {
             if ( $context->isSlotAvailable( $slot_time)) {
                 $this->_logger->info( 'Requested slot is available');
-                $params->setServiceParam( $this->_resultVar, [ 'suggestions' => [], 'timezone' => $timezone->getName()]);
+                $params->setServiceParam( 
+                    $this->_resultVar, 
+                    [ 'suggestions' => [], 'timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()]);
                 foreach ( $this->_availableFlow as $element) {
                     $element->read( $request, $response);
                 }
@@ -121,7 +123,9 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
             }
         }
         
-        $params->setServiceParam( $this->_resultVar, [ 'suggestions' => $queue->values(), 'timezone' => $timezone->getName()]);
+        $params->setServiceParam( 
+            $this->_resultVar, 
+            [ 'suggestions' => $queue->values(), 'timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()]);
 
 		$queueCount = $queue->count();
         $this->_logger->info( 'Got ['.$queueCount.'] suggestions');

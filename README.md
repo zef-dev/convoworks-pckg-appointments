@@ -116,7 +116,7 @@ Parameters:
 * `context_id` - Id of the referenced `IAppointmentsContext`
 * `mode` : `current` default, `past` or `all`
 * `limit` : default `10`
-* `return_var` - Default `status`, name of the variable that contains additional information (`appointments`)
+* `return_var` - Default `status`, name of the variable that contains additional information (`appointments` : array of appointments, `timezone`: preffered timezone, `requested_time`: requested appoinitment as timestamp)
 
 Flows:
 * `empty`
