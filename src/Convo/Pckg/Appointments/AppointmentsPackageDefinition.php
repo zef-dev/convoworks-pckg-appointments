@@ -646,7 +646,30 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 							'</div>'
 					)
 				)
-			)
+			),
+			new \Convo\Core\Factory\ComponentDefinition(
+			    $this->getNamespace(),
+			    '\Convo\Pckg\Appointments\DummyAppointmentsContext',
+			    'Dummy Appointments Context',
+			    'Provides dummy, test implementation of the appointment managing context',
+			    array(
+			        'id' => array(
+			            'editor_type' => 'text',
+			            'editor_properties' => array(),
+			            'defaultValue' => 'your_appointment',
+			            'name' => 'Context ID',
+			            'description' => 'Unique ID by which this context is referenced',
+			            'valueType' => 'string'
+			        ),
+			        '_preview_angular' => array(
+			            'type' => 'html',
+			            'template' => '<div class="code">' .
+			            '<span class="statement">Dummy Appointments </span> <b>[{{ contextElement.properties.id }}]</b>' .
+			            '</div>'
+			        ),
+			        '_workflow' => 'datasource'
+				)
+		    )
 		];
 	}
 }
