@@ -4,6 +4,7 @@ namespace Convo\Pckg\Appointments;
 
 use Convo\Core\Workflow\AbstractBasicComponent;
 use Convo\Core\Workflow\IServiceContext;
+use Convo\Core\Params\IServiceParamsScope;
 
 class DummyAppointmentsContext extends AbstractBasicComponent implements IServiceContext, IAppointmentsContext
 {
@@ -77,7 +78,20 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 	
 	public function createAppointment( $email, $time, $payload = [])
 	{
-	    return \Convo\Core\Util\StrUtil::uuidV4();
+	    $appointment_id    =   \Convo\Core\Util\StrUtil::uuidV4();
+	    $appointment       =   [
+	        'appointment_id' => $appointment_id,
+	        'email' => $email,
+	        'timestamp' => $time->getTimestamp(),
+	        'timezone' => $time->getTimezone()->getName(),
+	        'payload' => $payload,
+	    ];
+	    
+	    $appointments      =   $this->_getAppointments();
+	    $appointments[]    =   $appointment;
+	    $this->_saveAppointments( $appointments);
+	    
+	    return $appointment_id;
 	}
 	
 	public function updateAppointment( $email, $appointmentId, $time, $payload = [])
@@ -127,7 +141,22 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
     }
     
     // DATA
-
+    private function _getAppointments()
+    {
+        $params         =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_USER, $this);
+        $appointments   =   $params->getServiceParam( 'appointments');
+        if ( empty( $appointments)) {
+            return [];
+        }
+        return $appointments;
+    }
+    
+    private function _saveAppointments( $appointments)
+    {
+        $params =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_USER, $this);
+        $params->setServiceParam( 'appointments', $appointments);
+    }
+    
     
     // UTIL
     public function __toString()
