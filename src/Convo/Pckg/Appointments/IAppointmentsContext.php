@@ -105,7 +105,7 @@ interface IAppointmentsContext
 	 * @param \DateTimeInterface $startTime
 	 * @return \Iterator
 	 */
-	public function getFreeSlotsIterator( $startTime=null);
+	public function getFreeSlotsIterator( $startTime);
 	
 	
 	

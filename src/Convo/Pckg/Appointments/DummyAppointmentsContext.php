@@ -39,8 +39,20 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 		return $this->_id;
 	}
 	
-	
+	// APPOINTMENTS INTERFACE
 	public function isSlotAvailable( $time)
+	{
+	    if ( !$this->_isSlotAllowed( $time)) {
+	        return false;
+	    }
+	    return true;
+	}
+	
+	/**
+	 * @param \DateTimeInterface $time
+	 * @return bool
+	 */
+	private function _isSlotAllowed( $time) 
 	{
 	    return true;
 	}
@@ -61,27 +73,42 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
         return [
             'appointment_id' => $appointmentId,
             'timestamp' => time() + 60 * 60 * 24,
-            'timezone' => date_default_timezone_get(),
             'payload' => [
-                'email' => $email
+                'email' => $email,
+                'name' => 'Tole Car'
             ],
         ];
     }
 
-    public function getFreeSlotsIterator( $startTime = null)
+    public function getFreeSlotsIterator( $startTime)
     {
-        return new \ArrayIterator( []);    
+        return new \ArrayIterator( [[
+            'timestamp' => time() + 60 * 60 * 24,
+        ], [
+            'timestamp' => time() + 60 * 60 * 24 + 60 * 60 * 2,
+        ]]);    
     }
 
     public function loadAppointments( $email, $mode=self::LOAD_MODE_CURRENT, $count=self::DEFAULT_APPOINTMENTS_COUNT) 
     {
-        return [];
+        return [[
+            'appointment_id' => '1',
+            'timestamp' => time() + 60 * 60 * 24,
+            'email' => $email,
+            'payload' => [
+                'email' => $email,
+                'name' => 'Tole Car'
+            ],
+        ]
+        ];
     }
 
     public function getDefaultTimezone()
     {
         return new \DateTimeZone( date_default_timezone_get());
     }
+    
+    // DATA
 
     
     // UTIL
