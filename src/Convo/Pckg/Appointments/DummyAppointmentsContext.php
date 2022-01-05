@@ -5,6 +5,7 @@ namespace Convo\Pckg\Appointments;
 use Convo\Core\Workflow\AbstractBasicComponent;
 use Convo\Core\Workflow\IServiceContext;
 use Convo\Core\Params\IServiceParamsScope;
+use Convo\Core\DataItemNotFoundException;
 
 class DummyAppointmentsContext extends AbstractBasicComponent implements IServiceContext, IAppointmentsContext
 {
@@ -126,14 +127,16 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 
     public function getAppointment( $email, $appointmentId)
     {
-        return [
-            'appointment_id' => $appointmentId,
-            'timestamp' => time() + 60 * 60 * 24,
-            'payload' => [
-                'email' => $email,
-                'name' => 'Tole Car'
-            ],
-        ];
+        $appointments      =   $this->_getAppointments();
+        
+        foreach ( $appointments as &$appointment)
+        {
+            if ( $appointment['appointment_id'] == $appointmentId) {
+                return $appointment;
+            }
+        }
+        
+        throw new DataItemNotFoundException( 'COuld not find appointment ['.$appointmentId.']');
     }
 
     public function getFreeSlotsIterator( $startTime)
@@ -147,16 +150,8 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 
     public function loadAppointments( $email, $mode=self::LOAD_MODE_CURRENT, $count=self::DEFAULT_APPOINTMENTS_COUNT) 
     {
-        return [[
-            'appointment_id' => '1',
-            'timestamp' => time() + 60 * 60 * 24,
-            'email' => $email,
-            'payload' => [
-                'email' => $email,
-                'name' => 'Tole Car'
-            ],
-        ]
-        ];
+        $appointments      =   $this->_getAppointments();
+        return $appointments;
     }
 
     public function getDefaultTimezone()
