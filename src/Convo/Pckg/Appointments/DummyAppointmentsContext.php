@@ -95,10 +95,34 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 	}
 	
 	public function updateAppointment( $email, $appointmentId, $time, $payload = [])
-	{}
+	{
+	    $appointments      =   $this->_getAppointments();
+
+	    foreach ( $appointments as &$appointment) 
+	    {
+	        if ( $appointment['appointment_id'] != $appointmentId) {
+	            continue;
+	        }
+	        $appointment['timestamp']  =   $time->getTimestamp();
+	        $appointment['timezone']   =   $time->getTimezone()->getName();
+	        if ( !empty( $payload)) {
+	            $appointment['payload']  =   $payload;
+	        }
+	    }
+	    
+	    $this->_saveAppointments( $appointments);
+	}
 	
     public function cancelAppointment( $email, $appointmentId)
-    {}
+    {
+        $appointments   =   $this->_getAppointments();
+        
+        $appointments   =   array_filter( $appointments, function ( $appointment) use ( $appointmentId) {
+            return $appointment['appointment_id'] != $appointmentId;
+        });        
+        
+        $this->_saveAppointments( $appointments);
+    }
 
     public function getAppointment( $email, $appointmentId)
     {
