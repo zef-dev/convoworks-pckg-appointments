@@ -23,7 +23,7 @@ interface IAppointmentsContext
     
 	/**
 	 * Checks if given slot is available.
-	 * @param \DateTime $time
+	 * @param \DateTimeInterface $time
 	 * @return bool
 	 */
     public function isSlotAvailable( $time);
@@ -31,7 +31,7 @@ interface IAppointmentsContext
 	/**
 	 * Creates new appointment and returns it's id.
 	 * @param string $email
-	 * @param \DateTime $time
+	 * @param \DateTimeInterface $time
 	 * @param array $payload
 	 * @return string created appointment id
 	 * @throws BadRequestException
@@ -43,7 +43,7 @@ interface IAppointmentsContext
 	 * Updates existing appointment.
 	 * @param string $email
 	 * @param string $appointmentId
-	 * @param \DateTime $time
+	 * @param \DateTimeInterface $time
 	 * @param array $payload
 	 * @throws DataItemNotFoundException
 	 * @throws BadRequestException
@@ -102,7 +102,7 @@ interface IAppointmentsContext
      *      "timezone" : "America/New_York"
      * }]
      * ```
-	 * @param \DateTime $startTime
+	 * @param \DateTimeInterface $startTime
 	 * @return \Iterator
 	 */
 	public function getFreeSlotsIterator( $startTime=null);
