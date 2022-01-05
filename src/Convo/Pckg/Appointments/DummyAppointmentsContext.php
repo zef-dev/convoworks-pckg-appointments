@@ -11,6 +11,10 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 
 	const DATE_TIME_FORMAT = 'Y-m-d H:i:s';
 
+	const MIN_HOUR =   '09:00';
+	const MAX_HOUR =   '16:30';
+	const DURATION =   '00:30';
+	
 	public function __construct( $properties)
 	{
 		parent::__construct( $properties);
@@ -54,6 +58,20 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 	 */
 	private function _isSlotAllowed( $time) 
 	{
+	    $requested =   \DateTime::createFromFormat( 'H:i', $time->format( 'H:i'));
+	    $start     =   \DateTime::createFromFormat( 'H:i', SELF::MIN_HOUR);
+	    $end       =   \DateTime::createFromFormat( 'H:i', SELF::MAX_HOUR);
+	    
+	    if ( $requested < $start || $requested > $end) {
+	        $this->_logger->info( 'Not in allowed period');
+	        return false;
+	    }
+	    
+	    if ( $time->format( 'N') >= 6) {
+	        $this->_logger->info( 'Weekedns not allowed.');
+	        return false;
+	    }
+	    
 	    return true;
 	}
 	
