@@ -47,7 +47,7 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate
     // COUNTABLE
     public function count()
     {
-        return $this->_items;
+        return count( $this->_items);
     }
     
     // ITERATOR AGREGATE
