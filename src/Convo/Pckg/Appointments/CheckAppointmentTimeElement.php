@@ -97,7 +97,7 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
 		
         $this->_logger->info( 'Checking time ['.$date.']['.$time.']['.$timezone->getName().']');
         
-        $slot_time    =   new \DateTime( $date.' '.$time, $timezone);
+        $slot_time    =   new \DateTimeImmutable( $date.' '.$time, $timezone);
         
         if ( $date && $time)
         {
