@@ -18,6 +18,8 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 	const DURATION_MINUTES =   30;
 	const MAX_DAYS         =   15;
 	
+	private $_cachedAppointments;
+	
 	public function __construct( $properties)
 	{
 		parent::__construct( $properties);
@@ -191,18 +193,21 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
     // DATA
     private function _getAppointments()
     {
-        $params         =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_USER, $this);
-        $appointments   =   $params->getServiceParam( 'appointments');
-        if ( empty( $appointments)) {
-            return [];
+        if ( !isset( $this->_cachedAppointments)) {
+            $params                      =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_USER, $this);
+            $this->_cachedAppointments   =   $params->getServiceParam( 'appointments');
+            if ( is_null( $this->_cachedAppointments)) {
+                $this->_cachedAppointments   =    [];
+            }
         }
-        return $appointments;
+        return $this->_cachedAppointments;
     }
     
     private function _saveAppointments( $appointments)
     {
         $params =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_USER, $this);
         $params->setServiceParam( 'appointments', $appointments);
+        $this->_cachedAppointments  =   $appointments;
     }
     
     
