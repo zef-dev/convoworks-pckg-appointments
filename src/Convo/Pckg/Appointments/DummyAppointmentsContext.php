@@ -53,6 +53,8 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 	// APPOINTMENTS INTERFACE
 	public function isSlotAvailable( $time)
 	{
+	    $this->_logger->debug( 'Checking time ['.$time->format( self::DATE_TIME_FORMAT).']');
+	    
 	    if ( !$this->_isSlotAllowed( $time)) {
 	        return false;
 	    }
@@ -61,9 +63,11 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 	    
 	    foreach ( $appointments as $appointment) 
 	    {
-	        $start =   new \DateTime( $appointment['timestamp'], $time->getTimezone());
-	        $end   =   new \DateTime( $appointment['timestamp'] + self::DURATION_MINUTES * 60, $time->getTimezone());
-	        if ( $time > $start && $time < $end) {
+	        $start     =   \DateTime::createFromFormat( 'U', strval( $appointment['timestamp']), $time->getTimezone());
+	        $end       =   \DateTime::createFromFormat( 'U', strval( $appointment['timestamp'] + self::DURATION_MINUTES * 60), $time->getTimezone());
+	        
+	        $this->_logger->debug( 'Checking against ['.$start->format( self::DATE_TIME_FORMAT).']['.$end->format( self::TIME_FORMAT).']');
+	        if ( $time >= $start && $time < $end) {
 	            $this->_logger->info( 'Taken slot by ['.$appointment['appointment_id'].']');
 	            return false;
 	        }
