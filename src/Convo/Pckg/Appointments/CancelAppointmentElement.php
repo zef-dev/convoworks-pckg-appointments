@@ -23,6 +23,11 @@ class CancelAppointmentElement extends AbstractAppointmentElement
 	private $_email;
 
 	/**
+	 * @var string
+	 */
+	private $_resultVar;
+
+	/**
 	 * @var IConversationElement[]
 	 */
 	private $_okFlow = array();
@@ -42,6 +47,7 @@ class CancelAppointmentElement extends AbstractAppointmentElement
 
 		$this->_appointmentId     =   $properties['appointment_id'];
 		$this->_email   		  =   $properties['email'];
+		$this->_resultVar  		  =   $properties['result_var'];
 
 		foreach ( $properties['ok'] as $element) {
 			$this->_okFlow[] = $element;
@@ -75,7 +81,7 @@ class CancelAppointmentElement extends AbstractAppointmentElement
 			$this->_logger->info('Canceled appointment with id ['. $appointmentId .'] for the customers email [' . $email . ']');
 			$selected_flow = $this->_okFlow;
 		}  catch (DataItemNotFoundException $e) {
-			$this->_logger->info($e->getMessage());
+		    $this->_logger->warning( $e);
 			$selected_flow = $this->_notFoundFlow;
 		}
 		
