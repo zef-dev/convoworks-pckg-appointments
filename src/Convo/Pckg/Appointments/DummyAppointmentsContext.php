@@ -12,6 +12,8 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 	private $_id;
 
 	const DATE_TIME_FORMAT =   'Y-m-d H:i:s';
+	const DATE_FORMAT      =   'Y-m-d';
+	const TIME_FORMAT      =   'H:i:s';
 
 	const MIN_HOUR         =   '09:00';
 	const MAX_HOUR         =   '16:30';
@@ -159,14 +161,21 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
     {
         $end        =   clone $startTime;
         $end        =   $end->modify( '+'.self::MAX_DAYS.' days' );
+        
+        $this->_logger->info( 'Checking free slots from ['.$startTime->format( self::DATE_TIME_FORMAT).'] to ['.$end->format( self::DATE_TIME_FORMAT).']');
+        
         $interval   =   new \DateInterval( 'P1D');
         $daterange  =   new \DatePeriod( $startTime, $interval, $end);
         
         foreach ( $daterange as $day) 
         {
+            $this->_logger->debug( 'Checking day ['.$day->format( self::DATE_TIME_FORMAT).']');
             /* @var \DateTime $day */
             $first      =   \DateTime::createFromFormat( 'H:i', self::MIN_HOUR);
             $last       =   \DateTime::createFromFormat( 'H:i', self::MAX_HOUR);
+            
+            $this->_logger->debug( 'Checking day ['.$day->format( self::DATE_TIME_FORMAT).'] from ['.$day->format( self::TIME_FORMAT).'] to ['.$day->format( self::TIME_FORMAT).']');
+            
 //             PT30M
             $slots      =   new \DateInterval( 'PT'.self::DURATION_MINUTES.'M');
             $timerange  =   new \DatePeriod( $first, $slots, $last);
@@ -177,10 +186,13 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
                 // 'Y-m-d H:i:s';
                 $current    =   \DateTime::createFromFormat( 
                     self::DATE_TIME_FORMAT, 
-                    $day->format( 'Y-m-d').' '.$slot->format( 'H:i:s'),
+                    $day->format( self::DATE_FORMAT).' '.$slot->format( self::TIME_FORMAT),
                     $startTime->getTimezone());
                 
+                $this->_logger->debug( 'Got current ['.$current->format( self::DATE_TIME_FORMAT).'] from slot ['.$slot->format( self::TIME_FORMAT).']');
+                
                 if ( $this->_isSlotAllowed( $current)) {
+                    $this->_logger->debug( 'Returning match ['.$current->format( self::DATE_TIME_FORMAT).']');
                     yield ['timestamp' => $current->getTimestamp()];                }
             }
         }
