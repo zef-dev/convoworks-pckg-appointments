@@ -77,8 +77,8 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 	private function _isSlotAllowed( $time) 
 	{
 	    $requested =   \DateTime::createFromFormat( 'H:i', $time->format( 'H:i'));
-	    $start     =   \DateTime::createFromFormat( 'H:i', SELF::MIN_HOUR);
-	    $end       =   \DateTime::createFromFormat( 'H:i', SELF::MAX_HOUR);
+	    $start     =   \DateTime::createFromFormat( 'H:i', self::MIN_HOUR);
+	    $end       =   \DateTime::createFromFormat( 'H:i', self::MAX_HOUR);
 	    
 	    if ( $requested < $start || $requested > $end) {
 	        $this->_logger->info( 'Not in allowed period');
@@ -167,8 +167,8 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
             /* @var \DateTime $day */
             $first      =   \DateTime::createFromFormat( 'H:i', self::MIN_HOUR);
             $last       =   \DateTime::createFromFormat( 'H:i', self::MAX_HOUR);
-            
-            $slots      =   new \DateInterval( 'P'.self::DURATION_MINUTES.'I');
+//             PT30M
+            $slots      =   new \DateInterval( 'PT'.self::DURATION_MINUTES.'M');
             $timerange  =   new \DatePeriod( $first, $slots, $last);
             
             foreach ( $timerange as $slot) 
