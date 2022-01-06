@@ -176,6 +176,11 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
         
         foreach ( $daterange as $day) 
         {
+            if ( $day->format( 'N') >= 6) {
+                $this->_logger->info( 'Weekedns not allowed ['.$day->format( self::DATE_FORMAT).'].');
+                continue;
+            }
+            
             $this->_logger->debug( 'Checking day ['.$day->format( self::DATE_TIME_FORMAT).']');
             /* @var \DateTime $day */
             $first      =   \DateTime::createFromFormat( 'H:i', self::MIN_HOUR);
@@ -198,7 +203,7 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
                 
                 $this->_logger->debug( 'Got current ['.$current->format( self::DATE_TIME_FORMAT).'] from slot ['.$slot->format( self::TIME_FORMAT).']');
                 
-                if ( $this->_isSlotAllowed( $current)) {
+                if ( $this->isSlotAvailable( $current)) {
                     $this->_logger->debug( 'Returning match ['.$current->format( self::DATE_TIME_FORMAT).']');
                     yield ['timestamp' => $current->getTimestamp()];                }
             }
