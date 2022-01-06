@@ -11,11 +11,12 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 {
 	private $_id;
 
-	const DATE_TIME_FORMAT = 'Y-m-d H:i:s';
+	const DATE_TIME_FORMAT =   'Y-m-d H:i:s';
 
-	const MIN_HOUR =   '09:00';
-	const MAX_HOUR =   '16:30';
-	const DURATION =   '00:30';
+	const MIN_HOUR         =   '09:00';
+	const MAX_HOUR         =   '16:30';
+	const DURATION_MINUTES =   30;
+	const MAX_DAYS         =   15;
 	
 	public function __construct( $properties)
 	{
@@ -141,11 +142,39 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 
     public function getFreeSlotsIterator( $startTime)
     {
-        return new \ArrayIterator( [[
-            'timestamp' => time() + 60 * 60 * 24,
-        ], [
-            'timestamp' => time() + 60 * 60 * 24 + 60 * 60 * 2,
-        ]]);    
+        $end        =   clone $startTime;
+        $end        =   $end->modify( '+'.self::MAX_DAYS.' days' );
+        $interval   =   new \DateInterval( 'P1D');
+        $daterange  =   new \DatePeriod( $startTime, $interval, $end);
+        
+        foreach ( $daterange as $day) 
+        {
+            /* @var \DateTime $day */
+            $first      =   \DateTime::createFromFormat( 'H:i', self::MIN_HOUR);
+            $last       =   \DateTime::createFromFormat( 'H:i', self::MAX_HOUR);
+            
+            $slots      =   new \DateInterval( 'P'.self::DURATION_MINUTES.'I');
+            $timerange  =   new \DatePeriod( $first, $slots, $last);
+            
+            foreach ( $timerange as $slot) 
+            {
+                /* @var \DateTime $slot */
+                // 'Y-m-d H:i:s';
+                $current    =   \DateTime::createFromFormat( 
+                    self::DATE_TIME_FORMAT, 
+                    $day->format( 'Y-m-d').' '.$slot->format( 'H:i:s'),
+                    $startTime->getTimezone());
+                
+                if ( $this->_isSlotAllowed( $current)) {
+                    yield ['timestamp' => $current->getTimestamp()];                }
+            }
+        }
+        
+//         return new \ArrayIterator( [[
+//             'timestamp' => time() + 60 * 60 * 24,
+//         ], [
+//             'timestamp' => time() + 60 * 60 * 24 + 60 * 60 * 2,
+//         ]]);    
     }
 
     public function loadAppointments( $email, $mode=self::LOAD_MODE_CURRENT, $count=self::DEFAULT_APPOINTMENTS_COUNT) 
