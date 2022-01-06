@@ -48,10 +48,9 @@ Parameters:
 Flows:
 
 * `available_flow`
-* `no_suggestions_flow`- default not available flow.
-* `suggestions_flow` - if it is empty, `no_suggestions_flow` will be executed
+* `suggestions_flow` - default flow
 * `single_suggestion_flow` - if it is empty, `suggestions_flow` will be executed
-
+* `no_suggestions_flow`- no suggestions, if it is empty, `suggestions_flow` will be executed
 
 Suggestion rules (TODO):
 * `first_next`
@@ -120,9 +119,9 @@ Parameters:
 * `return_var` - Default `status`, name of the variable that contains additional information (`appointments` : array of appointments, `timezone`: preffered timezone)
 
 Flows:
-* `empty`
 * `multiple`
 * `single` - if it is empty, `multiple` will be executed
+* `empty` - if it is empty, `multiple` will be executed
 
 
 

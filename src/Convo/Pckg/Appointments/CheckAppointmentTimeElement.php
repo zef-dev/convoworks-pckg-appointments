@@ -151,11 +151,11 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
      */
     private function _fallbackSuggestionFlows( $flow) {
         if ( $flow === $this->_singleSuggestionFlow && empty( $flow)) {
-            return $this->_fallbackSuggestionFlows( $this->_suggestionsFlow);
+            return $this->_suggestionsFlow;
         }
-        if ( $flow === $this->_suggestionsFlow && empty( $flow)) {
+        if ( $flow === $this->_noSuggestionsFlow && empty( $flow)) {
             $this->_logger->debug( 'Returning no suggestions flow');
-            return $this->_noSuggestionsFlow;
+            return $this->_suggestionsFlow;
         }
         $this->_logger->debug( 'Returning original flow');
         return $flow;

@@ -98,16 +98,28 @@ class LoadAppointmentsElement extends AbstractAppointmentElement
 		$params->setServiceParam( $returnVar, ['appointments' => $appointments, 'timezone' => $timezone->getName()]);
 
 		if ($appointmentsCount === 1) {
-			$selected_flow = $this->_singleFlow;
-		} else if ($appointmentsCount > 1) {
+		    $selected_flow = $this->_fallbackSuggestionFlows( $this->_singleFlow);
+		} else if ( $appointmentsCount > 1) {
 			$selected_flow = $this->_multipleFlow;
 		} else {
-			$selected_flow = $this->_emptyFlow;
+		    $selected_flow = $this->_fallbackSuggestionFlows( $this->_emptyFlow);
 		}
 
 		foreach ($selected_flow as $element) {
 			$element->read( $request, $response);
 		}
+	}
+	
+	private function _fallbackSuggestionFlows( $flow) {
+	    if ( $flow === $this->_emptyFlow && empty( $flow)) {
+	        return $this->_multipleFlow;
+	    }
+	    if ( $flow === $this->_singleFlow && empty( $flow)) {
+	        $this->_logger->debug( 'Returning multiple flow');
+	        return $this->_multipleFlow;
+	    }
+	    $this->_logger->debug( 'Returning original flow');
+	    return $flow;
 	}
 
 }

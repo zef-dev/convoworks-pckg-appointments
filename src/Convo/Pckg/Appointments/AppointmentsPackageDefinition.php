@@ -106,18 +106,6 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Flow to be executed if the requested appointment date is available.',
 						'valueType' => 'class'
 					],
-					'no_suggestions_flow' => [
-						'editor_type' => 'service_components',
-						'editor_properties' => [
-							'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
-							'multiple' => true
-						],
-						'defaultValue' => [],
-						'defaultOpen' => false,
-						'name' => 'No Suggestions',
-						'description' => 'Flow to be executed if the requested appointment date is available.',
-						'valueType' => 'class'
-					],
 					'suggestions_flow' => [
 						'editor_type' => 'service_components',
 						'editor_properties' => [
@@ -142,6 +130,18 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Flow to be executed if the requested appointment date is available.',
 						'valueType' => 'class'
 					],
+				    'no_suggestions_flow' => [
+				        'editor_type' => 'service_components',
+				        'editor_properties' => [
+				            'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
+				            'multiple' => true
+				        ],
+				        'defaultValue' => [],
+				        'defaultOpen' => false,
+				        'name' => 'No Suggestions',
+				        'description' => 'Flow to be executed if the requested appointment date is available.',
+				        'valueType' => 'class'
+				    ],
 					'_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
 					{
 						private $_alexaSettingsApi;
@@ -292,18 +292,6 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 					),
 				    'timezone_mode' => $timezone_mode_param,
 				    'timezone' => $timezone_param,
-					'empty' => [
-						'editor_type' => 'service_components',
-						'editor_properties' => [
-							'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
-							'multiple' => true
-						],
-						'defaultValue' => [],
-						'defaultOpen' => false,
-						'name' => 'Empty',
-						'description' => 'Flow to be executed if no appointment could be found.',
-						'valueType' => 'class'
-					],
 					'multiple' => [
 						'editor_type' => 'service_components',
 						'editor_properties' => [
@@ -328,6 +316,18 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Flow to be executed if one appointment could be found.',
 						'valueType' => 'class'
 					],
+				    'empty' => [
+				        'editor_type' => 'service_components',
+				        'editor_properties' => [
+				            'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
+				            'multiple' => true
+				        ],
+				        'defaultValue' => [],
+				        'defaultOpen' => false,
+				        'name' => 'Empty',
+				        'description' => 'Flow to be executed if no appointment could be found.',
+				        'valueType' => 'class'
+				    ],
 				    '_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
 				    {
 				        private $_alexaSettingsApi;
