@@ -11,6 +11,11 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate
      * @var array
      */
     private $_items =   [];
+    
+    /**
+     * @var IFreeSlotValidator[]
+     */
+    private $_validators =   [];
 
     /**
      * @var array
@@ -29,14 +34,27 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate
     }
     
     
+    public function addValidator( $key, $validator) {
+        $this->_validators[$key] = $validator;
+    }
+    
     public function add( $item)
     {
-        $this->_items[] = $item;
+        foreach ( $this->_validators as $key => $val) 
+        {
+            if ( isset( $this->_items[$key])) {
+                continue;
+            }
+            
+            if ( $val->isValid( $item)) {
+                $this->_items[$key] = $item;
+            }
+        }
     }
     
     public function values()
     {
-        return $this->_items;
+        return array_values( $this->_items);
     }
     
     public function isFull()
@@ -53,7 +71,7 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate
     // ITERATOR AGREGATE
     public function getIterator()
     {
-        return new \ArrayIterator( $this->_items);
+        return new \ArrayIterator( $this->values());
     }
     
     // UTIL

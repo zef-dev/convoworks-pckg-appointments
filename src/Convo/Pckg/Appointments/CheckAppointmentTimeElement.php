@@ -114,7 +114,13 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
         }
         
         $MAX      =   3;
+        $factory  =   new FreeSlotValidatorFactory( $slot_time);
         $queue    =   new FreeSlotQueue( $MAX, []);
+        $queue->addValidator( FreeSlotValidatorFactory::KEY_FIRST_NEXT, $factory->create( FreeSlotValidatorFactory::KEY_FIRST_NEXT));
+        $queue->addValidator( FreeSlotValidatorFactory::KEY_FIRST_SAME_TIME, $factory->create( FreeSlotValidatorFactory::KEY_FIRST_SAME_TIME));
+        $queue->addValidator( FreeSlotValidatorFactory::KEY_FIRST_SAME_DAY_TIME, $factory->create( FreeSlotValidatorFactory::KEY_FIRST_SAME_DAY_TIME));
+        $queue->addValidator( FreeSlotValidatorFactory::KEY_FIRST_NEXT_WEEK, $factory->create( FreeSlotValidatorFactory::KEY_FIRST_NEXT_WEEK));
+        
         foreach ( $context->getFreeSlotsIterator( $slot_time) as $time)
         {
             $queue->add( $time);
