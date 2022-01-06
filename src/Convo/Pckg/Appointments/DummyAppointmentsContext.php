@@ -209,8 +209,31 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 
     public function loadAppointments( $email, $mode=self::LOAD_MODE_CURRENT, $count=self::DEFAULT_APPOINTMENTS_COUNT) 
     {
-        $appointments      =   $this->_getAppointments();
-        return $appointments;
+        $appointments       =   $this->_getAppointments();
+        
+        if ( $mode == self::LOAD_MODE_ALL) {
+            return $appointments;
+        }
+
+        $filtered           =   [];
+        $now                =   time();
+        if ( $mode == self::LOAD_MODE_CURRENT) {
+            foreach ( $appointments as $appointment) {
+                if ( $appointment['timestamp'] > $now) {
+                    $filtered[] = $appointment;
+                }
+            }
+        } else if ( $mode == self::LOAD_MODE_PAST) {
+            foreach ( $appointments as $appointment) {
+                if ( $appointment['timestamp'] < $now) {
+                    $filtered[] = $appointment;
+                }
+            }
+        } else {
+            throw new \Exception( 'Unexpected mode ['.$mode.']');
+        }
+        
+        return $filtered;
     }
 
     public function getDefaultTimezone()
