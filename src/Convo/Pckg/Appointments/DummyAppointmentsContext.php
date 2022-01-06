@@ -54,6 +54,19 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 	    if ( !$this->_isSlotAllowed( $time)) {
 	        return false;
 	    }
+	    
+	    $appointments  =   $this->_getAppointments();
+	    
+	    foreach ( $appointments as $appointment) 
+	    {
+	        $start =   new \DateTime( $appointment['timestamp'], $time->getTimezone());
+	        $end   =   new \DateTime( $appointment['timestamp'] + self::DURATION_MINUTES * 60, $time->getTimezone());
+	        if ( $time > $start && $time < $end) {
+	            $this->_logger->info( 'Taken slot by ['.$appointment['appointment_id'].']');
+	            return false;
+	        }
+	    }
+	    
 	    return true;
 	}
 	
