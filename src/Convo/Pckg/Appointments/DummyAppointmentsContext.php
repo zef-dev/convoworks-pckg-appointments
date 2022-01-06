@@ -147,14 +147,17 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
     {
         $appointments      =   $this->_getAppointments();
         
-        foreach ( $appointments as &$appointment)
+        $this->_logger->debug( 'Searching for appointment ['.$appointmentId.']');
+        foreach ( $appointments as $appointment)
         {
+            $this->_logger->debug( 'Checking appointment ['.print_r( $appointment, true).']');
             if ( $appointment['appointment_id'] == $appointmentId) {
+                $this->_logger->info( 'Found appointment ['.$appointmentId.']');
                 return $appointment;
             }
         }
         
-        throw new DataItemNotFoundException( 'COuld not find appointment ['.$appointmentId.']');
+        throw new DataItemNotFoundException( 'Could not find appointment ['.$appointmentId.']');
     }
 
     public function getFreeSlotsIterator( $startTime)
