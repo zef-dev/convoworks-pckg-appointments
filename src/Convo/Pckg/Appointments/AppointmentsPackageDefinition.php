@@ -635,7 +635,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				        
 				        public function createComponent($properties, $service)
 				        {
-				            return new \Convo\Pckg\Appointments\CreateAppointmentElement( $properties, $this->_alexaSettingsApi);
+				            return new \Convo\Pckg\Appointments\CancelAppointmentElement( $properties, $this->_alexaSettingsApi);
 				        }
 					},
 					'_workflow' => 'read',
