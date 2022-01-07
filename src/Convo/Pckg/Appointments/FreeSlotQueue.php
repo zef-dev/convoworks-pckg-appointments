@@ -27,6 +27,8 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate
      */
     private $_maxCount;
     
+    private $_days  =   [];
+    
     public function __construct( $maxCount, $config)
     {
         $this->_maxCount    =   $maxCount;
@@ -42,12 +44,33 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate
     {
         foreach ( $this->_validators as $val) 
         {
+            if ( $this->_blocked( $item)) {
+                return;
+            }
             if ( !$val->active()) {
                 continue;
             }
             if ( $val->add( $item)) {
+                $this->_register( $item);
                 return;
             }
+        }
+    }
+    
+    private function _register( $item) {
+        $date   =   \DateTimeImmutable::createFromFormat( 'U', strval( $item['timestamp']), new \DateTimeZone( $item['timezone']));
+        $day    =   $date->format( 'Y-m-d');
+        if ( !isset( $this->_days[$day])) {
+            $this->_days[$day]  =   0;
+        }
+        $this->_days[$day]++;
+    }
+    
+    private function _blocked( $item) {
+        $date   =   \DateTimeImmutable::createFromFormat( 'U', strval( $item['timestamp']), new \DateTimeZone( $item['timezone']));
+        $day    =   $date->format( 'Y-m-d');
+        if ( isset( $this->_days[$day]) && $this->_days[$day] >= 2) {
+            return true;
         }
     }
     
