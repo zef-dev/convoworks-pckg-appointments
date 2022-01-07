@@ -59,6 +59,11 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate
                 $values[]   =   $val->value();
             }
         }
+        
+        usort( $values, function ( $item1, $item2) {
+            return $item1['timestamp'] <=> $item2['timestamp'];
+        });
+        
         return $values;
     }
     
