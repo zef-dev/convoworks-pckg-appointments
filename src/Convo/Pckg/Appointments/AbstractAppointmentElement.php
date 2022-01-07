@@ -7,6 +7,7 @@ use Convo\Core\Workflow\AbstractWorkflowContainerComponent;
 use Convo\Core\Workflow\IConversationElement;
 use Convo\Core\Workflow\IConvoRequest;
 use Convo\Core\Adapters\Alexa\Api\AlexaSettingsApi;
+use Convo\Core\Workflow\IConvoResponse;
 
 abstract class AbstractAppointmentElement extends AbstractWorkflowContainerComponent implements IConversationElement
 {
@@ -46,6 +47,30 @@ abstract class AbstractAppointmentElement extends AbstractWorkflowContainerCompo
 		$this->_timezone          =   $properties['timezone'];
 		
 		$this->_alexaSettingsApi  =   $alexaSettingsApi;
+	}
+	
+
+	/**
+	 * @param IConversationElement[] $elements
+	 * @param \DateTimeZone $timezone
+     * @param IConvoRequest $request
+     * @param IConvoResponse $response
+	 * @throws \Throwable
+	 */
+	protected function _readElementsInTimezone( $elements, $timezone, $request, $response) 
+	{
+	    $default  =    date_default_timezone_get();
+	    
+	    try {
+	        date_default_timezone_set( $timezone->getName());
+	        foreach ($elements as $element) {
+	            $element->read( $request, $response);
+	        }
+	    } catch ( \Throwable $e) {
+	        throw $e;
+	    } finally {
+	        date_default_timezone_set( $default);
+	    }
 	}
 	
 	/**

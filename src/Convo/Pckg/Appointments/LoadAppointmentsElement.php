@@ -107,10 +107,8 @@ class LoadAppointmentsElement extends AbstractAppointmentElement
 		    $this->_logger->debug( 'Selecting no suggestions flow');
 		    $selected_flow = $this->_fallbackSuggestionFlows( $this->_emptyFlow);
 		}
-
-		foreach ($selected_flow as $element) {
-			$element->read( $request, $response);
-		}
+		
+		$this->_readElementsInTimezone( $selected_flow, $timezone, $request, $response);
 	}
 	
 	private function _fallbackSuggestionFlows( $flow) {

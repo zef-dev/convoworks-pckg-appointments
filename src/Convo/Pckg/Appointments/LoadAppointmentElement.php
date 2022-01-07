@@ -89,9 +89,6 @@ class LoadAppointmentElement extends AbstractAppointmentElement
 			$selected_flow = $this->_notFoundFlow;
 		}
 
-		foreach ($selected_flow as $element) {
-			$element->read( $request, $response);
-		}
+		$this->_readElementsInTimezone( $selected_flow, $timezone, $request, $response);
 	}
-
 }
