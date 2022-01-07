@@ -23,6 +23,16 @@ class FreeSlotValidatorFactory
         $this->_time    =   $time;
     }
     
+    public function getDefaultQueue()
+    {
+        $MAX      =   3;
+        $queue    =   new FreeSlotQueue( $MAX, []);
+        $queue->addValidator( $this->create( FreeSlotValidatorFactory::KEY_FIRST_NEXT));
+        $queue->addValidator( $this->create( FreeSlotValidatorFactory::KEY_FIRST_SAME_TIME));
+        $queue->addValidator( $this->create( FreeSlotValidatorFactory::KEY_FIRST_SAME_DAY_TIME));
+        $queue->addValidator( $this->create( FreeSlotValidatorFactory::KEY_FIRST_NEXT_WEEK));
+        return $queue;
+    }
     
     public function create( $key)
     {
