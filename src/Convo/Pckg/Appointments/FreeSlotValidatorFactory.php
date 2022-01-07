@@ -27,83 +27,50 @@ class FreeSlotValidatorFactory
     public function create( $key)
     {
         if ( $key == self::KEY_FIRST_NEXT) {
-            return new class() implements IFreeSlotValidator {
-                public function isValid( $item)
-                {
-                    return true;
-                }
+            return new class( $this->_time) extends AbstractFreeSlotValidator {
             };
         }
         
         if ( $key == self::KEY_FIRST_SAME_TIME) {
-            return new class( $this->_time) implements IFreeSlotValidator {
+            return new class( $this->_time) extends AbstractFreeSlotValidator {
                 
-                /**
-                 * @var \DateTime
-                 **/
-                private $_time;
-                
-                public function __construct( $time) {
-                    $this->_time    =   $time;
-                }
-                
-                public function isValid( $item) 
+                public function add( $item) 
                 {
-                    
                     $slot_date  =   \DateTime::createFromFormat( 'U', strval( $item['timestamp']));
                     if ( $this->_time->format( FreeSlotValidatorFactory::TIME_FORMAT) !== $slot_date->format( FreeSlotValidatorFactory::TIME_FORMAT)) {
-                        return false;
+                        return;
                     }
-                    return true;
+                    parent::add( $item);
                 }
             };
         }
         
         if ( $key == self::KEY_FIRST_SAME_DAY_TIME) {
-            return new class( $this->_time) implements IFreeSlotValidator {
+            return new class( $this->_time) extends AbstractFreeSlotValidator {
                 
-                /**
-                 * @var \DateTime
-                 **/
-                private $_time;
-                
-                public function __construct( $time) {
-                    $this->_time    =   $time;
-                }
-                
-                public function isValid( $item) 
+                public function add( $item) 
                 {
                     $slot_date  =   \DateTime::createFromFormat( 'U', strval( $item['timestamp']));
                     if ( $this->_time->format( FreeSlotValidatorFactory::TIME_FORMAT) !== $slot_date->format( FreeSlotValidatorFactory::TIME_FORMAT)) {
-                        return false;
+                        return;
                     }
                     if ( $this->_time->format( 'N') !== $slot_date->format( 'N')) {
-                        return false;
+                        return;
                     }
-                    return true;
+                    parent::add( $item);
                 }
             };
         }
         
         if ( $key == self::KEY_FIRST_NEXT_WEEK) {
-            return new class( $this->_time) implements IFreeSlotValidator {
-                
-                /**
-                 * @var \DateTime
-                 **/
-                private $_time;
-                
-                public function __construct( $time) {
-                    $this->_time    =   $time;
-                }
-                
-                public function isValid( $item) 
+            return new class( $this->_time) extends AbstractFreeSlotValidator {
+
+                public function add( $item) 
                 {
                     $slot_date  =   \DateTime::createFromFormat( 'U', strval( $item['timestamp']));
                     if ( $this->_time->format( 'W') < $slot_date->format( 'W')) {
-                        return true;
+                        parent::add( $item);
                     }
-                    return false;
                 }
             };
         }

@@ -13,11 +13,6 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate
     private $_items =   [];
     
     /**
-     * @var array
-     */
-//     private $_values =   [];
-    
-    /**
      * @var IFreeSlotValidator[]
      */
     private $_validators =   [];
@@ -39,33 +34,28 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate
     }
     
     
-    public function addValidator( $key, $validator) {
-        $this->_validators[$key] = $validator;
+    public function addValidator( $validator) {
+        $this->_validators[] = $validator;
     }
     
     public function add( $item)
     {
-//         if ( isset( $this->_values[strval($item['timestamp'])])) {
-//             return;
-//         }
-        
-        foreach ( $this->_validators as $key => $val) 
+        foreach ( $this->_validators as $val) 
         {
-            if ( isset( $this->_items[$key])) {
+            if ( !$val->active()) {
                 continue;
             }
-            
-            if ( $val->isValid( $item)) {
-                $this->_items[$key] = $item;
-//                 $this->_values[strval($item['timestamp'])] =   true;
-                return ;
-            }
+            $val->add( $item);
         }
     }
     
     public function values()
     {
-        return array_values( $this->_items);
+        $values =   [];
+        foreach ( $this->_validators as $val) {
+            $values =   array_merge( $values, $val->values());
+        }
+        return $values;
     }
     
     public function isFull()
@@ -76,7 +66,7 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate
     // COUNTABLE
     public function count()
     {
-        return count( $this->_items);
+        return count( $this->values());
     }
     
     // ITERATOR AGREGATE

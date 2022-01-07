@@ -9,8 +9,19 @@ interface IFreeSlotValidator
     
     /**
      * @param array $item
-     * @return bool 
      */
-    public function isValid( $item);
+    public function add( $item);
+
+    /**
+     * @param array $item
+     * @return bool
+     */
+    public function active();
+    
+    
+    /**
+     * @return array
+     */
+    public function values();
     
 }
