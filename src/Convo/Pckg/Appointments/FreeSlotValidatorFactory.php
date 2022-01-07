@@ -37,12 +37,11 @@ class FreeSlotValidatorFactory
     public function create( $key)
     {
         if ( $key == self::KEY_FIRST_NEXT) {
-            return new class( $this->_time) extends AbstractFreeSlotValidator {
-            };
+            return new DefaultFreeSlotValidator( $this->_time);
         }
         
         if ( $key == self::KEY_FIRST_SAME_TIME) {
-            return new class( $this->_time) extends AbstractFreeSlotValidator {
+            return new class( $this->_time) extends DefaultFreeSlotValidator {
                 
                 public function add( $item) 
                 {
@@ -56,7 +55,7 @@ class FreeSlotValidatorFactory
         }
         
         if ( $key == self::KEY_FIRST_SAME_DAY_TIME) {
-            return new class( $this->_time) extends AbstractFreeSlotValidator {
+            return new class( $this->_time) extends DefaultFreeSlotValidator {
                 
                 public function add( $item) 
                 {
@@ -73,7 +72,7 @@ class FreeSlotValidatorFactory
         }
         
         if ( $key == self::KEY_FIRST_NEXT_WEEK) {
-            return new class( $this->_time) extends AbstractFreeSlotValidator {
+            return new class( $this->_time) extends DefaultFreeSlotValidator {
 
                 public function add( $item) 
                 {

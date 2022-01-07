@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Convo\Pckg\Appointments;
 
 
-abstract class AbstractFreeSlotValidator implements IFreeSlotValidator
+class DefaultFreeSlotValidator implements IFreeSlotValidator
 {
    
     
