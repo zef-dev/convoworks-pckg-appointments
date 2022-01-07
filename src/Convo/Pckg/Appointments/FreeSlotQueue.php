@@ -55,7 +55,9 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate
     {
         $values =   [];
         foreach ( $this->_validators as $val) {
-            $values =   array_merge( $values, $val->values());
+            if ( $val->value()) {
+                $values[]   =   $val->value();
+            }
         }
         return $values;
     }

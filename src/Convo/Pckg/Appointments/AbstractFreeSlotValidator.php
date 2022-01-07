@@ -44,11 +44,11 @@ abstract class AbstractFreeSlotValidator implements IFreeSlotValidator
     /**
      * @return array
      */
-    public function values() {
+    public function value() {
         if ( isset( $this->_value)) {
-            return [$this->_value];
+            return $this->_value;
         }
-        return [];
+        return null;
     }
     
 }

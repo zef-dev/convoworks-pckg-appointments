@@ -23,6 +23,6 @@ interface IFreeSlotValidator
     /**
      * @return array
      */
-    public function values();
+    public function value();
     
 }
