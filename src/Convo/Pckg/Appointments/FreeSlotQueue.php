@@ -45,7 +45,9 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate
             if ( !$val->active()) {
                 continue;
             }
-            $val->add( $item);
+            if ( $val->add( $item)) {
+                return;
+            }
         }
     }
     

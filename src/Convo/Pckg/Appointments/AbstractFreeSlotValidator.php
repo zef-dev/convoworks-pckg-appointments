@@ -26,6 +26,7 @@ abstract class AbstractFreeSlotValidator implements IFreeSlotValidator
      */
     public function add( $item) {
         $this->_value    =   $item;
+        return true;
     }
     
     /**

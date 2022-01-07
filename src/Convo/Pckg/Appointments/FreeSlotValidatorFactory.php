@@ -38,9 +38,9 @@ class FreeSlotValidatorFactory
                 {
                     $slot_date  =   \DateTime::createFromFormat( 'U', strval( $item['timestamp']));
                     if ( $this->_time->format( FreeSlotValidatorFactory::TIME_FORMAT) !== $slot_date->format( FreeSlotValidatorFactory::TIME_FORMAT)) {
-                        return;
+                        return false;
                     }
-                    parent::add( $item);
+                    return parent::add( $item);
                 }
             };
         }
@@ -52,12 +52,12 @@ class FreeSlotValidatorFactory
                 {
                     $slot_date  =   \DateTime::createFromFormat( 'U', strval( $item['timestamp']));
                     if ( $this->_time->format( FreeSlotValidatorFactory::TIME_FORMAT) !== $slot_date->format( FreeSlotValidatorFactory::TIME_FORMAT)) {
-                        return;
+                        return false;
                     }
                     if ( $this->_time->format( 'N') !== $slot_date->format( 'N')) {
-                        return;
+                        return false;
                     }
-                    parent::add( $item);
+                    return parent::add( $item);
                 }
             };
         }
@@ -69,8 +69,9 @@ class FreeSlotValidatorFactory
                 {
                     $slot_date  =   \DateTime::createFromFormat( 'U', strval( $item['timestamp']));
                     if ( $this->_time->format( 'W') < $slot_date->format( 'W')) {
-                        parent::add( $item);
+                        return parent::add( $item);
                     }
+                    return false;
                 }
             };
         }

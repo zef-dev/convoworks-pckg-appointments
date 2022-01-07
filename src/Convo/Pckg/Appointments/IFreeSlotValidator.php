@@ -9,6 +9,7 @@ interface IFreeSlotValidator
     
     /**
      * @param array $item
+     * @return bool true when actually added
      */
     public function add( $item);
 
