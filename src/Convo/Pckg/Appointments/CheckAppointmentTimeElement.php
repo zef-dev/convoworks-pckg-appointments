@@ -26,6 +26,11 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
     /**
      * @var string
      */
+    private $_maxSuggestions;
+    
+    /**
+     * @var string
+     */
     private $_resultVar;
     
     /**
@@ -60,6 +65,7 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
         $this->_resultVar         =   $properties['result_var'];
         $this->_appointmentDate   =   $properties['appointment_date'];
         $this->_appointmentTime   =   $properties['appointment_time'];
+        $this->_maxSuggestions    =   $properties['max_suggestions'];
         
         foreach ( $properties['available_flow'] as $element) {
             $this->_availableFlow[] = $element;
@@ -114,7 +120,7 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
         }
         
         $factory  =   new FreeSlotValidatorFactory( $slot_time);
-        $queue    =   $factory->getDefaultQueue(); 
+        $queue    =   $factory->getDefaultQueue( $this->_maxSuggestions); 
         
         foreach ( $context->getFreeSlotsIterator( $slot_time) as $time)
         {
