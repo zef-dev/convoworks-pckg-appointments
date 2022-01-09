@@ -44,11 +44,11 @@ class DefaultFreeSlotValidator implements IFreeSlotValidator
     /**
      * @return array
      */
-    public function value() {
+    public function values() {
         if ( isset( $this->_value)) {
-            return $this->_value;
+            return [$this->_value];
         }
-        return null;
+        return [];
     }
     
 }
