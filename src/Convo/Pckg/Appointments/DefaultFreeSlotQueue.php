@@ -4,7 +4,7 @@ namespace Convo\Pckg\Appointments;
 
 use Convo\Core\Workflow\AbstractWorkflowComponent;
 
-class DefaultFreeSlotStack extends AbstractWorkflowComponent implements IFreeSlotQueueFactory
+class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlotQueueFactory
 {
     
     /**

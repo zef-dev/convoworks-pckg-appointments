@@ -187,7 +187,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 			),
 			new \Convo\Core\Factory\ComponentDefinition(
 				$this->getNamespace(),
-				'\Convo\Pckg\Appointments\DefaultFreeSlotStack',
+				'\Convo\Pckg\Appointments\DefaultFreeSlotQueue',
 				'Default free slot collector',
 				'Collects and generates free slots suggestions',
 				array(
