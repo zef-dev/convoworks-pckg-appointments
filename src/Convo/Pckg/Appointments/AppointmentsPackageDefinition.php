@@ -105,7 +105,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 					'suggestions_builder' => [
 						'editor_type' => 'service_components',
 						'editor_properties' => [
-							'allow_interfaces' => ['\Convo\Pckg\Appointments\IFreeSlotQueueFactory'],
+							'allow_interfaces' => ['\Convo\Pckg\Appointments\Freeslot\IFreeSlotQueueFactory'],
 							'multiple' => false
 						],
 						'defaultValue' => null,

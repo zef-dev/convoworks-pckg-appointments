@@ -3,6 +3,8 @@
 namespace Convo\Pckg\Appointments;
 
 use Convo\Core\Workflow\AbstractWorkflowComponent;
+use Convo\Pckg\Appointments\Freeslot\IFreeSlotQueueFactory;
+use Convo\Pckg\Appointments\Freeslot\FreeSlotValidatorFactory;
 
 class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlotQueueFactory
 {

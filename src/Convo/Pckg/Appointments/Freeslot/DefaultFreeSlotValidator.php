@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-namespace Convo\Pckg\Appointments;
+namespace Convo\Pckg\Appointments\Freeslot;
 
 
 class DefaultFreeSlotValidator implements IFreeSlotValidator

@@ -8,6 +8,7 @@ use Convo\Core\Workflow\IConvoResponse;
 use Convo\Core\Workflow\IConversationElement;
 use Convo\Core\Adapters\Alexa\Api\AlexaSettingsApi;
 use Convo\Core\Params\IServiceParamsScope;
+use Convo\Pckg\Appointments\Freeslot\IFreeSlotQueueFactory;
 
 
 class CheckAppointmentTimeElement extends AbstractAppointmentElement
