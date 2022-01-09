@@ -27,11 +27,6 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
     /**
      * @var string
      */
-    private $_maxSuggestions;
-    
-    /**
-     * @var string
-     */
     private $_resultVar;
     
     /**
@@ -70,7 +65,6 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
         $this->_resultVar           =   $properties['result_var'];
         $this->_appointmentDate     =   $properties['appointment_date'];
         $this->_appointmentTime     =   $properties['appointment_time'];
-        $this->_maxSuggestions      =   $properties['max_suggestions'];
         $this->_suggestionsBuilder  =   $properties['suggestions_builder'];
         
         $this->addChild( $this->_suggestionsBuilder);

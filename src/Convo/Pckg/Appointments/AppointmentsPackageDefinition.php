@@ -84,14 +84,6 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Time of the appointment.',
 						'valueType' => 'string'
 					),
-					'max_suggestions' => array(
-						'editor_type' => 'text',
-						'editor_properties' => array(),
-						'defaultValue' => 0,
-						'name' => 'Max Suggestions',
-						'description' => 'How many suggestions to return. Use 0 if your system does not supports suggestions',
-						'valueType' => 'string'
-					),
 					'result_var' => array(
 						'editor_type' => 'text',
 						'editor_properties' => array(),
