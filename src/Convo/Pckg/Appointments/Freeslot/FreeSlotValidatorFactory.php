@@ -27,7 +27,6 @@ class FreeSlotValidatorFactory
     public function getDefaultQueue( $max)
     {
         $queue    =   new FreeSlotQueue( $max);
-        $queue->addValidator( $this->create( FreeSlotValidatorFactory::KEY_MAX_PER_DAY));
         $queue->addValidator( $this->create( FreeSlotValidatorFactory::KEY_FIRST_NEXT));
         $queue->addValidator( $this->create( FreeSlotValidatorFactory::KEY_FIRST_SAME_TIME));
         $queue->addValidator( $this->create( FreeSlotValidatorFactory::KEY_FIRST_SAME_DAY_TIME));
@@ -37,22 +36,6 @@ class FreeSlotValidatorFactory
     
     public function create( $key)
     {
-        if ( $key == self::KEY_MAX_PER_DAY) {
-            return new class( $this->_time) extends DefaultFreeSlotValidator {
-                
-                private $_days  =   [];
-                
-                public function add( $item)
-                {
-                    $slot_date  =   \DateTime::createFromFormat( 'U', strval( $item['timestamp']));
-                    if ( $this->_time->format( 'W') < $slot_date->format( 'W')) {
-                        return parent::add( $item);
-                    }
-                    return false;
-                }
-            };
-        }
-        
         if ( $key == self::KEY_FIRST_NEXT) {
             return new DefaultFreeSlotValidator( $this->_time);
         }
