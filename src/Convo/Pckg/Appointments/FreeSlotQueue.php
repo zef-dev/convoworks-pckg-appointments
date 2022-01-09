@@ -16,11 +16,6 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate, IFreeSlotQueue
      * @var IFreeSlotValidator[]
      */
     private $_validators =   [];
-
-    /**
-     * @var array
-     */
-    private $_config;
     
     /**
      * @var int
@@ -29,10 +24,9 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate, IFreeSlotQueue
     
     private $_days  =   [];
     
-    public function __construct( $maxCount, $config)
+    public function __construct( $maxCount)
     {
         $this->_maxCount    =   $maxCount;
-        $this->_config      =   $config;
     }
     
     

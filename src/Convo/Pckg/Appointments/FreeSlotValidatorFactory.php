@@ -26,7 +26,7 @@ class FreeSlotValidatorFactory
     
     public function getDefaultQueue( $max)
     {
-        $queue    =   new FreeSlotQueue( $max, []);
+        $queue    =   new FreeSlotQueue( $max);
         $queue->addValidator( $this->create( FreeSlotValidatorFactory::KEY_MAX_PER_DAY));
         $queue->addValidator( $this->create( FreeSlotValidatorFactory::KEY_FIRST_NEXT));
         $queue->addValidator( $this->create( FreeSlotValidatorFactory::KEY_FIRST_SAME_TIME));
