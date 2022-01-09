@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Convo\Pckg\Appointments;
 
 
-class FreeSlotQueue implements \Countable, \IteratorAggregate
+class FreeSlotQueue implements \Countable, \IteratorAggregate, IFreeSlotQueue
 {
     
     /**

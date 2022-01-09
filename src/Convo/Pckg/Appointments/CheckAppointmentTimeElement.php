@@ -53,6 +53,10 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
      */
     private $_singleSuggestionFlow = array();
     
+    /**
+     * @var IFreeSlotQueueFactory
+     */
+    private $_suggestionsBuilder;
     
     /**
      * @param array $properties
@@ -62,10 +66,13 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
     {
         parent::__construct( $properties, $alexaSettingsApi);
         
-        $this->_resultVar         =   $properties['result_var'];
-        $this->_appointmentDate   =   $properties['appointment_date'];
-        $this->_appointmentTime   =   $properties['appointment_time'];
-        $this->_maxSuggestions    =   $properties['max_suggestions'];
+        $this->_resultVar           =   $properties['result_var'];
+        $this->_appointmentDate     =   $properties['appointment_date'];
+        $this->_appointmentTime     =   $properties['appointment_time'];
+        $this->_maxSuggestions      =   $properties['max_suggestions'];
+        $this->_suggestionsBuilder  =   $properties['suggestions_builder'];
+        
+        $this->addChild( $this->_suggestionsBuilder);
         
         foreach ( $properties['available_flow'] as $element) {
             $this->_availableFlow[] = $element;
@@ -119,35 +126,41 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
             }
         }
         
-        $factory  =   new FreeSlotValidatorFactory( $slot_time);
-        $queue    =   $factory->getDefaultQueue( $this->_maxSuggestions); 
-        
-        foreach ( $context->getFreeSlotsIterator( $slot_time) as $time)
+        if ( $this->_suggestionsBuilder) 
         {
-            $queue->add( $time);
-            if ( $queue->isFull()) {
-                break;
+            $queue  =   $this->_suggestionsBuilder->createStack( $slot_time);
+            foreach ( $context->getFreeSlotsIterator( $slot_time) as $time)
+            {
+                $queue->add( $time);
+                if ( $queue->isFull()) {
+                    break;
+                }
             }
+            
+            $queueCount = $queue->count();
+            $this->_logger->info( 'Got ['.$queueCount.'] suggestions');
+            
+            if ( $queueCount === 0) {
+                $selected_flow   =   $this->_noSuggestionsFlow;
+            } else if ( $queueCount === 1) {
+                $selected_flow   =   $this->_fallbackSuggestionFlows( $this->_singleSuggestionFlow);
+            } else {
+                $selected_flow   =   $this->_fallbackSuggestionFlows( $this->_suggestionsFlow);
+            }
+            
+            $params->setServiceParam(
+                $this->_resultVar,
+                [ 'suggestions' => $queue->values(), 'timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()]);
         }
-        
-        $params->setServiceParam( 
-            $this->_resultVar, 
-            [ 'suggestions' => $queue->values(), 'timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()]);
-
-		$queueCount = $queue->count();
-        $this->_logger->info( 'Got ['.$queueCount.'] suggestions');
-        
-        if ( $queueCount === 0) {
+        else
+        {
+            $params->setServiceParam(
+                $this->_resultVar,
+                [ 'suggestions' => [], 'timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()]);
             $selected_flow   =   $this->_noSuggestionsFlow;
-        } else if ( $queueCount === 1) {
-            $selected_flow   =   $this->_fallbackSuggestionFlows( $this->_singleSuggestionFlow);
-        } else {
-            $selected_flow   =   $this->_fallbackSuggestionFlows( $this->_suggestionsFlow);
         }
         
-        foreach ( $selected_flow as $element) {
-            $element->read( $request, $response);
-        }
+        $this->_readElementsInTimezone( $selected_flow, $timezone, $request, $response);
     }
     
     

@@ -102,6 +102,18 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 					),
 				    'timezone_mode' => $timezone_mode_param,
 				    'timezone' => $timezone_param,
+					'suggestions_builder' => [
+						'editor_type' => 'service_components',
+						'editor_properties' => [
+							'allow_interfaces' => ['\Convo\Pckg\Appointments\IFreeSlotQueueFactory'],
+							'multiple' => false
+						],
+						'defaultValue' => null,
+						'defaultOpen' => false,
+						'name' => 'Suggestion Builder',
+						'description' => 'Suggestion builder to build up suggestions',
+						'valueType' => 'class'
+					],
 					'available_flow' => [
 						'editor_type' => 'service_components',
 						'editor_properties' => [
@@ -169,6 +181,29 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'type' => 'html',
 						'template' => '<div class="code">' .
 							'Check time slot <b>{{ component.properties.appointment_date }} {{ component.properties.appointment_time }}</b> for appointment type <b>{{ component.properties.context_id }}</b>' .
+							'</div>'
+					)
+				)
+			),
+			new \Convo\Core\Factory\ComponentDefinition(
+				$this->getNamespace(),
+				'\Convo\Pckg\Appointments\DefaultFreeSlotStack',
+				'Default free slot collector',
+				'Collects and generates free slots suggestions',
+				array(
+					'max_suggestions' => array(
+						'editor_type' => 'text',
+						'editor_properties' => array(),
+						'defaultValue' => 0,
+						'name' => 'Max Suggestions',
+						'description' => 'How many suggestions to return. Use 0 if your system does not supports suggestions',
+						'valueType' => 'string'
+					),
+					'_workflow' => 'read',
+					'_preview_angular' => array(
+						'type' => 'html',
+						'template' => '<div class="code">' .
+							'Build max <b>{{ component.properties.max_suggestions }}</b> suggestions' .
 							'</div>'
 					)
 				)
