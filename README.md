@@ -3,7 +3,7 @@
 
 This package contains conversational workflow elements for managing appointment scheduling scenarios in the [Convoworks framework](https://github.com/zef-dev/convoworks-core). It contains elements that you can use in the conversation workflow, but the underlying data source is just described via the `IAppointmentsContext` interface.
 
-When we are talking about workflow components (elements), we have to primarily consider voice design and conversation workflow needs. What kind of properties, sub-flows and general behavior taht it should have to be easy for usage.
+When we are talking about workflow components (elements), we have to primarily consider voice design and conversation workflow needs. What kind of properties, sub-flows and general behavior that it should have to be easy for usage.
 
 Appointments context is on the other hand focused on the technical and developer needs. Here we take care of user identification, data formats, time zones. The interface is more technical. Data adaptation to human and conversation friendly manner is on the workflow elements.
 
@@ -12,7 +12,7 @@ Appointments context is on the other hand focused on the technical and developer
 
 `IAppointmentsContext` describes methods that should be implemented by a target appointments system. 
 
-Most of the methods are requiring user identification and we use `email` for it. Email works just well with WordPress, while it enables us to have passthrough implementations which are not requiring the actual user to be created in it.
+Most of the methods require user identification and we use `email` for it. Email works just well with WordPress, while it enables us to have passthrough implementations which do not require the actual user to be created in it.
 
 To be used in the Convoworks, it also has to implement `IBasicServiceComponent` and `IServiceContext`. You might consider to start your implementation like this:
 ```php
@@ -31,9 +31,9 @@ You might also consider adding additional elements which will expose different a
 
 ### `DummyAppointmentsContext`
 
-Dummy, implementation tha can serve to test voice application or as a example when creating your own implementation.
+Dummy implementation that can serve to test voice applications or as an example when creating your own implementation.
 
-Here are few characteristincs that it has:
+Here are few characteristics that it has:
 
 * business hours are 9:00 - 17:00 on workdays
 * appointment duration: 30 min
@@ -60,7 +60,7 @@ Parameters:
 * `appointment_date` - Optional, requested date in the `Y-m-d` format (the MySQL DATE format)
 * `appointment_time` - Optional, requested time in the `H:i:s` format (the MySQL TIME format)
 * `email` - Optional, user identification. If present, it might serve for better suggestions
-* `return_var` - Default `status`, name of the variable that contains additional information (`suggestions` : array of suggestions, `requested_time`: requested appoinitment as timestamp, `timezone`: prefered timezone)
+* `return_var` - Default `status`, name of the variable that contains additional information (`suggestions` : array of suggestions, `requested_time`: requested appointment as timestamp, `timezone`: prefered time zone)
 
 Flows:
 
@@ -83,7 +83,7 @@ Parameters:
 * `email` - User identification. 
 * `appointment_date` - Requested date in the `Y-m-d` format (the MySQL DATE format)
 * `appointment_time` - Requested time in the `H:i:s` format (the MySQL TIME format)
-* `payload` - Various other properties that might be used with implementing plugin.
+* `payload` - Various other properties that might be used with an implementing plugin.
 * `return_var` - Default `status`, name of the variable that contains additional information (`appointment_id`, `timezone` string timezone, `requested_time` timestamp)
 
 Flows:
@@ -100,7 +100,7 @@ Parameters:
 * `email` - User identification. 
 * `appointment_date` - Requested date in the `Y-m-d` format (the MySQL DATE format)
 * `appointment_time` - Requested time in the `H:i:s` format (the MySQL TIME format)
-* `payload` - Various other properties that might be used with implementing plugin.
+* `payload` - Various other properties that might be used with an implementing plugin.
 * `return_var` - Default `status`, name of the variable that contains additional information (`existing` previous appointment version as you would get it with load appointment element, `timezone`, `requested_time`)
 
 Flows:
@@ -126,7 +126,7 @@ Parameters:
 
 * `mode` : `current` default, `past` or `all`
 * `limit` : default `10`
-* `return_var` - Default `status`, name of the variable that contains additional information (`appointments` : array of appointments, `timezone`: preffered timezone)
+* `return_var` - Default `status`, name of the variable that contains additional information (`appointments` : array of appointments, `timezone`: preferred time zone)
 
 Flows:
 * `multiple`
@@ -168,3 +168,5 @@ Flows:
 ---
 
 For more information, please check out [convoworks.com](https://convoworks.com)
+
+
