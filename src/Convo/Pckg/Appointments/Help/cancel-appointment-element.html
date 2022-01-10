@@ -1,0 +1,21 @@
+<div>
+    <h3>Cancel Appointment Element</h3>
+
+    <p>Cancels an existing appointment for the user.</p>
+
+    <h4>Parameters:</h4>
+    <ul>
+        <li><code>Context ID</code> - ID of the referenced <code>IAppointmentsContext</code></li>
+        <li><code>Appointment ID</code> - ID of the existing appointment</li>
+        <li><code>Email</code> - User identification.</li>
+        <li><code>Result Variable Name</code> - Default <code>status</code>, name of the variable that contains additional information (<code>existing</code> previous appointment version as you would get it with load appointment element, <code>timezone</code>)</li>
+        <li><code>Timezone Mode</code> - <code>DEFAULT</code> will use default timezone from referenced appointments context, <code>CLIENT</code> will try to get client information or <code>SET</code> will allow you to explicitly set the value.</li>
+        <li><code>Timezone</code> - only when <code>timezone_mode</code> is <code>SET</code>. PHP timezone name.</li>
+    </ul>
+
+    <h4>Flows:</h4>
+    <ul>
+        <li><code>ok</code> - executes when the appointment was canceled</li>
+        <li><code>not_found</code> - executes when the appointment could not be found</li>
+    </ul>
+</div>

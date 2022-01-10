@@ -174,6 +174,10 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'template' => '<div class="code">' .
 							'Check time slot <b>{{ component.properties.appointment_date }} {{ component.properties.appointment_time }}</b> for appointment type <b>{{ component.properties.context_id }}</b>' .
 							'</div>'
+					),
+					'_help' =>  array(
+						'type' => 'file',
+						'filename' => 'check-appointment-time-element.html'
 					)
 				)
 			),
@@ -197,6 +201,10 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'template' => '<div class="code">' .
 							'Build max <b>{{ component.properties.max_suggestions }}</b> suggestions' .
 							'</div>'
+					),
+					'_help' =>  array(
+						'type' => 'file',
+						'filename' => 'default-free-slot-queue.html'
 					)
 				)
 			),
@@ -277,6 +285,10 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'template' => '<div class="code">' .
 							'Load <b>{{ component.properties.context_id }}</b> <b>{{ component.properties.appointment_id }}</b> for <b>{{ component.properties.email }}</b>' .
 							'</div>'
+					),
+					'_help' =>  array(
+						'type' => 'file',
+						'filename' => 'load-appointment-element.html'
 					)
 				)
 			),
@@ -383,6 +395,10 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'template' => '<div class="code">' .
 							'Load <b>{{ component.properties.mode }}</b> <b>{{ component.properties.context_id }}</b> for <b>{{ component.properties.email }}</b>' .
 							'</div>'
+					),
+					'_help' =>  array(
+						'type' => 'file',
+						'filename' => 'load-appointments-element.html'
 					)
 				)
 			),
@@ -481,6 +497,10 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'template' => '<div class="code">' .
 							'Create <b>{{ component.properties.context_id }}</b> for <b>{{ component.properties.email }}</b>' .
 							'</div>'
+					),
+					'_help' =>  array(
+						'type' => 'file',
+						'filename' => 'create-appointment-element.html'
 					)
 				)
 			),
@@ -599,6 +619,10 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'template' => '<div class="code">' .
 							'Update <b>{{ component.properties.context_id }}</b> <b>{{ component.properties.appointment_id }}</b> for <b>{{ component.properties.email }}</b> ' .
 							'</div>'
+					),
+					'_help' =>  array(
+						'type' => 'file',
+						'filename' => 'update-appointment-element.html'
 					)
 				)
 			),
@@ -679,6 +703,10 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'template' => '<div class="code">' .
 							'Cancel <b>{{ component.properties.context_id }}</b> <b>{{ component.properties.appointment_id }}</b> for <b>{{ component.properties.email }}</b>' .
 							'</div>'
+					),
+					'_help' =>  array(
+						'type' => 'file',
+						'filename' => 'cancel-appointment-element.html'
 					)
 				)
 			),
@@ -702,7 +730,11 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 			            '<span class="statement">Dummy Appointments </span> <b>[{{ contextElement.properties.id }}]</b>' .
 			            '</div>'
 			        ),
-			        '_workflow' => 'datasource'
+			        '_workflow' => 'datasource',
+					'_help' =>  array(
+						'type' => 'file',
+						'filename' => 'dummy-appointments-context.html'
+					)
 				)
 		    )
 		];
