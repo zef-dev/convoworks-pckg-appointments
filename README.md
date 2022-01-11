@@ -1,20 +1,20 @@
 # Appointments package for Convoworks
 
 
-This package contains conversational workflow elements for managing appointment scheduling scenarios in the [Convoworks framework](https://github.com/zef-dev/convoworks-core). It contains elements that you can use in the conversation workflow, but the underlying data source is just described via the `IAppointmentsContext` interface.
+This package contains conversational workflow elements for managing appointment scheduling scenarios in the [Convoworks framework](https://github.com/zef-dev/convoworks-core). It contains elements that you can use in the conversation workflow, but the appointments data source is just described via the `IAppointmentsContext` interface.
 
-When we are talking about workflow components (elements), we have to primarily consider voice design and conversation workflow needs. What kind of properties, sub-flows and general behavior that it should have to be easy for usage.
+When we are talking about workflow components (elements), we have to primarily consider voice and conversational design needs. Their properties, sub-flows and general behavior are tailored to make conversational workflow as easy as possible. They are not related to any particular booking plugin or a similar 3rd party service provider.
 
-Appointments context is on the other hand focused on the technical and developer needs. Here we take care of user identification, data formats, time zones. The interface is more technical. Data adaptation to human and conversation friendly manner is on the workflow elements.
-
+Appointments context is on the other hand bridge between workflow elements (Convoworks) and the real, concrete appointment system you are using in your system.
 
 ## Appointments context interface
 
-`IAppointmentsContext` describes methods that should be implemented by a target appointments system. 
+`IAppointmentsContext` describes methods that should be implemented by a target appointments system. If you have e.g. WordPress schedule appointment plugin, you can easily enable it to be used with Convoworks by implementing this interface.
 
-Most of the methods require user identification and we use `email` for it. Email works just well with WordPress, while it enables us to have passthrough implementations which do not require the actual user to be created in it.
+Most of the methods require user identification and we use `email` for it. Email works just well with WordPress, while it enables us to have passthrough implementations which do not require the actual user to be created in it. If your target system has several appointment types, the one you need should be configured on this `IAppointmentsContext` type component. 
 
-To be used in the Convoworks, it also has to implement `IBasicServiceComponent` and `IServiceContext`. You might consider to start your implementation like this:
+To be properly used in the Convoworks GUI, it also has to implement `IBasicServiceComponent` and `IServiceContext`. You might consider to start your implementation like this:
+
 ```php
 
 class MyCustomAppointmentsContext extends AbstractBasicComponent implements IAppointmentsContext, IServiceContext
@@ -23,17 +23,30 @@ class MyCustomAppointmentsContext extends AbstractBasicComponent implements IApp
 }
 ```
 
-If your target system has several appointment types, they should be configured on this Context type component. 
+Here is quick example how you can register your own package in the WordPress environment (Convoworks WP)
 
+```php
+/**
+ * @param Convo\Core\Factory\PackageProviderFactory $packageProviderFactory
+ * @param Psr\Container\ContainerInterface $container
+ */
+function my_package_registrator( $packageProviderFactory, $container) {
+    $packageProviderFactory->registerPackage( new Convo\Core\Factory\FunctionPackageDescriptor('\My\Namespace\MyPackageDefinition', 
+        function() use ( $container) {
+            return new \My\Namespace\MyPackageDefinition( $container->get( 'logger'));
+        }));
+}
+add_action( 'register_convoworks_package', 'my_package_registrator', 10, 2);
+```
 
-Implementing and having your own `IAppointmentsContext` component is a basic requirement that you have to have to use the Convoworks appointments system.
-You might also consider adding additional elements which will expose different appointment types or actual working hours periods.
+You can check for more about [developing custom packages](https://convoworks.com/docs/developers/develop-custom-packages/) on the Convoworks documentation. 
+
 
 ### `DummyAppointmentsContext`
 
-Dummy implementation that can serve to test voice applications or as an example when creating your own implementation.
+Dummy implementation that can serve to test voice applications or as an example when creating your own `IAppointmentsContext` implementation.
 
-Here are few characteristics that it has:
+Here are few predefined features that it has:
 
 * business hours are 9:00 - 17:00 on workdays
 * appointment duration: 30 min
@@ -47,31 +60,44 @@ All appointment package workflow elements have the `context_id` property which h
 Here are all common parameters:
 
 * `context_id` - Id of the referenced `IAppointmentsContext`
+* `email` - Optional for `CheckAppointmentTimeElement` but required for all others
 * `timezone_mode` - `DEFAULT` will use default timezone from referenced appointments context, `CLIENT` will try to get client information or `SET` will allow you to explicitly set the value.
 * `timezone` - only when `timezone_mode` is `SET`. PHP timezone name.
+
+Some elements have multiple sub-flows depending on the result we got. This kind of approach enables you to use less `IF` statements in your workflow. But in order not to force you to split workflow, some of the flows are optional and when left empty, the default flow will be executed.
 
 
 ### `CheckAppointmentTimeElement`
 
-This element has several sub flows, depending on the requested time available or not. When the requested slot is not available, element exposes suggestions, an array of time slots that could be offered to the end user. 
+This element will check if the desired time slot is available. It has several sub-flows, depending on requested slot or suggestions availability. When the requested slot is not available, element exposes suggestions, an array of time slots (timestamps) which could be offered to the end user. 
 
 Parameters:
 
 * `appointment_date` - Optional, requested date in the `Y-m-d` format (the MySQL DATE format)
 * `appointment_time` - Optional, requested time in the `H:i:s` format (the MySQL TIME format)
 * `email` - Optional, user identification. If present, it might serve for better suggestions
-* `return_var` - Default `status`, name of the variable that contains additional information (`suggestions` : array of suggestions, `requested_time`: requested appointment as timestamp, `timezone`: prefered time zone)
+* `return_var` - Default `status`, name of the variable which will be present in sub-flows and that contains information about operation result (`suggestions` : array of suggestions, `requested_time`: requested appointment as timestamp, `timezone`: prefered time zone)
 
 Flows:
 
-* `available_flow`
-* `suggestions_flow` - default flow
-* `single_suggestion_flow` - if it is empty, `suggestions_flow` will be executed
-* `no_suggestions_flow`- no suggestions, if it is empty, `suggestions_flow` will be executed
+* `available_flow` - Executed when time slot is available
+* `suggestions_flow` - Executed when the slot is not available an there are suggestions
+* `single_suggestion_flow` - Optional, executed if there is just a single suggestion. If it is empty (no elements inside), `suggestions_flow` will be executed
+* `no_suggestions_flow`- Optional, executed if there are no suggestions. If it is empty, `suggestions_flow` will be executed
 
 Other:
 
 * `suggestions_builder` - Component of type `IFreeSlotQueueFactory` which serves for building suggestions. You can use `DefaultFreeSlotQueue` or create your own.
+
+Suggestions representation as JSON.
+
+```json
+[{
+      "timestamp" : 123345678,
+}, {
+      "timestamp" : 123445678,
+}]
+```
 
 
 ### `CreateAppointmentElement`
@@ -80,15 +106,15 @@ This element will try to create an appointment for a given time slot. It can hap
 
 Parameters:
 
-* `email` - User identification. 
 * `appointment_date` - Requested date in the `Y-m-d` format (the MySQL DATE format)
 * `appointment_time` - Requested time in the `H:i:s` format (the MySQL TIME format)
-* `payload` - Various other properties that might be used with an implementing plugin.
+* `payload` - Various other properties that might be used with an implementing booking plugin.
 * `return_var` - Default `status`, name of the variable that contains additional information (`appointment_id`, `timezone` string timezone, `requested_time` timestamp)
 
 Flows:
-* `ok`
-* `not_available`
+* `ok` - This flow is executed when appointment is created
+* `not_available` - Executed when the requested slot is not available
+
 
 ### `UpdateAppointmentElement`
 
@@ -97,30 +123,34 @@ Element which updates existing appointment time.
 Parameters:
 
 * `appointment_id` - Id of the existing appointment
-* `email` - User identification. 
 * `appointment_date` - Requested date in the `Y-m-d` format (the MySQL DATE format)
 * `appointment_time` - Requested time in the `H:i:s` format (the MySQL TIME format)
-* `payload` - Various other properties that might be used with an implementing plugin.
+* `payload` - Optional, various other properties that might be used with an implementing plugin.
 * `return_var` - Default `status`, name of the variable that contains additional information (`existing` previous appointment version as you would get it with load appointment element, `timezone`, `requested_time`)
 
 Flows:
-* `ok`
-* `not_available`
-* `not_found` - if it is empty, `not_available` will be executed
+* `ok` - Executed when the appointment is updated
+* `not_available` - Executed when the requested slot is not available
+* `not_found` - Executed when the requested appointment could not be located. If it is empty, `not_available` will be executed. TODO: Remove?
+
 
 ### `CancelAppointmentElement`
+
+This element will cancel an existing appointment. 
 
 Parameters:
 
 * `appointment_id` - Id of the existing appointment
-* `email` - User identification. 
 * `return_var` - Default `status`, name of the variable that contains additional information (`existing` previous appointment version as you would get it with load appointment element, `timezone`)
 
 Flows:
-* `ok`
-* `not_found`
+* `ok` - Executed when the appointment is canceled
+* `not_found` - Executed when the requested appointment could not be located. TODO: Remove?
+
 
 ### `LoadAppointmentsElement`
+
+This elment will load existing appointments for the current user.
 
 Parameters:
 
@@ -129,16 +159,26 @@ Parameters:
 * `return_var` - Default `status`, name of the variable that contains additional information (`appointments` : array of appointments, `timezone`: preferred time zone)
 
 Flows:
-* `multiple`
-* `single` - if it is empty, `multiple` will be executed
-* `empty` - if it is empty, `multiple` will be executed
-
+* `multiple` - Executed when the multiple appointments are found.
+* `single` - Executed when only a single appointment is found. If it is empty, `multiple` flow will be executed.
+* `empty` - Executed if there are no suggestions. If it is empty, `multiple` flow will be executed
 
 
 ### `LoadAppointmentElement`
 
-Returns single appointment data.
-Appointment representation.
+This element returns single appointment data.
+
+Parameters:
+
+* `appointment_id` - Id of the existing appointment
+* `return_var` - Default `status`, name of the variable that contains additional information (`appointment`, `timezone`)
+
+Flows:
+* `ok` - Executed when the appointment is loaded.
+* `not_found` - TODO: Remove?
+
+
+Single appointment representation as JSON.
 
 ```json
 {
@@ -151,22 +191,7 @@ Appointment representation.
 }
 ```
 
-Parameters:
-
-* `context_id` - Id of the referenced `IAppointmentsContext`
-* `appointment_id` - Id of the existing appointment
-* `email` - User identification. 
-* `return_var` - Default `status`, name of the variable that contains additional information (`appointment`, `timezone`)
-
-Flows:
-* `ok`
-* `not_found`
-
-
-
 
 ---
 
 For more information, please check out [convoworks.com](https://convoworks.com)
-
-
