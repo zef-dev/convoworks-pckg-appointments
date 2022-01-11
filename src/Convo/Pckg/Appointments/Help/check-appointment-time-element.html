@@ -14,16 +14,30 @@
         <li><code>Timezone</code> - only when <code>timezone_mode</code> is <code>SET</code>. PHP timezone name.</li>
     </ul>
 
+    <p>Example of <code>${status.suggestions}</code> <var>Return Variable Name</var> value:</p>
+    <pre>
+    <code>[
+        {
+            "timestamp": 1641913200,
+            "timezone": "UTC"
+        },
+        {
+            "timestamp": 1641996000,
+            "timezone": "UTC"
+        }
+    ]</code>
+    </pre>
+
     <h4>Flows:</h4>
     <ul>
         <li><code>Available Flow</code> - executes when the time slot is available</li>
         <li><code>Suggestions Flow</code> - default flow</li>
-        <li><code>Single Suggestion_flow</code> - if it is empty, <code>suggestions_flow</code> will be executed</li>
-        <li><code>No Suggestions Flow</code> - no suggestions, if it is empty, <code>suggestions_flow</code> will be executed</li>
+        <li><code>Single Suggestion Flow</code> - if one suggestion is available and no elements are present in <code>Single Suggestion Flow</code>, <code>Suggestions Flow</code> will be executed</li>
+        <li><code>No Suggestions Flow</code> - no suggestions, if it is empty, <code>Suggestions Flow</code> will be executed</li>
     </ul>
 
     <h4>Other:</h4>
     <ul>
-        <li><code>Suggestions Builder</code> - Component of type <code>IFreeSlotQueueFactory</code> which serves for building suggestions. You can use <code>DefaultFreeSlotQueue</code> or create your own.</li>
+        <li><code>Suggestions Builder</code> - Component of type <code>IFreeSlotQueueFactory</code> which serves for building suggestions. You can use <code>Default free slot collector</code> element or you create your own suggestion's builder element.</li>
     </ul>
 </div>
