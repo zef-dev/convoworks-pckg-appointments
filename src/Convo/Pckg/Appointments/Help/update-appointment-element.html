@@ -1,0 +1,26 @@
+<div>
+    <h3>Update Appointment Element</h3>
+
+    <p>Element which updates existing appointment time.</p>
+
+    <h4>Parameters:</h4>
+    <ul>
+        <li><code>Context ID</code> - ID of the referenced <code>IAppointmentsContext</code></li>
+        <li><code>Appointment ID</code> - ID of the existing appointment</li>
+        <li><code>Email</code> - User identification</li>
+        <li><code>Appointment Date</code> - Requested date in the <code>Y-m-d</code> format (the MySQL DATE format)</li>
+        <li><code>Appointment Time</code> - Requested time in the <code>H:i:s</code> format (the MySQL TIME format)</li>
+        <li><code>Payload</code> - Various other properties that might be used with implementing plugin</li>
+        <li><code>Result Variable Name</code> - Default <code>status</code>, name of the variable that contains additional information (<code> existing</code> previous appointment version as you would get it with load appointment element, <code>timezone</code>, <code>requested_time</code>)</li>
+        <li><code>Timezone Mode</code> - <code>DEFAULT</code> will use default timezone from referenced appointments context, <code>CLIENT</code> will try to get client information or <code>SET</code> will allow you to explicitly set the value.</li>
+        <li><code>Timezone</code> - only when <code>timezone_mode</code> is <code>SET</code>. PHP timezone name.</li>
+    </ul>
+
+    <h4>Flows:</h4>
+
+    <ul>
+        <li><code>OK</code> - will be executed if the time slot is available</li>
+        <li><code>Not Available</code> - will be executed if the time slot is not available</li>
+        <li><code>Not Found</code> - if it is empty, not_available will be executed</li>
+    </ul>
+</div>
