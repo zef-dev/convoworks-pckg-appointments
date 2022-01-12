@@ -25,9 +25,13 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
 		$this->_maxSuggestions    =   $properties['max_suggestions'];
 	}
 
-	public function createStack( $targetTime) {
+	/**
+	 * {@inheritDoc}
+	 * @see \Convo\Pckg\Appointments\Freeslot\IFreeSlotQueueFactory::createStack()
+	 */
+	public function createStack( $targetTime, $systemTimezone) {
 	    
-	    $queue    =   new FreeSlotQueue( $this->evaluateString( $this->_maxSuggestions));
+	    $queue    =   new FreeSlotQueue( $systemTimezone, $this->evaluateString( $this->_maxSuggestions));
 	    
 	    $queue->addValidator( $this->_create( self::KEY_FIRST_NEXT, $targetTime));
 	    $queue->addValidator( $this->_create( self::KEY_FIRST_SAME_TIME, $targetTime));

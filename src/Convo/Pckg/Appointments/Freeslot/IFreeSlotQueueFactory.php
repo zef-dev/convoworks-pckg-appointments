@@ -11,8 +11,9 @@ interface IFreeSlotQueueFactory
     
     /**
      * @param \DateTime $targetTime
+     * @param \DateTimeZone $systemTimezone
      * @return IFreeSlotQueue
      */
-    public function createStack( $targetTime);
+    public function createStack( $targetTime, $systemTimezone);
     
 }

@@ -133,7 +133,7 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
         if ( $this->_suggestionsBuilder) 
         {
             $this->_logger->debug( 'Going to build suggestions ...');
-            $queue  =   $this->_suggestionsBuilder->createStack( $slot_time);
+            $queue  =   $this->_suggestionsBuilder->createStack( $slot_time, $context->getDefaultTimezone());
             foreach ( $context->getFreeSlotsIterator( $slot_time) as $time)
             {
                 $queue->add( $time);

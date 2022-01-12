@@ -22,11 +22,17 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate, IFreeSlotQueue
      */
     private $_maxCount;
     
+    /**
+     * @var \DateTimeZone
+     */
+    private $_systemTimezone;
+    
     private $_days  =   [];
     
-    public function __construct( $maxCount)
+    public function __construct( $systemTimezone, $maxCount)
     {
-        $this->_maxCount    =   $maxCount;
+        $this->_systemTimezone  =   $systemTimezone;
+        $this->_maxCount        =   $maxCount;
     }
     
     
@@ -52,7 +58,7 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate, IFreeSlotQueue
     }
     
     private function _register( $item) {
-        $date   =   \DateTimeImmutable::createFromFormat( 'U', strval( $item['timestamp']), new \DateTimeZone( $item['timezone']));
+        $date   =   \DateTimeImmutable::createFromFormat( 'U', strval( $item['timestamp']), $this->_systemTimezone);
         $day    =   $date->format( 'Y-m-d');
         if ( !isset( $this->_days[$day])) {
             $this->_days[$day]  =   0;
@@ -61,7 +67,7 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate, IFreeSlotQueue
     }
     
     private function _blocked( $item) {
-        $date   =   \DateTimeImmutable::createFromFormat( 'U', strval( $item['timestamp']), new \DateTimeZone( $item['timezone']));
+        $date   =   \DateTimeImmutable::createFromFormat( 'U', strval( $item['timestamp']), $this->_systemTimezone);
         $day    =   $date->format( 'Y-m-d');
         if ( isset( $this->_days[$day]) && $this->_days[$day] >= 2) {
             return true;
