@@ -131,7 +131,6 @@ Parameters:
 Flows:
 * `ok` - Executed when the appointment is updated
 * `not_available` - Executed when the requested slot is not available
-* `not_found` - Executed when the requested appointment could not be located. If it is empty, `not_available` will be executed. TODO: Remove?
 
 
 ### `CancelAppointmentElement`
@@ -145,7 +144,6 @@ Parameters:
 
 Flows:
 * `ok` - Executed when the appointment is canceled
-* `not_found` - Executed when the requested appointment could not be located. TODO: Remove?
 
 
 ### `LoadAppointmentsElement`
@@ -175,7 +173,6 @@ Parameters:
 
 Flows:
 * `ok` - Executed when the appointment is loaded.
-* `not_found` - TODO: Remove?
 
 
 Single appointment representation as JSON.

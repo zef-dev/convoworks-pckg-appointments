@@ -2,7 +2,6 @@
 
 namespace Convo\Pckg\Appointments;
 
-use Convo\Core\DataItemNotFoundException;
 use Convo\Core\Params\IServiceParamsScope;
 use Convo\Core\Workflow\IConversationElement;
 use Convo\Core\Workflow\IConvoRequest;
@@ -50,11 +49,6 @@ class UpdateAppointmentElement extends AbstractAppointmentElement
 	/**
 	 * @var IConversationElement[]
 	 */
-	private $_notFoundFlow = array();
-
-	/**
-	 * @var IConversationElement[]
-	 */
 	private $_notAvailableFlow = array();
 
 	/**
@@ -74,11 +68,6 @@ class UpdateAppointmentElement extends AbstractAppointmentElement
 
 		foreach ( $properties['ok'] as $element) {
 			$this->_okFlow[] = $element;
-			$this->addChild($element);
-		}
-
-		foreach ( $properties['not_found'] as $element) {
-			$this->_notFoundFlow[] = $element;
 			$this->addChild($element);
 		}
 
@@ -120,9 +109,6 @@ class UpdateAppointmentElement extends AbstractAppointmentElement
 		} catch ( SlotNotAvailableException $e) {
 			$this->_logger->info( $e->getMessage());
 			$selected_flow = $this->_notAvailableFlow;
-		} catch ( DataItemNotFoundException $e) {
-			$this->_logger->info( $e->getMessage());
-			$selected_flow = $this->_notFoundFlow;
 		}
 		
 		$params         =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);

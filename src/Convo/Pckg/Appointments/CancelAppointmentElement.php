@@ -3,7 +3,6 @@
 namespace Convo\Pckg\Appointments;
 
 use Convo\Core\Adapters\Alexa\Api\AlexaSettingsApi;
-use Convo\Core\DataItemNotFoundException;
 use Convo\Core\Workflow\IConversationElement;
 use Convo\Core\Workflow\IConvoRequest;
 use Convo\Core\Workflow\IConvoResponse;
@@ -33,11 +32,6 @@ class CancelAppointmentElement extends AbstractAppointmentElement
 	private $_okFlow = array();
 
 	/**
-	 * @var IConversationElement[]
-	 */
-	private $_notFoundFlow = array();
-
-	/**
 	 * @param array $properties
 	 * @param AlexaSettingsApi $alexaSettingsApi
 	 */
@@ -51,11 +45,6 @@ class CancelAppointmentElement extends AbstractAppointmentElement
 
 		foreach ( $properties['ok'] as $element) {
 			$this->_okFlow[] = $element;
-			$this->addChild($element);
-		}
-
-		foreach ( $properties['not_found'] as $element) {
-			$this->_notFoundFlow[] = $element;
 			$this->addChild($element);
 		}
 	}
@@ -72,22 +61,15 @@ class CancelAppointmentElement extends AbstractAppointmentElement
 
 		$this->_logger->info('Canceling appointment with id ['.$appointmentId.'] for customer email [' . $email . ']');
 
-		$data           =   [ 'existing' => null];
+		$data           =   [ 'existing' => $context->getAppointment( $email, $appointmentId)];
 		
-		try {
-		    $data['existing']     =   $context->getAppointment( $email, $appointmentId);
-			$context->cancelAppointment($email, $appointmentId);
-			$this->_logger->info('Canceled appointment with id ['. $appointmentId .'] for the customers email [' . $email . ']');
-			$selected_flow = $this->_okFlow;
-		}  catch (DataItemNotFoundException $e) {
-		    $this->_logger->warning( $e);
-			$selected_flow = $this->_notFoundFlow;
-		}
+		$context->cancelAppointment( $email, $appointmentId);
+		$this->_logger->info('Canceled appointment with id ['. $appointmentId .'] for the customers email [' . $email . ']');
 		
 		$params         =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
 		$params->setServiceParam( $this->_resultVar, $data);
 
-		$this->_readElementsInTimezone( $selected_flow, $request, $response);
+		$this->_readElementsInTimezone( $this->_okFlow, $request, $response);
 	}
 
 }

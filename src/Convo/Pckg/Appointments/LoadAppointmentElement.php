@@ -3,7 +3,6 @@
 namespace Convo\Pckg\Appointments;
 
 use Convo\Core\Adapters\Alexa\Api\AlexaSettingsApi;
-use Convo\Core\DataItemNotFoundException;
 use Convo\Core\Params\IServiceParamsScope;
 use Convo\Core\Workflow\IConversationElement;
 use Convo\Core\Workflow\IConvoRequest;
@@ -33,11 +32,6 @@ class LoadAppointmentElement extends AbstractAppointmentElement
 	private $_okFlow = array();
 
 	/**
-	 * @var IConversationElement[]
-	 */
-	private $_notFoundFlow = array();
-
-	/**
 	 * @param array $properties
 	 * @param AlexaSettingsApi $alexaSettingsApi
 	 */
@@ -53,11 +47,6 @@ class LoadAppointmentElement extends AbstractAppointmentElement
 			$this->_okFlow[] = $element;
 			$this->addChild($element);
 		}
-
-		foreach ( $properties['not_found'] as $element) {
-			$this->_notFoundFlow[] = $element;
-            $this->addChild($element);
-        }
     }
 
     /**
@@ -76,18 +65,12 @@ class LoadAppointmentElement extends AbstractAppointmentElement
         
 		$data           =   ['appointment' => null];
 		
-		try {
-		    $data['appointment'] = $context->getAppointment( $email, $appointmentId);
-			$this->_logger->info('Loaded appointment with id ['.$appointmentId.'] appointments for customer email [' . $email . ']');
-			$selected_flow = $this->_okFlow;
-		}  catch ( DataItemNotFoundException $e) {
-			$this->_logger->info($e->getMessage());
-			$selected_flow = $this->_notFoundFlow;
-		}
+	    $data['appointment'] = $context->getAppointment( $email, $appointmentId);
+		$this->_logger->info('Loaded appointment with id ['.$appointmentId.'] appointments for customer email [' . $email . ']');
 		
 		$params       =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
 		$params->setServiceParam( $returnVar, $data);
 
-		$this->_readElementsInTimezone( $selected_flow, $request, $response);
+		$this->_readElementsInTimezone( $this->_okFlow, $request, $response);
 	}
 }

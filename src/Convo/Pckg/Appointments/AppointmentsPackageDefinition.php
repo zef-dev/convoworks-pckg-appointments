@@ -253,18 +253,6 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Flow to be executed if the appointment under ID was found.',
 						'valueType' => 'class'
 					],
-					'not_found' => [
-						'editor_type' => 'service_components',
-						'editor_properties' => [
-							'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
-							'multiple' => true
-						],
-						'defaultValue' => [],
-						'defaultOpen' => false,
-						'name' => 'Not Found',
-						'description' => 'Flow to be executed if the appointment under ID was not found.',
-						'valueType' => 'class'
-					],
 				    '_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
 				    {
 				        private $_alexaSettingsApi;
@@ -587,18 +575,6 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'description' => 'Flow to be executed if the appointment date is not available for the specified time slot.',
 						'valueType' => 'class'
 					],
-					'not_found' => [
-						'editor_type' => 'service_components',
-						'editor_properties' => [
-							'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
-							'multiple' => true
-						],
-						'defaultValue' => [],
-						'defaultOpen' => false,
-						'name' => 'Not Found',
-						'description' => 'Flow to be executed if the appointment under the ID could not be found.',
-						'valueType' => 'class'
-					],
 				    '_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
 				    {
 				        private $_alexaSettingsApi;
@@ -669,18 +645,6 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'defaultOpen' => false,
 						'name' => 'OK',
 						'description' => 'Flow to be executed if the appointment was canceled successfully.',
-						'valueType' => 'class'
-					],
-					'not_found' => [
-						'editor_type' => 'service_components',
-						'editor_properties' => [
-							'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
-							'multiple' => true
-						],
-						'defaultValue' => [],
-						'defaultOpen' => false,
-						'name' => 'Not Found',
-						'description' => 'Flow to be executed if the appointment under the ID could not be found.',
 						'valueType' => 'class'
 					],
 				    '_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
