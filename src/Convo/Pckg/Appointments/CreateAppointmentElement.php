@@ -86,26 +86,31 @@ class CreateAppointmentElement extends AbstractAppointmentElement
 
 		$this->_logger->info('Creating appointment at ['.$date.']['.$time.'] for customer email [' . $email . ']');
 		$slot_time    =   new \DateTime( $date.' '.$time, $timezone);
-
-		$params       =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
+		$data         =   [
+		    'appointment_id' => null, 
+		    'timezone' => $timezone->getName(), 
+		    'requested_time' => $slot_time->getTimestamp(),
+		    'not_allowed' => false
+		];
 		
-		// TODO add exception for invalid data
 		try {
 		    $appointment_id   =   $context->createAppointment($email, $slot_time, $payload);
-			$params->setServiceParam( 
-			    $this->_resultVar, 
-			    ['appointment_id' => $appointment_id, 'timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()]);
+		    $data['appointment_id']    =   $appointment_id;    
 			$this->_logger->info( 'Created appointment successfully ['.$appointment_id.']');
-			$selected_flow = $this->_okFlow;
+			$selected_flow    =   $this->_okFlow;
+		} catch ( OutOfBusinessHoursException $e) {
+			$this->_logger->info( $e->getMessage());
+			$selected_flow       =   $this->_notAvailableFlow;
+			$data['not_allowed'] =   true;
 		} catch ( SlotNotAvailableException $e) {
 			$this->_logger->info( $e->getMessage());
-			$selected_flow = $this->_notAvailableFlow;
-			$params->setServiceParam(
-			    $this->_resultVar,
-			    ['appointment_id' => null, 'timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()]);
+			$selected_flow    =   $this->_notAvailableFlow;
 		}
-
-		foreach ($selected_flow as $element) {
+        
+		$params       =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
+		$params->setServiceParam( $this->_resultVar, $data);
+		
+		foreach ( $selected_flow as $element) {
 			$element->read( $request, $response);
 		}
 	}

@@ -104,15 +104,19 @@ class UpdateAppointmentElement extends AbstractAppointmentElement
 
 		$this->_logger->info( 'Updating appointment at ['.$date.']['.$time.'] for customer email [' . $email . ']');
 		$slot_time      =   new \DateTime( $date.' '.$time, $timezone);
-		$eval_data      =   ['timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()];
+		$data      =   ['timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()];
 		
 		try {
-		    $eval_data['existing']     =   $context->getAppointment( $email, $appointmentId);
+		    $data['existing']     =   $context->getAppointment( $email, $appointmentId);
 			$context->updateAppointment( $email, $appointmentId, $slot_time, $payload);
 
 			$this->_logger->info( 'Updated appointment successfully ['.$appointmentId.']');
 
 			$selected_flow = $this->_okFlow;
+		} catch ( OutOfBusinessHoursException $e) {
+		    $this->_logger->info( $e->getMessage());
+		    $selected_flow       =   $this->_notAvailableFlow;
+		    $data['not_allowed'] =   true;
 		} catch ( SlotNotAvailableException $e) {
 			$this->_logger->info( $e->getMessage());
 			$selected_flow = $this->_notAvailableFlow;
@@ -122,7 +126,7 @@ class UpdateAppointmentElement extends AbstractAppointmentElement
 		}
 		
 		$params         =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
-		$params->setServiceParam( $this->_resultVar, $eval_data);
+		$params->setServiceParam( $this->_resultVar, $data);
 
 		foreach ( $selected_flow as $element) {
 			$element->read( $request, $response);

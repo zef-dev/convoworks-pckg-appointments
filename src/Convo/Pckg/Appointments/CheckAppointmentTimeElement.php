@@ -106,18 +106,28 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
         $this->_logger->info( 'Checking time ['.$date.']['.$time.']['.$timezone->getName().']');
         
         $slot_time    =   new \DateTimeImmutable( $date.' '.$time, $timezone);
+        $data         =   [
+            'suggestions' => [], 
+            'timezone' => $timezone->getName(), 
+            'requested_time' => $slot_time->getTimestamp(),
+            'not_allowed' => false
+        ];
         
         if ( $date && $time)
         {
-            if ( $context->isSlotAvailable( $slot_time)) {
-                $this->_logger->info( 'Requested slot is available');
-                $params->setServiceParam( 
-                    $this->_resultVar, 
-                    [ 'suggestions' => [], 'timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()]);
-                foreach ( $this->_availableFlow as $element) {
-                    $element->read( $request, $response);
+            
+            try {
+                if ( $context->isSlotAvailable( $slot_time)) {
+                    $this->_logger->info( 'Requested slot is available');
+                    foreach ( $this->_availableFlow as $element) {
+                        $element->read( $request, $response);
+                    }
                 }
+                $params->setServiceParam( $this->_resultVar, $data);
                 return ;
+            } catch ( OutOfBusinessHoursException $e) {
+                $this->_logger->info( $e->getMessage());
+                $data['not_allowed'] = true;
             }
         }
         
@@ -131,6 +141,7 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
                     break;
                 }
             }
+            $data['suggestions'] = $queue->values();
             
             $queueCount = $queue->count();
             $this->_logger->info( 'Got ['.$queueCount.'] suggestions');
@@ -142,18 +153,13 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
             } else {
                 $selected_flow   =   $this->_fallbackSuggestionFlows( $this->_suggestionsFlow);
             }
-            
-            $params->setServiceParam(
-                $this->_resultVar,
-                [ 'suggestions' => $queue->values(), 'timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()]);
         }
         else
         {
-            $params->setServiceParam(
-                $this->_resultVar,
-                [ 'suggestions' => [], 'timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()]);
             $selected_flow   =   $this->_noSuggestionsFlow;
         }
+        
+        $params->setServiceParam( $this->_resultVar, $data);
         
         $this->_readElementsInTimezone( $selected_flow, $timezone, $request, $response);
     }
