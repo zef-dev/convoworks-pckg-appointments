@@ -55,7 +55,7 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 	{
 	    $this->_logger->debug( 'Checking time ['.$time->format( self::DATE_TIME_FORMAT).']');
 	    
-	    if ( !$this->_isSlotAllowed( $time)) {
+	    if ( !$this->_checkSlotAllowed( $time)) {
 	        return false;
 	    }
 	    
@@ -77,26 +77,22 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 	}
 	
 	/**
-	 * @param \DateTimeInterface $time
-	 * @return bool
+	 * @param \DateTime $time
+	 * @throws OutOfBusinessHoursException
 	 */
-	private function _isSlotAllowed( $time) 
+	private function _checkSlotAllowed( $time) 
 	{
 	    $requested =   \DateTime::createFromFormat( 'H:i', $time->format( 'H:i'));
 	    $start     =   \DateTime::createFromFormat( 'H:i', self::MIN_HOUR);
 	    $end       =   \DateTime::createFromFormat( 'H:i', self::MAX_HOUR);
 	    
 	    if ( $requested < $start || $requested > $end) {
-	        $this->_logger->info( 'Not in allowed period');
-	        return false;
+	        throw new OutOfBusinessHoursException( 'Not in allowed period.');
 	    }
 	    
 	    if ( $time->format( 'N') >= 6) {
-	        $this->_logger->info( 'Weekedns not allowed.');
-	        return false;
+	        throw new OutOfBusinessHoursException( 'Weekedns not allowed.');
 	    }
-	    
-	    return true;
 	}
 	
 	public function createAppointment( $email, $time, $payload = [])

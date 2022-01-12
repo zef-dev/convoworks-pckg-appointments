@@ -11,6 +11,7 @@ use Convo\Core\DataItemNotFoundException;
  * Some methods should throw an exception if required condition is meet.
  *  DataItemNotFoundException - when the appointment with requested appointment_id is not found.
  *  BadRequestException - When required data in payload is not populated.
+ *  OutOfBusinessHoursException - When the requested time is out of defined business hours
  *  SlotNotAvailableException - When the requested time is not available.
  */
 interface IAppointmentsContext
@@ -25,6 +26,7 @@ interface IAppointmentsContext
 	 * Checks if given slot is available.
 	 * @param \DateTimeInterface $time
 	 * @return bool
+	 * @throws OutOfBusinessHoursException
 	 */
     public function isSlotAvailable( $time);
 
@@ -35,6 +37,7 @@ interface IAppointmentsContext
 	 * @param array $payload
 	 * @return string created appointment id
 	 * @throws BadRequestException
+	 * @throws OutOfBusinessHoursException
 	 * @throws SlotNotAvailableException
 	 */
     public function createAppointment( $email, $time, $payload=[]);
@@ -47,6 +50,7 @@ interface IAppointmentsContext
 	 * @param array $payload
 	 * @throws DataItemNotFoundException
 	 * @throws BadRequestException
+	 * @throws OutOfBusinessHoursException
 	 * @throws SlotNotAvailableException
 	 */
 	public function updateAppointment( $email, $appointmentId, $time, $payload=[]);
