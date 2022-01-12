@@ -82,7 +82,6 @@ class LoadAppointmentsElement extends AbstractAppointmentElement
 	public function read( IConvoRequest $request, IConvoResponse $response)
 	{
 		$context          =   $this->_getAppointmentsContext();
-		$timezone         =   $this->_getTimezone( $request);
 		$email            =   $this->evaluateString( $this->_email);
 		$mode             =   $this->evaluateString( $this->_mode);
 		$limit            =   $this->evaluateString( $this->_limit);
@@ -108,7 +107,7 @@ class LoadAppointmentsElement extends AbstractAppointmentElement
 		$params       =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
 		$params->setServiceParam( $returnVar, ['appointments' => $appointments]);
 		
-		$this->_readElementsInTimezone( $selected_flow, $timezone, $request, $response);
+		$this->_readElementsInTimezone( $selected_flow, $request, $response);
 	}
 	
 	private function _fallbackSuggestionFlows( $flow) {

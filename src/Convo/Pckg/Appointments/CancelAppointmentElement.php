@@ -67,7 +67,6 @@ class CancelAppointmentElement extends AbstractAppointmentElement
 	public function read( IConvoRequest $request, IConvoResponse $response)
 	{
 		$context      	=   $this->_getAppointmentsContext();
-		$timezone       =   $this->_getTimezone( $request);
 		$appointmentId  =   $this->evaluateString($this->_appointmentId);
 		$email          =   $this->evaluateString($this->_email);
 
@@ -88,7 +87,7 @@ class CancelAppointmentElement extends AbstractAppointmentElement
 		$params         =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
 		$params->setServiceParam( $this->_resultVar, $data);
 
-		$this->_readElementsInTimezone( $selected_flow, $timezone, $request, $response);
+		$this->_readElementsInTimezone( $selected_flow, $request, $response);
 	}
 
 }

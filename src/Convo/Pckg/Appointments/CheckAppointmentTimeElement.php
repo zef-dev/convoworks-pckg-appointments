@@ -120,7 +120,7 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
                 if ( $context->isSlotAvailable( $slot_time)) {
                     $this->_logger->info( 'Requested slot is available');
                     $params->setServiceParam( $this->_resultVar, $data);
-                    $this->_readElementsInTimezone( $this->_availableFlow, $timezone, $request, $response);
+                    $this->_readElementsInTimezone( $this->_availableFlow, $request, $response);
                     return ;
                 }
                 $this->_logger->info( 'Requested slot is not available');
@@ -161,7 +161,7 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
         
         $params->setServiceParam( $this->_resultVar, $data);
         
-        $this->_readElementsInTimezone( $selected_flow, $timezone, $request, $response);
+        $this->_readElementsInTimezone( $selected_flow, $request, $response);
     }
     
     

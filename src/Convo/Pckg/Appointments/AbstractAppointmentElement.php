@@ -52,13 +52,14 @@ abstract class AbstractAppointmentElement extends AbstractWorkflowContainerCompo
 
 	/**
 	 * @param IConversationElement[] $elements
-	 * @param \DateTimeZone $timezone
      * @param IConvoRequest $request
      * @param IConvoResponse $response
 	 * @throws \Throwable
 	 */
-	protected function _readElementsInTimezone( $elements, $timezone, $request, $response) 
+	protected function _readElementsInTimezone( $elements, $request, $response) 
 	{
+	    $timezone       =   $this->_getTimezone( $request);
+	    
 	    $default  =    date_default_timezone_get();
 	    
 	    try {

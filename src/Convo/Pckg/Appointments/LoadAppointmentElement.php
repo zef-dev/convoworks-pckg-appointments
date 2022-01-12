@@ -70,7 +70,6 @@ class LoadAppointmentElement extends AbstractAppointmentElement
         $context        =   $this->_getAppointmentsContext();
         $email          =   $this->evaluateString($this->_email);
 		$appointmentId  =   $this->evaluateString( $this->_appointmentId);
-        $timezone       =   $this->_getTimezone( $request);
 		$returnVar      =   $this->evaluateString( $this->_returnVar);
 
 		$this->_logger->info( 'Loading appointment with id ['.$appointmentId.'] for customer email ['.$email.']');
@@ -89,6 +88,6 @@ class LoadAppointmentElement extends AbstractAppointmentElement
 		$params       =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
 		$params->setServiceParam( $returnVar, $data);
 
-		$this->_readElementsInTimezone( $selected_flow, $timezone, $request, $response);
+		$this->_readElementsInTimezone( $selected_flow, $request, $response);
 	}
 }
