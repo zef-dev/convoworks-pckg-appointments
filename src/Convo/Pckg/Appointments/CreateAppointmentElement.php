@@ -88,7 +88,7 @@ class CreateAppointmentElement extends AbstractAppointmentElement
 		$slot_time    =   new \DateTime( $date.' '.$time, $timezone);
 		$data         =   [
 		    'appointment_id' => null, 
-		    'timezone' => $timezone->getName(), 
+		    'requested_timezone' => $timezone->getName(), 
 		    'requested_time' => $slot_time->getTimestamp(),
 		    'not_allowed' => false
 		];

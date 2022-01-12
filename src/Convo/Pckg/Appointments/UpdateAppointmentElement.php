@@ -104,7 +104,7 @@ class UpdateAppointmentElement extends AbstractAppointmentElement
 
 		$this->_logger->info( 'Updating appointment at ['.$date.']['.$time.'] for customer email [' . $email . ']');
 		$slot_time      =   new \DateTime( $date.' '.$time, $timezone);
-		$data      =   ['timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()];
+		$data      =   ['requested_timezone' => $timezone->getName(), 'requested_time' => $slot_time->getTimestamp()];
 		
 		try {
 		    $data['existing']     =   $context->getAppointment( $email, $appointmentId);

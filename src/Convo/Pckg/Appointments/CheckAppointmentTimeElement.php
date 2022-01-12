@@ -108,23 +108,22 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
         $slot_time    =   new \DateTimeImmutable( $date.' '.$time, $timezone);
         $data         =   [
             'suggestions' => [], 
-            'timezone' => $timezone->getName(), 
             'requested_time' => $slot_time->getTimestamp(),
+            'requested_timezone' => $timezone->getName(), 
             'not_allowed' => false
         ];
         
         if ( $date && $time)
         {
-            
+            $this->_logger->debug( 'Going to check if the slot is available ...');
             try {
                 if ( $context->isSlotAvailable( $slot_time)) {
                     $this->_logger->info( 'Requested slot is available');
-                    foreach ( $this->_availableFlow as $element) {
-                        $element->read( $request, $response);
-                    }
+                    $params->setServiceParam( $this->_resultVar, $data);
+                    $this->_readElementsInTimezone( $this->_availableFlow, $timezone, $request, $response);
+                    return ;
                 }
-                $params->setServiceParam( $this->_resultVar, $data);
-                return ;
+                $this->_logger->info( 'Requested slot is not available');
             } catch ( OutOfBusinessHoursException $e) {
                 $this->_logger->info( $e->getMessage());
                 $data['not_allowed'] = true;
@@ -133,6 +132,7 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
         
         if ( $this->_suggestionsBuilder) 
         {
+            $this->_logger->debug( 'Going to build suggestions ...');
             $queue  =   $this->_suggestionsBuilder->createStack( $slot_time);
             foreach ( $context->getFreeSlotsIterator( $slot_time) as $time)
             {

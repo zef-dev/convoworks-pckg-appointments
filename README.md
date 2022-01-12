@@ -76,7 +76,7 @@ Parameters:
 * `appointment_date` - Optional, requested date in the `Y-m-d` format (the MySQL DATE format)
 * `appointment_time` - Optional, requested time in the `H:i:s` format (the MySQL TIME format)
 * `email` - Optional, user identification. If present, it might serve for better suggestions
-* `return_var` - Default `status`, name of the variable which will be present in sub-flows and that contains information about operation result (`suggestions` : array of suggestions, `requested_time`: requested appointment as timestamp, `timezone`: prefered time zone, `not_allowed`: `true` when the requested period is out of business hours)
+* `return_var` - Default `status`, name of the variable which will be present in sub-flows and that contains information about operation result (`suggestions` : array of suggestions, `requested_time`: requested appointment as timestamp, `requested_timezone`: requested time zone as string, `not_allowed`: `true` when the requested period is out of business hours)
 
 Flows:
 
@@ -109,7 +109,7 @@ Parameters:
 * `appointment_date` - Requested date in the `Y-m-d` format (the MySQL DATE format)
 * `appointment_time` - Requested time in the `H:i:s` format (the MySQL TIME format)
 * `payload` - Various other properties that might be used with an implementing booking plugin.
-* `return_var` - Default `status`, name of the variable that contains additional information (`appointment_id`, `requested_time` timestamp, `timezone` string timezone, `not_allowed`: `true` when the requested period is out of business hour)
+* `return_var` - Default `status`, name of the variable that contains additional information (`appointment_id`: string, `requested_time`: requested appointment as timestamp, `requested_timezone`: requested time zone as string, `not_allowed`: `true` when the requested period is out of business hour)
 
 Flows:
 * `ok` - This flow is executed when appointment is created
@@ -126,7 +126,7 @@ Parameters:
 * `appointment_date` - Requested date in the `Y-m-d` format (MySQL DATE format)
 * `appointment_time` - Requested time in the `H:i:s` format (MySQL TIME format)
 * `payload` - Optional, various other properties that might be used with an implementing plugin. When empty, original payload data provided on creation, should stay the same.
-* `return_var` - Default `status`, name of the variable that contains additional information (`existing` previous appointment version as you would get it with load appointment element, `timezone`, `requested_time`, `not_allowed`: `true` when the requested period is out of business hour)
+* `return_var` - Default `status`, name of the variable that contains additional information (`existing` previous appointment version as you would get it with load appointment element, `requested_time`: requested appointment as timestamp, `requested_timezone`: requested time zone as string, `not_allowed`: `true` when the requested period is out of business hour)
 
 Flows:
 * `ok` - Executed when the appointment is updated
