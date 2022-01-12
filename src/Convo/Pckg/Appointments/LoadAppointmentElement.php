@@ -74,20 +74,20 @@ class LoadAppointmentElement extends AbstractAppointmentElement
 		$returnVar      =   $this->evaluateString( $this->_returnVar);
 
 		$this->_logger->info( 'Loading appointment with id ['.$appointmentId.'] for customer email ['.$email.']');
-
+        
+		$data           =   ['appointment' => null];
+		
 		try {
-			$appointment = $context->getAppointment( $email, $appointmentId);
-
+		    $data['appointment'] = $context->getAppointment( $email, $appointmentId);
 			$this->_logger->info('Loaded appointment with id ['.$appointmentId.'] appointments for customer email [' . $email . ']');
-
-			$params       =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
-			$params->setServiceParam( $returnVar, ['appointment' => $appointment, 'timezone' => $timezone->getName()]);
-
 			$selected_flow = $this->_okFlow;
 		}  catch ( DataItemNotFoundException $e) {
 			$this->_logger->info($e->getMessage());
 			$selected_flow = $this->_notFoundFlow;
 		}
+		
+		$params       =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
+		$params->setServiceParam( $returnVar, $data);
 
 		$this->_readElementsInTimezone( $selected_flow, $timezone, $request, $response);
 	}

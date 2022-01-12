@@ -141,7 +141,7 @@ This element will cancel an existing appointment.
 Parameters:
 
 * `appointment_id` - Id of the existing appointment
-* `return_var` - Default `status`, name of the variable that contains additional information (`existing` previous appointment version as you would get it with load appointment element, `timezone`)
+* `return_var` - Default `status`, name of the variable that contains additional information (`existing`: previous appointment version as you would get it with load appointment element)
 
 Flows:
 * `ok` - Executed when the appointment is canceled
@@ -156,7 +156,7 @@ Parameters:
 
 * `mode` : `current` default, `past` or `all`
 * `limit` : default `10`
-* `return_var` - Default `status`, name of the variable that contains additional information (`appointments` : array of appointments, `timezone`: preferred time zone)
+* `return_var` - Default `status`, name of the variable that contains additional information (`appointments` : array of appointments)
 
 Flows:
 * `multiple` - Executed when the multiple appointments are found.
@@ -171,7 +171,7 @@ This element returns single appointment data.
 Parameters:
 
 * `appointment_id` - Id of the existing appointment
-* `return_var` - Default `status`, name of the variable that contains additional information (`appointment`, `timezone`)
+* `return_var` - Default `status`, name of the variable that contains additional information (`appointment`: array of appointment objects)
 
 Flows:
 * `ok` - Executed when the appointment is loaded.

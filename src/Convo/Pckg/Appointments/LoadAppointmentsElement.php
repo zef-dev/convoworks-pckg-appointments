@@ -94,9 +94,6 @@ class LoadAppointmentsElement extends AbstractAppointmentElement
 		$appointmentsCount    =   count( $appointments);
 		$this->_logger->info('Loaded ['.$appointmentsCount.'] appointments for customer email [' . $email . ']');
 
-		$params       =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
-		$params->setServiceParam( $returnVar, ['appointments' => $appointments, 'timezone' => $timezone->getName()]);
-
 		if ($appointmentsCount === 1) {
 		    $this->_logger->debug( 'Selecting single flow');
 		    $selected_flow = $this->_fallbackSuggestionFlows( $this->_singleFlow);
@@ -107,6 +104,9 @@ class LoadAppointmentsElement extends AbstractAppointmentElement
 		    $this->_logger->debug( 'Selecting no suggestions flow');
 		    $selected_flow = $this->_fallbackSuggestionFlows( $this->_emptyFlow);
 		}
+		
+		$params       =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
+		$params->setServiceParam( $returnVar, ['appointments' => $appointments]);
 		
 		$this->_readElementsInTimezone( $selected_flow, $timezone, $request, $response);
 	}

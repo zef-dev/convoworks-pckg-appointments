@@ -73,7 +73,7 @@ class CancelAppointmentElement extends AbstractAppointmentElement
 
 		$this->_logger->info('Canceling appointment with id ['.$appointmentId.'] for customer email [' . $email . ']');
 
-		$eval_data      =   ['timezone' => $timezone->getName()];
+		$eval_data      =   [ 'existing' => null];
 		
 		try {
 		    $eval_data['existing']     =   $context->getAppointment( $email, $appointmentId);
@@ -88,9 +88,7 @@ class CancelAppointmentElement extends AbstractAppointmentElement
 		$params         =   $this->getService()->getComponentParams( IServiceParamsScope::SCOPE_TYPE_REQUEST, $this);
 		$params->setServiceParam( $this->_resultVar, $eval_data);
 
-		foreach ($selected_flow as $element) {
-			$element->read( $request, $response);
-		}
+		$this->_readElementsInTimezone( $selected_flow, $timezone, $request, $response);
 	}
 
 }
