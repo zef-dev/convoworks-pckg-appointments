@@ -69,6 +69,7 @@ interface IAppointmentsContext
      * ```json
      * {
      *      "appointment_id" : "123",
+     *      "email" : "user@domain.com",
      *      "timestamp" : 123345678,
      *      "timezone" : "America/New_York",
      *      "payload" : {

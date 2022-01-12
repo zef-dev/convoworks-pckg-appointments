@@ -183,7 +183,9 @@ Single appointment representation as JSON.
 ```json
 {
       "appointment_id" : "123",
+      "email" : "user@domain.com",
       "timestamp" : 123345678,
+      "timezone" : "America/New_York",
       "payload" : {
           "some_other_fields" : "That is used by implementing appointment context & WP plugin",
           "more_fields" : "Some other data"
