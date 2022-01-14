@@ -190,6 +190,34 @@ Single appointment representation as JSON.
 }
 ```
 
+## Template - Schedule Appointments
+
+This package is shipped with the ready to use service template - Schedule Appointments.
+By default it is configured to use our dummy appointments context. You can easily change it on the variables view by chaning the `APPOINTMENTS` value.
+
+### Features
+
+This conversational service enables your users to create, reschedule or cancel appointments. It is designed to provide nice and rich user experiance.
+Users are able to create new appointments, check if they have existing ones and cancel or reschedule them.
+When the requested slot is not available, service will suggest several free slots.
+
+Other characteristics and requirements:
+
+* Ready to use as Alexa skill
+* Voice only interface
+* It will require from user to enable access to profile data in Alexa app (name, email)
+
+
+### Initial setup
+
+If you just installed Cnvoworks WP, you might want to check the [Connect to Amazon and create your first Alexa skill](https://youtu.be/7lx5_ZqazvA) from our [Convoworks basics](https://youtube.com/playlist?list=PL9eUOVS2fICHc7FF48opQyOWUDVvNoNFD) video tutorial series.
+
+
+
+
+
+
+
 
 ---
 
