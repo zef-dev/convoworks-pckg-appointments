@@ -110,7 +110,7 @@ Parameters:
 * `appointment_id` - Id of the existing appointment
 * `appointment_date` - Requested date in the `Y-m-d` format (MySQL DATE format)
 * `appointment_time` - Requested time in the `H:i:s` format (MySQL TIME format)
-* `payload` - Optional, various other properties that might be used with an implementing plugin. When empty, original payload data provided on creation, should stay the same.
+* `payload` - Optional, various other properties that might be used with an implementing plugin. When empty, original payload data provided on creation should stay the same.
 * `return_var` - Default `status`, name of the variable that contains additional information (`existing` previous appointment version as you would get it with load appointment element, `requested_time`: requested appointment as timestamp, `requested_timezone`: requested time zone as string, `not_allowed`: `true` when the requested period is out of business hour)
 
 Flows:
@@ -133,7 +133,7 @@ Flows:
 
 ### `LoadAppointmentsElement`
 
-This elment will load existing appointments for the current user.
+This element will load existing appointments for the current user.
 
 Parameters:
 
@@ -178,11 +178,11 @@ Single appointment representation as JSON.
 ## Template - Schedule Appointments
 
 This package is shipped with the ready to use service template - Schedule Appointments.
-By default it is configured to use our dummy appointments context. You can easily change it on the variables view by chaning the `APPOINTMENTS` value.
+By default it is configured to use our dummy appointments context. You can easily change it on the variables view by changing the `APPOINTMENTS` value.
 
 ### Features
 
-This conversational service enables your users to create, reschedule or cancel appointments. It is designed to provide nice and rich user experiance.
+This conversational service enables your users to create, reschedule or cancel appointments. It is designed to provide a nice and rich user experience.
 Users are able to create new appointments, check if they have existing ones and cancel or reschedule them.
 When the requested slot is not available, service will suggest several free slots.
 
@@ -195,14 +195,19 @@ Other characteristics and requirements:
 
 ### Initial setup
 
-If you just installed Cnvoworks WP, you might want to check the [Connect to Amazon and create your first Alexa skill](https://youtu.be/7lx5_ZqazvA) from our [Convoworks basics](https://youtube.com/playlist?list=PL9eUOVS2fICHc7FF48opQyOWUDVvNoNFD) video tutorial series.
+If you just installed Convoworks WP, you might want to check the [Connect to Amazon and create your first Alexa skill](https://youtu.be/7lx5_ZqazvA) from our [Convoworks basics](https://youtube.com/playlist?list=PL9eUOVS2fICHc7FF48opQyOWUDVvNoNFD) video tutorial series.
 
+Open Convoworks WP services view and click on the "Create new" button.
+Enter your service name, select the "My Booking" template and press the "Submit" button.
 
+Now navigate to the service "Configuration" view and select "amazon alexa" configuration button. In the "Amazon Alexa Skill Permissions" section check the "Full Name" and the "Customer Email Address" checkboxes. Press "Save configuration" and your service will be propagated to Alexa Console.
 
+You might also change `APP_NAME` in the "Variables'' view. If you plan to use some other appointment context, you should change `APPOINTMENTS` to the appropriate id.
 
+Go to the Alexa app (or web app https://alexa.amazon.com), click on "Your Skills", select the "Dev skills" tab, find your new skill and enable it.
 
-
-
+Your Booking skill now can be tested on your Alexa enabled devices.
+ 
 
 ---
 
