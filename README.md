@@ -23,23 +23,8 @@ class MyCustomAppointmentsContext extends AbstractBasicComponent implements IApp
 }
 ```
 
-Here is quick example how you can register your own package in the WordPress environment (Convoworks WP)
 
-```php
-/**
- * @param Convo\Core\Factory\PackageProviderFactory $packageProviderFactory
- * @param Psr\Container\ContainerInterface $container
- */
-function my_package_registrator( $packageProviderFactory, $container) {
-    $packageProviderFactory->registerPackage( new Convo\Core\Factory\FunctionPackageDescriptor('\My\Namespace\MyPackageDefinition', 
-        function() use ( $container) {
-            return new \My\Namespace\MyPackageDefinition( $container->get( 'logger'));
-        }));
-}
-add_action( 'register_convoworks_package', 'my_package_registrator', 10, 2);
-```
-
-You can check for more about [developing custom packages](https://convoworks.com/docs/developers/develop-custom-packages/) on the Convoworks documentation. 
+You can check for more about [developing custom packages](https://convoworks.com/docs/developers/develop-custom-packages/) on the Convoworks documentation and you can check our [Convoworks WP Plugin Package Template](https://github.com/zef-dev/convoworks-wp-plugin-package-template)
 
 
 ### `DummyAppointmentsContext`
