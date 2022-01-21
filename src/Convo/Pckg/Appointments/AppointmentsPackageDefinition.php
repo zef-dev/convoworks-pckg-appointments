@@ -137,7 +137,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 							'multiple' => true,
                             'hideWhenEmpty' => true
 						],
-						'defaultValue' => null,
+						'defaultValue' => [],
 						'defaultOpen' => false,
 						'name' => 'Single Suggestion',
 						'description' => 'Flow to be executed if the requested appointment date is available.',
@@ -150,7 +150,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				            'multiple' => true,
                             'hideWhenEmpty' => true
 				        ],
-				        'defaultValue' => null,
+				        'defaultValue' => [],
 				        'defaultOpen' => false,
 				        'name' => 'No Suggestions',
 				        'description' => 'Flow to be executed if the requested appointment date is available.',
@@ -348,7 +348,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 							'multiple' => true,
                             'hideWhenEmpty' => true
 						],
-						'defaultValue' => null,
+						'defaultValue' => [],
 						'defaultOpen' => false,
 						'name' => 'Single',
 						'description' => 'Flow to be executed if one appointment could be found.',
@@ -361,7 +361,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				            'multiple' => true,
                             'hideWhenEmpty' => true
 				        ],
-				        'defaultValue' => null,
+				        'defaultValue' => [],
 				        'defaultOpen' => false,
 				        'name' => 'Empty',
 				        'description' => 'Flow to be executed if no appointment could be found.',
