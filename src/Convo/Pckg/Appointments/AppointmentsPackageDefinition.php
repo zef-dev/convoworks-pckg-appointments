@@ -34,7 +34,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 	        'description' => 'Unique ID by which this context is referenced',
 	        'valueType' => 'string'
 	    ];
-	    
+
 	    $timezone_mode_param =   [
 	        'editor_type' => 'select',
 	        'editor_properties' => [
@@ -59,7 +59,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 	        'description' => 'Enabled only when timezone mode is on "Set". Enter explicit timezone value.',
 	        'valueType' => 'string'
 	    ];
-	    
+
 		return [
 			new \Convo\Core\Factory\ComponentDefinition(
 				$this->getNamespace(),
@@ -136,7 +136,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 							'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
 							'multiple' => true
 						],
-						'defaultValue' => [],
+						'defaultValue' => null,
 						'defaultOpen' => false,
 						'name' => 'Single Suggestion',
 						'description' => 'Flow to be executed if the requested appointment date is available.',
@@ -148,7 +148,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				            'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
 				            'multiple' => true
 				        ],
-				        'defaultValue' => [],
+				        'defaultValue' => null,
 				        'defaultOpen' => false,
 				        'name' => 'No Suggestions',
 				        'description' => 'Flow to be executed if the requested appointment date is available.',
@@ -256,12 +256,12 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				    '_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
 				    {
 				        private $_alexaSettingsApi;
-				        
+
 				        public function __construct($alexaCustomerProfileApi)
 				        {
 				            $this->_alexaSettingsApi = $alexaCustomerProfileApi;
 				        }
-				        
+
 				        public function createComponent($properties, $service)
 				        {
 				            return new \Convo\Pckg\Appointments\LoadAppointmentElement($properties, $this->_alexaSettingsApi);
@@ -345,7 +345,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 							'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
 							'multiple' => true
 						],
-						'defaultValue' => [],
+						'defaultValue' => null,
 						'defaultOpen' => false,
 						'name' => 'Single',
 						'description' => 'Flow to be executed if one appointment could be found.',
@@ -357,7 +357,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				            'allow_interfaces' => ['\Convo\Core\Workflow\IConversationElement'],
 				            'multiple' => true
 				        ],
-				        'defaultValue' => [],
+				        'defaultValue' => null,
 				        'defaultOpen' => false,
 				        'name' => 'Empty',
 				        'description' => 'Flow to be executed if no appointment could be found.',
@@ -366,12 +366,12 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				    '_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
 				    {
 				        private $_alexaSettingsApi;
-				        
+
 				        public function __construct($alexaCustomerProfileApi)
 				        {
 				            $this->_alexaSettingsApi = $alexaCustomerProfileApi;
 				        }
-				        
+
 				        public function createComponent($properties, $service)
 				        {
 				            return new \Convo\Pckg\Appointments\LoadAppointmentsElement( $properties, $this->_alexaSettingsApi);
@@ -468,12 +468,12 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				    '_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
 				    {
 				        private $_alexaSettingsApi;
-				        
+
 				        public function __construct($alexaCustomerProfileApi)
 				        {
 				            $this->_alexaSettingsApi = $alexaCustomerProfileApi;
 				        }
-				        
+
 				        public function createComponent($properties, $service)
 				        {
 				            return new \Convo\Pckg\Appointments\CreateAppointmentElement( $properties, $this->_alexaSettingsApi);
@@ -578,12 +578,12 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				    '_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
 				    {
 				        private $_alexaSettingsApi;
-				        
+
 				        public function __construct($alexaCustomerProfileApi)
 				        {
 				            $this->_alexaSettingsApi = $alexaCustomerProfileApi;
 				        }
-				        
+
 				        public function createComponent($properties, $service)
 				        {
 				            return new \Convo\Pckg\Appointments\UpdateAppointmentElement( $properties, $this->_alexaSettingsApi);
@@ -650,12 +650,12 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 				    '_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
 				    {
 				        private $_alexaSettingsApi;
-				        
+
 				        public function __construct($alexaCustomerProfileApi)
 				        {
 				            $this->_alexaSettingsApi = $alexaCustomerProfileApi;
 				        }
-				        
+
 				        public function createComponent($properties, $service)
 				        {
 				            return new \Convo\Pckg\Appointments\CancelAppointmentElement( $properties, $this->_alexaSettingsApi);
