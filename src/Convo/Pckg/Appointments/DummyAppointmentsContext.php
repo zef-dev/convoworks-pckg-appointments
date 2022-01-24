@@ -248,6 +248,9 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
         $appointments       =   $this->_getAppointments();
 
         if ( $mode == self::LOAD_MODE_ALL) {
+            usort($appointments, function ($first, $second) {
+                return $first['timestamp'] > $second['timestamp'];
+            });
             return $appointments;
         }
 
@@ -256,12 +259,18 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
         if ( $mode == self::LOAD_MODE_CURRENT) {
             foreach ( $appointments as $appointment) {
                 if ( $appointment['timestamp'] > $now) {
+                    usort($appointments, function ($first, $second) {
+                        return $first['timestamp'] > $second['timestamp'];
+                    });
                     $filtered[] = $appointment;
                 }
             }
         } else if ( $mode == self::LOAD_MODE_PAST) {
             foreach ( $appointments as $appointment) {
                 if ( $appointment['timestamp'] < $now) {
+                    usort($appointments, function ($first, $second) {
+                        return $first['timestamp'] < $second['timestamp'];
+                    });
                     $filtered[] = $appointment;
                 }
             }
