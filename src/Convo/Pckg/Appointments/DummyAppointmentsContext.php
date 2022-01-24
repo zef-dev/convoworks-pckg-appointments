@@ -57,6 +57,11 @@ class DummyAppointmentsContext extends AbstractBasicComponent implements IServic
 
 	    $this->_checkSlotAllowed( $time);
 
+        if ($time->getTimestamp() <= time()) {
+            $this->_logger->notice( 'Time [' . $time->format('Y-m-d H:s:i') . '] in the past is not allowed.');
+            return false;
+        }
+
 	    $appointments  =   $this->_getAppointments();
 
 	    foreach ( $appointments as $appointment)
