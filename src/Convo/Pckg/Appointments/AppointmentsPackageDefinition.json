@@ -3,7 +3,7 @@
     "author": "ZEF Development",
     "email": "mark@zefdev.com",
     "source_for": [
-        "elements"
+        "elements", "templates"
     ],
     "description": "Contains conversational workflow elements for managing appointment scheduling scenarios in the Convoworks framework.",
     "stability": "experimental"

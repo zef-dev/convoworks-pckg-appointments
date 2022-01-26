@@ -22,6 +22,8 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 	{
 		$this->_alexaSettingsApi = $alexaSettingsApi;
 		parent::__construct($logger, self::NAMESPACE, __DIR__);
+
+		$this->addTemplate( $this->_loadFile( __DIR__ .'/schedule-appointments.template.json'));
 	}
 
 	protected function _initDefintions()
