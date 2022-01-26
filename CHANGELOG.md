@@ -2,7 +2,13 @@
 
 ## [Current development]
 
-## 1.00 - Initial release
+## 1.1.0
+
+* Add new service template
+* Fix dummy context
+* Hide optional flows in elements
+
+## 1.0.0 - Initial release
 
 * Define appointment scheduling interface
 * Implement dummy appointment scheduling interface implementation
