@@ -12,14 +12,6 @@
         ],
         "contexts": [
             {
-                "class": "\\Convo\\Wp\\Pckg\\WpPluginPack\\SSAAppointmentsContext",
-                "namespace": "convo-wp-plugin-pack",
-                "properties": {
-                    "id": "ssa",
-                    "appointment_type": "Consultation Phone Call"
-                }
-            },
-            {
                 "class": "\\Convo\\Pckg\\Appointments\\DummyAppointmentsContext",
                 "namespace": "convo-appointments",
                 "properties": {
