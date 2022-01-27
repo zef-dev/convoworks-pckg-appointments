@@ -21,12 +21,9 @@
         ],
         "variables": {
             "APP_NAME": "Schedule Appointment",
-            "DATE_FORMAT": "l, F j",
             "TIME_FORMAT": "g:i a",
             "FULL_DATE_FORMAT": "l, F j \\a\\t g:i a",
             "APPOINTMENTS": "appointments_ctx",
-            "TIMEZONE_MODE": "DEFAULT",
-            "TIMEZONE": "America\/New_York",
             "MAX_APPOINTMENTS_PER_PERSON": "${2}"
         },
         "preview_variables": [],
@@ -1953,8 +1950,8 @@
                                     }
                                 ],
                                 "_use_var_context_id": true,
-                                "timezone_mode": "SET",
-                                "timezone": "${TIMEZONE}"
+                                "timezone_mode": "DEFAULT",
+                                "timezone": null
                             }
                         }
                     ],
@@ -2449,7 +2446,7 @@
                                         "class": "\\Convo\\Pckg\\Core\\Elements\\IfElement",
                                         "namespace": "convo-core",
                                         "properties": {
-                                            "test": "${initialize_new == true}",
+                                            "test": "${initialize_new}",
                                             "then": [
                                                 {
                                                     "class": "\\Convo\\Pckg\\Core\\Elements\\SetParamElement",
@@ -2725,7 +2722,7 @@
                                                 }
                                             ],
                                             "single_suggestion_flow": [],
-                                            "timezone_mode": "SET",
+                                            "timezone_mode": "DEFAULT",
                                             "_use_var_context_id": true,
                                             "suggestions_builder": {
                                                 "class": "\\Convo\\Pckg\\Appointments\\DefaultFreeSlotQueue",
@@ -2734,7 +2731,7 @@
                                                     "max_suggestions": "4"
                                                 }
                                             },
-                                            "timezone": "${TIMEZONE}"
+                                            "timezone": null
                                         }
                                     }
                                 ]
@@ -3311,9 +3308,9 @@
                                                     }
                                                 }
                                             ],
-                                            "timezone_mode": "SET",
+                                            "timezone_mode": "DEFAULT",
                                             "_use_var_context_id": true,
-                                            "timezone": "${TIMEZONE}"
+                                            "timezone": null
                                         }
                                     }
                                 ],
@@ -3600,9 +3597,9 @@
                                                     }
                                                 }
                                             ],
-                                            "timezone_mode": "SET",
+                                            "timezone_mode": "DEFAULT",
                                             "_use_var_context_id": true,
-                                            "timezone": "${TIMEZONE}"
+                                            "timezone": null
                                         }
                                     }
                                 ],
@@ -3933,9 +3930,9 @@
                                         }
                                     }
                                 ],
-                                "timezone_mode": "SET",
+                                "timezone_mode": "DEFAULT",
                                 "_use_var_context_id": true,
-                                "timezone": "${TIMEZONE}"
+                                "timezone": null
                             }
                         }
                     ],
@@ -4345,9 +4342,9 @@
                                                     }
                                                 }
                                             ],
-                                            "timezone_mode": "SET",
+                                            "timezone_mode": "DEFAULT",
                                             "_use_var_context_id": true,
-                                            "timezone": "${TIMEZONE}"
+                                            "timezone": null
                                         }
                                     }
                                 ],
@@ -4525,9 +4522,9 @@
                                         }
                                     }
                                 ],
-                                "timezone_mode": "SET",
+                                "timezone_mode": "DEFAULT",
                                 "_use_var_context_id": true,
-                                "timezone": "${TIMEZONE}"
+                                "timezone": null
                             }
                         }
                     ],
@@ -5093,10 +5090,6 @@
                             "namespace": "convo-alexa",
                             "properties": {
                                 "name": "customer_profile_status",
-                                "should_get_full_name": true,
-                                "should_get_given_name": false,
-                                "should_get_email_address": true,
-                                "should_get_phone_number": false,
                                 "ok": [
                                     {
                                         "class": "\\Convo\\Pckg\\Core\\Elements\\SetParamElement",
@@ -5137,26 +5130,6 @@
                                         "properties": {
                                             "type": "default",
                                             "text": "To provide access, please enable profile permissions in the Amazon Alexa app.",
-                                            "append": false,
-                                            "alexa_domain": "normal",
-                                            "alexa_emotion": "neutral",
-                                            "alexa_emotion_intensity": "medium"
-                                        }
-                                    },
-                                    {
-                                        "class": "\\Convo\\Pckg\\Core\\Elements\\EndSessionElement",
-                                        "namespace": "convo-core",
-                                        "properties": {
-                                        }
-                                    }
-                                ],
-                                "nok": [
-                                    {
-                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
-                                        "namespace": "convo-core",
-                                        "properties": {
-                                            "type": "default",
-                                            "text": "I'm sorry, something went wrong.",
                                             "append": false,
                                             "alexa_domain": "normal",
                                             "alexa_emotion": "neutral",
@@ -6673,9 +6646,9 @@
                                                     }
                                                 }
                                             ],
-                                            "timezone_mode": "SET",
+                                            "timezone_mode": "DEFAULT",
                                             "_use_var_context_id": true,
-                                            "timezone": "${TIMEZONE}"
+                                            "timezone": null
                                         }
                                     }
                                 ],
