@@ -26,7 +26,7 @@
             "FULL_DATE_FORMAT": "l, F j \\a\\t g:i a",
             "APPOINTMENTS": "appointments_ctx",
             "TIMEZONE_MODE": "DEFAULT",
-            "TIMEZONE": "Europe\/Zagreb",
+            "TIMEZONE": "America\/New_York",
             "MAX_APPOINTMENTS_PER_PERSON": "${2}"
         },
         "preview_variables": [],
