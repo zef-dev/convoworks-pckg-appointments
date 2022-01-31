@@ -7,7 +7,6 @@
         "packages": [
             "convo-core",
             "convo-appointments",
-            "convo-wp-plugin-pack",
             "convo-alexa"
         ],
         "contexts": [
