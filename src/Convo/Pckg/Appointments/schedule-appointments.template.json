@@ -7,7 +7,6 @@
         "packages": [
             "convo-core",
             "convo-appointments",
-            "convo-wp-plugin-pack",
             "convo-alexa"
         ],
         "contexts": [
@@ -2529,7 +2528,7 @@
                                         "class": "\\Convo\\Pckg\\Core\\Elements\\IfElement",
                                         "namespace": "convo-core",
                                         "properties": {
-                                            "test": "${initialize_new == true}",
+                                            "test": "${initialize_new}",
                                             "then": [
                                                 {
                                                     "class": "\\Convo\\Pckg\\Core\\Elements\\SetParamElement",
@@ -2830,7 +2829,7 @@
                                                 }
                                             ],
                                             "single_suggestion_flow": [],
-                                            "timezone_mode": "SET",
+                                            "timezone_mode": "DEFAULT",
                                             "_use_var_context_id": true,
                                             "suggestions_builder": {
                                                 "class": "\\Convo\\Pckg\\Appointments\\DefaultFreeSlotQueue",
@@ -3469,7 +3468,7 @@
                                                     }
                                                 }
                                             ],
-                                            "timezone_mode": "SET",
+                                            "timezone_mode": "DEFAULT",
                                             "_use_var_context_id": true,
                                             "timezone": "${TIMEZONE}",
                                             "_component_id": "1bc23314-73dc-5487-2bd9-5a5ed6c57f01"
@@ -3785,7 +3784,7 @@
                                                     }
                                                 }
                                             ],
-                                            "timezone_mode": "SET",
+                                            "timezone_mode": "DEFAULT",
                                             "_use_var_context_id": true,
                                             "timezone": "${TIMEZONE}",
                                             "_component_id": "ad4d8f57-9d4b-0089-e871-bb83b5e3dd12"
@@ -4148,7 +4147,7 @@
                                         }
                                     }
                                 ],
-                                "timezone_mode": "SET",
+                                "timezone_mode": "DEFAULT",
                                 "_use_var_context_id": true,
                                 "timezone": "${TIMEZONE}",
                                 "_component_id": "d2e9d6a6-e393-b558-9655-e3708a452f32"
@@ -4599,7 +4598,7 @@
                                                     }
                                                 }
                                             ],
-                                            "timezone_mode": "SET",
+                                            "timezone_mode": "DEFAULT",
                                             "_use_var_context_id": true,
                                             "timezone": "${TIMEZONE}",
                                             "_component_id": "8b57fcbd-f66d-e43d-bf97-358170d06bbd"
@@ -4795,7 +4794,7 @@
                                         }
                                     }
                                 ],
-                                "timezone_mode": "SET",
+                                "timezone_mode": "DEFAULT",
                                 "_use_var_context_id": true,
                                 "timezone": "${TIMEZONE}",
                                 "_component_id": "d65904cb-636a-f39e-1753-ace94a89e789"
@@ -7219,7 +7218,7 @@
                                                     }
                                                 }
                                             ],
-                                            "timezone_mode": "SET",
+                                            "timezone_mode": "DEFAULT",
                                             "_use_var_context_id": true,
                                             "timezone": "${TIMEZONE}",
                                             "_component_id": "7f686def-7342-931a-d5e0-10219391539e"
