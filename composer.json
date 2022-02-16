@@ -1,36 +1,36 @@
 {
-	"name" : "zef-dev/convoworks-pckg-appointments",
-	"type" : "library",
-	"description" : "Contains conversational workflow elements for managing appointment scheduling scenarios in the Convoworks framework.",
-	"homepage" : "https://github.com/zef-dev/convoworks-pckg-appointments",
-	"keywords" : [
+	"name": "zef-dev/convoworks-pckg-appointments",
+	"type": "library",
+	"description": "Contains conversational workflow elements for managing appointment scheduling scenarios in the Convoworks framework.",
+	"homepage": "https://github.com/zef-dev/convoworks-pckg-appointments",
+	"keywords": [
 		"convoworks"
 	],
-	"license" : "MIT",
-    "version": "1.1.0",
-	"require" : {
-		"php" : "^7.2",
-		"psr/log" : "^1.1.0",
-		"zef-dev/convoworks-core" : "^0.22"
+	"license": "MIT",
+	"version": "1.1.1",
+	"require": {
+		"php": "^7.2",
+		"psr/log": "^1.1.0",
+		"zef-dev/convoworks-core": "^0.22"
 	},
-	"autoload" : {
-		"psr-4" : {
-            "Convo\\Pckg\\Appointments\\" : "src/Convo/Pckg/Appointments"
+	"autoload": {
+		"psr-4": {
+			"Convo\\Pckg\\Appointments\\": "src/Convo/Pckg/Appointments"
 		}
 	},
-    "autoload-dev": {
-       "psr-4": {
-         "Convo\\": "tests/"
-       }
-    },
-    "require-dev": {
-       "phpunit/phpunit": "^8"
-    },
-	"config" : {
-		"platform" : {
-			"php" : "7.2.5"
-		},
-		"sort-packages" : true
+	"autoload-dev": {
+		"psr-4": {
+			"Convo\\": "tests/"
+		}
 	},
-	"minimum-stability" : "stable"
+	"require-dev": {
+		"phpunit/phpunit": "^8"
+	},
+	"config": {
+		"platform": {
+			"php": "7.2.5"
+		},
+		"sort-packages": true
+	},
+	"minimum-stability": "stable"
 }

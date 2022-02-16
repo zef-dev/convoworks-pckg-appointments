@@ -2,6 +2,12 @@
 
 ## [Current development]
 
+## 1.1.1 - 2022-02-16
+
+* Fix issues in `schedule-appointments.template`
+* Fix package issue in template
+* Set template timezone to New York
+
 ## 1.1.0
 
 * Add new service template
