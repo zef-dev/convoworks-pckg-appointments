@@ -6787,7 +6787,7 @@
                                                     "class": "\\Convo\\Pckg\\Core\\Filters\\ConvoIntentReader",
                                                     "namespace": "convo-core",
                                                     "properties": {
-                                                        "intent": "DateOnlyIntent",
+                                                        "intent": "DateIntent",
                                                         "required_slots": "",
                                                         "values": [],
                                                         "rename": [],
@@ -7580,8 +7580,8 @@
                 }
             }
         ],
-        "time_updated": 1645015396,
-        "intents_time_updated": 1645013324,
+        "time_updated": 1645022411,
+        "intents_time_updated": 1645021296,
         "properties": [],
         "name": "Schedule appointments"
     }
