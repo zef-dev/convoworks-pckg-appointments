@@ -3941,7 +3941,81 @@
                                 "mode": "current",
                                 "number_of_appointments_to_load": "10",
                                 "return_var": "status",
-                                "single": [],
+                                "single": [
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\SetParamElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "scope_type": "request",
+                                            "properties": {
+                                                "current_appoinment": "${ status.appointments[0]}",
+                                                "dateformat_date": "${current_appoinment.timestamp}"
+                                            },
+                                            "parameters": "service",
+                                            "_component_id": "qwsapmxj-sesu-byu7-jdgo-hoqs3hh5hbm6"
+                                        }
+                                    },
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\SetParamElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "scope_type": "session",
+                                            "properties": {
+                                                "current_id": "${ current_appoinment.appointment_id}",
+                                                "question_context": "reschedule"
+                                            },
+                                            "parameters": "service",
+                                            "_component_id": "q2zhjyug-njgt-tdfg-ia3a-mnushpdnqubk"
+                                        }
+                                    },
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\ReadElementsFragment",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "fragment_id": "Function_Friendly_format_full_date",
+                                            "_component_id": "sueyolzq-p8g3-u8f5-myb2-gjkbfpuelcoa"
+                                        }
+                                    },
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "type": "default",
+                                            "text": "You have one upcoming appointment ${dateformat_formatted}.",
+                                            "append": false,
+                                            "alexa_domain": "normal",
+                                            "alexa_emotion": "neutral",
+                                            "alexa_emotion_intensity": "medium",
+                                            "_component_id": "potwogxw-jyes-fuhb-dnoy-cb8aa8lzenju"
+                                        }
+                                    },
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "type": "default",
+                                            "text": "Would you like to reschedule or cancel the appointment?",
+                                            "append": false,
+                                            "alexa_domain": "normal",
+                                            "alexa_emotion": "neutral",
+                                            "alexa_emotion_intensity": "medium",
+                                            "_component_id": "7dzuipcu-wcql-cwsx-v87o-i4ic2penmtdz"
+                                        }
+                                    },
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "type": "reprompt",
+                                            "text": "What do you want to do: reschedule or cancel?",
+                                            "append": false,
+                                            "alexa_domain": "normal",
+                                            "alexa_emotion": "neutral",
+                                            "alexa_emotion_intensity": "medium",
+                                            "_component_id": "mqfjnhza-dxrj-x8wn-e0zs-sd2be3fumrxk"
+                                        }
+                                    }
+                                ],
                                 "multiple": [
                                     {
                                         "class": "\\Convo\\Pckg\\Core\\Elements\\SetParamElement",
@@ -3978,35 +4052,35 @@
                                         }
                                     },
                                     {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "type": "default",
+                                            "text": "You have ${count( status.appointments)} appointments, with the first one ${dateformat_formatted}.",
+                                            "append": false,
+                                            "alexa_domain": "normal",
+                                            "alexa_emotion": "neutral",
+                                            "alexa_emotion_intensity": "medium",
+                                            "_component_id": "0678kdyk-cmbr-5g3c-hldc-9idgxawcbh3y"
+                                        }
+                                    },
+                                    {
                                         "class": "\\Convo\\Pckg\\Core\\Elements\\IfElement",
                                         "namespace": "convo-core",
                                         "properties": {
-                                            "test": "${count( status.appointments) === 1}",
+                                            "test": "${count( status.appointments) < 3}",
                                             "then": [
                                                 {
                                                     "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
                                                     "namespace": "convo-core",
                                                     "properties": {
                                                         "type": "default",
-                                                        "text": "You have one upcoming appointment ${dateformat_formatted}.",
+                                                        "text": "What do you want to do: cancel the first one, or check when the other is?",
                                                         "append": false,
                                                         "alexa_domain": "normal",
                                                         "alexa_emotion": "neutral",
                                                         "alexa_emotion_intensity": "medium",
-                                                        "_component_id": "1d00788a-a1bf-1e7e-2fd7-0c03a85f8133"
-                                                    }
-                                                },
-                                                {
-                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
-                                                    "namespace": "convo-core",
-                                                    "properties": {
-                                                        "type": "default",
-                                                        "text": "Would you like to reschedule or cancel the appointment?",
-                                                        "append": false,
-                                                        "alexa_domain": "normal",
-                                                        "alexa_emotion": "neutral",
-                                                        "alexa_emotion_intensity": "medium",
-                                                        "_component_id": "3e1db02a-bfb8-7e01-bf53-1fef00b9bd76"
+                                                        "_component_id": "vdmf487k-nqey-mdc1-hniv-oasfhnnnqyb2"
                                                     }
                                                 },
                                                 {
@@ -4014,12 +4088,12 @@
                                                     "namespace": "convo-core",
                                                     "properties": {
                                                         "type": "reprompt",
-                                                        "text": "What do you want to do: reschedule or cancel?",
+                                                        "text": "Do you want to cancel the first appointment, reschedule, or check the other?",
                                                         "append": false,
                                                         "alexa_domain": "normal",
                                                         "alexa_emotion": "neutral",
                                                         "alexa_emotion_intensity": "medium",
-                                                        "_component_id": "3a66f8c0-1a9b-b1a2-2efb-cec61fe484c4"
+                                                        "_component_id": "awydo6gq-n9n5-3ins-ekzw-ayokojxen928"
                                                     }
                                                 }
                                             ],
@@ -4030,81 +4104,29 @@
                                                     "namespace": "convo-core",
                                                     "properties": {
                                                         "type": "default",
-                                                        "text": "You have ${count( status.appointments)} appointments, with the first one ${dateformat_formatted}.",
+                                                        "text": "What do you want to do: cancel the first one, or check the others?",
                                                         "append": false,
                                                         "alexa_domain": "normal",
                                                         "alexa_emotion": "neutral",
                                                         "alexa_emotion_intensity": "medium",
-                                                        "_component_id": "783ff849-9f7a-e03b-bdff-a438ebc6f850"
+                                                        "_component_id": "cq2mkqmk-nyxt-awyd-xmil-bksuejjdo7ky"
                                                     }
                                                 },
                                                 {
-                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\IfElement",
+                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
                                                     "namespace": "convo-core",
                                                     "properties": {
-                                                        "test": "${count( status.appointments) < 3}",
-                                                        "then": [
-                                                            {
-                                                                "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
-                                                                "namespace": "convo-core",
-                                                                "properties": {
-                                                                    "type": "default",
-                                                                    "text": "What do you want to do: cancel the first one, or check when the other is?",
-                                                                    "append": false,
-                                                                    "alexa_domain": "normal",
-                                                                    "alexa_emotion": "neutral",
-                                                                    "alexa_emotion_intensity": "medium",
-                                                                    "_component_id": "594fa8b8-7c82-1dfe-a0bb-8579beb9f18b"
-                                                                }
-                                                            },
-                                                            {
-                                                                "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
-                                                                "namespace": "convo-core",
-                                                                "properties": {
-                                                                    "type": "reprompt",
-                                                                    "text": "Do you want to cancel the first appointment, reschedule, or check the other?",
-                                                                    "append": false,
-                                                                    "alexa_domain": "normal",
-                                                                    "alexa_emotion": "neutral",
-                                                                    "alexa_emotion_intensity": "medium",
-                                                                    "_component_id": "edc3dc55-b954-40e0-3086-7813bcc17f60"
-                                                                }
-                                                            }
-                                                        ],
-                                                        "else_if": [],
-                                                        "else": [
-                                                            {
-                                                                "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
-                                                                "namespace": "convo-core",
-                                                                "properties": {
-                                                                    "type": "default",
-                                                                    "text": "What do you want to do: cancel the first one, or check the others?",
-                                                                    "append": false,
-                                                                    "alexa_domain": "normal",
-                                                                    "alexa_emotion": "neutral",
-                                                                    "alexa_emotion_intensity": "medium",
-                                                                    "_component_id": "c8e5ec14-f08c-60bf-61c1-4d315867895b"
-                                                                }
-                                                            },
-                                                            {
-                                                                "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
-                                                                "namespace": "convo-core",
-                                                                "properties": {
-                                                                    "type": "reprompt",
-                                                                    "text": "Do you want to cancel the first appointment, reschedule, or check the others?",
-                                                                    "append": false,
-                                                                    "alexa_domain": "normal",
-                                                                    "alexa_emotion": "neutral",
-                                                                    "alexa_emotion_intensity": "medium",
-                                                                    "_component_id": "fa374289-1d91-c9fb-3bb8-45fc185d1c1c"
-                                                                }
-                                                            }
-                                                        ],
-                                                        "_component_id": "56ebeb12-7b48-abef-c6fc-b802eec36b1d"
+                                                        "type": "reprompt",
+                                                        "text": "Do you want to cancel the first appointment, reschedule, or check the others?",
+                                                        "append": false,
+                                                        "alexa_domain": "normal",
+                                                        "alexa_emotion": "neutral",
+                                                        "alexa_emotion_intensity": "medium",
+                                                        "_component_id": "4ubeli9u-yfdl-vg5m-f7xn-1s2gskgdklhh"
                                                     }
                                                 }
                                             ],
-                                            "_component_id": "aac5f3ee-079a-e707-36cb-1faab34d8e6a"
+                                            "_component_id": "0czrr1ak-eirp-emvl-6vpq-cwoz6p8jzyec"
                                         }
                                     }
                                 ],
@@ -4643,7 +4665,34 @@
                                 "mode": "current",
                                 "number_of_appointments_to_load": "10",
                                 "return_var": "status",
-                                "single": [],
+                                "single": [
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "type": "default",
+                                            "text": "Sorry, what do you want to do: reschedule, cancel appointment, or stop?",
+                                            "append": false,
+                                            "alexa_domain": "normal",
+                                            "alexa_emotion": "neutral",
+                                            "alexa_emotion_intensity": "medium",
+                                            "_component_id": "27du88f3-zdwm-danz-p0rx-9u62bsula7cg"
+                                        }
+                                    },
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "type": "reprompt",
+                                            "text": "What do you want to do: reschedule, cancel, or stop?",
+                                            "append": false,
+                                            "alexa_domain": "normal",
+                                            "alexa_emotion": "neutral",
+                                            "alexa_emotion_intensity": "medium",
+                                            "_component_id": "5gmvxajx-2buj-komv-vspm-okyuxpnwqzbu"
+                                        }
+                                    }
+                                ],
                                 "multiple": [
                                     {
                                         "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
@@ -4678,25 +4727,25 @@
                                         "namespace": "convo-core",
                                         "properties": {
                                             "type": "default",
-                                            "text": "Sorry, what do you want to do: reschedule, cancel appointment, or stop?",
+                                            "text": "Sorry, would you like to schedule an appointment?",
                                             "append": false,
                                             "alexa_domain": "normal",
                                             "alexa_emotion": "neutral",
                                             "alexa_emotion_intensity": "medium",
-                                            "_component_id": "64069d34-e2d7-f6c7-cc2e-9b450a10156a"
+                                            "_component_id": "blhizvhm-fvyh-qqhc-yugw-fklsisrswvcw"
                                         }
                                     },
                                     {
                                         "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
                                         "namespace": "convo-core",
                                         "properties": {
-                                            "type": "reprompt",
-                                            "text": "What do you want to do: reschedule, cancel, or stop?",
+                                            "type": "default",
+                                            "text": "Would you like to schedule an appointment? Yes or no?",
                                             "append": false,
                                             "alexa_domain": "normal",
                                             "alexa_emotion": "neutral",
                                             "alexa_emotion_intensity": "medium",
-                                            "_component_id": "ff14dbf3-2cb2-dd64-1d09-b7513a99defe"
+                                            "_component_id": "spjxkzk7-s9to-j2yf-vk7t-tdjzewjvpnps"
                                         }
                                     }
                                 ],
@@ -7531,8 +7580,8 @@
                 }
             }
         ],
-        "time_updated": 1644915913,
-        "intents_time_updated": 1644578305,
+        "time_updated": 1645015396,
+        "intents_time_updated": 1645013324,
         "properties": [],
         "name": "Schedule appointments"
     }
