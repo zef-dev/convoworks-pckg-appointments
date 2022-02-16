@@ -2,6 +2,8 @@
 
 ## [Current development]
 
+## [Releases]
+
 ## 1.1.1 - 2022-02-16
 
 * Fix issues in `schedule-appointments.template`
@@ -20,6 +22,3 @@
 * Implement dummy appointment scheduling interface implementation
 * Implement generic appointment scheduling workflow elements (check time, create, update, cancel, load)
 * Define suggestions builder interface
-
-
-## [Releases]
