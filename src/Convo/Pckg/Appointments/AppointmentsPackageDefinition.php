@@ -680,6 +680,56 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 					)
 				)
 			),
+            new \Convo\Core\Factory\ComponentDefinition(
+                $this->getNamespace(),
+                '\Convo\Pckg\Appointments\TimezoneWrapperElement',
+                'Timezone Wrapper Element',
+                'Executes elements in the provided timezone mode.',
+                array(
+                    'context_id' => $context_id_param,
+                    'result_var' => array(
+                        'editor_type' => 'text',
+                        'editor_properties' => array(),
+                        'defaultValue' => 'status',
+                        'name' => 'Result Variable Name',
+                        'description' => 'Status variable of the result of appointment update.',
+                        'valueType' => 'string'
+                    ),
+                    'elements' => array(
+                        'editor_type' => 'service_components',
+                        'editor_properties' => array(
+                            'allow_interfaces' => array('\Convo\Core\Workflow\IConversationElement'),
+                            'multiple' => true
+                        ),
+                        'defaultValue' => array(),
+                        'defaultOpen' => true,
+                        'name' => 'Elements',
+                        'description' => 'Elements to be executed',
+                        'valueType' => 'class'
+                    ),
+                    'timezone_mode' => $timezone_mode_param,
+                    'timezone' => $timezone_param,
+                    '_factory' => new class ($this->_alexaSettingsApi) implements IComponentFactory
+                    {
+                        private $_alexaSettingsApi;
+
+                        public function __construct($alexaCustomerProfileApi)
+                        {
+                            $this->_alexaSettingsApi = $alexaCustomerProfileApi;
+                        }
+
+                        public function createComponent($properties, $service)
+                        {
+                            return new \Convo\Pckg\Appointments\TimezoneWrapperElement( $properties, $this->_alexaSettingsApi);
+                        }
+                    },
+                    '_workflow' => 'read',
+                    '_help' =>  array(
+                        'type' => 'file',
+                        'filename' => 'timezone-wrapper-element.html'
+                    )
+                )
+            ),
 			new \Convo\Core\Factory\ComponentDefinition(
 			    $this->getNamespace(),
 			    '\Convo\Pckg\Appointments\DummyAppointmentsContext',
