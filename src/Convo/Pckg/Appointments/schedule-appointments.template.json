@@ -2309,87 +2309,6 @@
                                                     }
                                                 },
                                                 {
-                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\SetParamElement",
-                                                    "namespace": "convo-core",
-                                                    "properties": {
-                                                        "scope_type": "request",
-                                                        "properties": {
-                                                            "date_info": "${relative_date( new_appointment.date)}"
-                                                        },
-                                                        "parameters": "service",
-                                                        "_component_id": "9e663a6e-2c3f-fbfe-6be5-447816e5bef4"
-                                                    }
-                                                },
-                                                {
-                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\CommentElement",
-                                                    "namespace": "convo-core",
-                                                    "properties": {
-                                                        "comment": "FORMAT AS FRIENDLY DATE",
-                                                        "context": null,
-                                                        "_component_id": "7da804a0-7512-30c9-d217-26ef89e375d2"
-                                                    }
-                                                },
-                                                {
-                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\IfElement",
-                                                    "namespace": "convo-core",
-                                                    "properties": {
-                                                        "test": "${date_info.today}",
-                                                        "then": [
-                                                            {
-                                                                "class": "\\Convo\\Pckg\\Core\\Elements\\SetParamElement",
-                                                                "namespace": "convo-core",
-                                                                "properties": {
-                                                                    "scope_type": "request",
-                                                                    "properties": {
-                                                                        "formatted": "Today"
-                                                                    },
-                                                                    "parameters": "service",
-                                                                    "_component_id": "f520e809-f7f7-af2d-13ac-0413eca44ffb"
-                                                                }
-                                                            }
-                                                        ],
-                                                        "else_if": [
-                                                            {
-                                                                "class": "\\Convo\\Pckg\\Core\\Elements\\ElseIfElement",
-                                                                "namespace": "convo-core",
-                                                                "properties": {
-                                                                    "test": "${date_info.tomorrow}",
-                                                                    "then": [
-                                                                        {
-                                                                            "class": "\\Convo\\Pckg\\Core\\Elements\\SetParamElement",
-                                                                            "namespace": "convo-core",
-                                                                            "properties": {
-                                                                                "scope_type": "request",
-                                                                                "properties": {
-                                                                                    "formatted": "Tomorrow"
-                                                                                },
-                                                                                "parameters": "service",
-                                                                                "_component_id": "ea8a4058-3868-386d-ce6f-fc9f1996b553"
-                                                                            }
-                                                                        }
-                                                                    ],
-                                                                    "_component_id": "5e831d1f-1565-631f-c924-23e2091d7de5"
-                                                                }
-                                                            }
-                                                        ],
-                                                        "else": [
-                                                            {
-                                                                "class": "\\Convo\\Pckg\\Core\\Elements\\SetParamElement",
-                                                                "namespace": "convo-core",
-                                                                "properties": {
-                                                                    "scope_type": "request",
-                                                                    "properties": {
-                                                                        "formatted": "${date('l', strtotime(new_appointment.date))}"
-                                                                    },
-                                                                    "parameters": "service",
-                                                                    "_component_id": "d578953a-9ac9-8f8d-49fb-8b970b7467ba"
-                                                                }
-                                                            }
-                                                        ],
-                                                        "_component_id": "cfbc8897-f808-2dbf-830c-c583b1d790f1"
-                                                    }
-                                                },
-                                                {
                                                     "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
                                                     "namespace": "convo-core",
                                                     "properties": {
@@ -3098,7 +3017,7 @@
                                                                 "namespace": "convo-core",
                                                                 "properties": {
                                                                     "type": "default",
-                                                                    "text": "Unfortunately, your chosen date is booked or unavailable.  Do you want to schedule any of the available ones?",
+                                                                    "text": "Do you want to schedule any of the available appointments? Say yes or no. If you want to hear the suggested appointments again, say repeat.",
                                                                     "append": false,
                                                                     "alexa_domain": "normal",
                                                                     "alexa_emotion": "neutral",
@@ -3844,7 +3763,7 @@
                                         "namespace": "convo-core",
                                         "properties": {
                                             "type": "default",
-                                            "text": "If you want to replace the old appointment with the new one, say yes. To, exit, say no.",
+                                            "text": "If you want to replace the old appointment with the new one, say yes. To exit, say no.",
                                             "append": false,
                                             "alexa_domain": "normal",
                                             "alexa_emotion": "neutral",
@@ -4739,7 +4658,7 @@
                                         "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
                                         "namespace": "convo-core",
                                         "properties": {
-                                            "type": "default",
+                                            "type": "reprompt",
                                             "text": "Would you like to schedule an appointment? Yes or no?",
                                             "append": false,
                                             "alexa_domain": "normal",
@@ -7076,98 +6995,88 @@
                                             "mode": "current",
                                             "number_of_appointments_to_load": "10",
                                             "return_var": "status",
-                                            "single": [],
+                                            "single": [
+                                                {
+                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\GoToElement",
+                                                    "namespace": "convo-core",
+                                                    "properties": {
+                                                        "value": "Existing_Appointments",
+                                                        "next": false,
+                                                        "_component_id": "sopdgtnp-s1vl-kpvi-fbu7-4vmzgdw2zmyo"
+                                                    }
+                                                }
+                                            ],
                                             "multiple": [
                                                 {
                                                     "class": "\\Convo\\Pckg\\Core\\Elements\\IfElement",
                                                     "namespace": "convo-core",
                                                     "properties": {
-                                                        "test": "${count( status.appointments) === 1}",
+                                                        "test": "${count( status.appointments) < 3}",
                                                         "then": [
                                                             {
-                                                                "class": "\\Convo\\Pckg\\Core\\Elements\\GoToElement",
+                                                                "class": "\\Convo\\Pckg\\Core\\Elements\\LoopElement",
                                                                 "namespace": "convo-core",
                                                                 "properties": {
-                                                                    "value": "Existing_Appointments",
-                                                                    "next": false,
-                                                                    "_component_id": "e12ad408-6c97-1b57-5c49-856248433d0b"
-                                                                }
-                                                            }
-                                                        ],
-                                                        "else_if": [
-                                                            {
-                                                                "class": "\\Convo\\Pckg\\Core\\Elements\\ElseIfElement",
-                                                                "namespace": "convo-core",
-                                                                "properties": {
-                                                                    "test": "${count( status.appointments) < 3}",
-                                                                    "then": [
+                                                                    "name": null,
+                                                                    "data_collection": "${status.appointments}",
+                                                                    "item": "appointment",
+                                                                    "elements": [
                                                                         {
-                                                                            "class": "\\Convo\\Pckg\\Core\\Elements\\LoopElement",
+                                                                            "class": "\\Convo\\Pckg\\Core\\Elements\\ReadElementsFragment",
                                                                             "namespace": "convo-core",
                                                                             "properties": {
-                                                                                "name": null,
-                                                                                "data_collection": "${status.appointments}",
-                                                                                "item": "appointment",
-                                                                                "elements": [
+                                                                                "fragment_id": "Format_list_appointments",
+                                                                                "_component_id": "pkkp1q4t-giel-modv-0nsg-8a0qjqcbev1g"
+                                                                            }
+                                                                        },
+                                                                        {
+                                                                            "class": "\\Convo\\Pckg\\Core\\Elements\\IfElement",
+                                                                            "namespace": "convo-core",
+                                                                            "properties": {
+                                                                                "test": "${appointment.first}",
+                                                                                "then": [
                                                                                     {
-                                                                                        "class": "\\Convo\\Pckg\\Core\\Elements\\ReadElementsFragment",
+                                                                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
                                                                                         "namespace": "convo-core",
                                                                                         "properties": {
-                                                                                            "fragment_id": "Format_list_appointments",
-                                                                                            "_component_id": "8c4dd47b-e8c9-4560-b978-52e773e82003"
-                                                                                        }
-                                                                                    },
-                                                                                    {
-                                                                                        "class": "\\Convo\\Pckg\\Core\\Elements\\IfElement",
-                                                                                        "namespace": "convo-core",
-                                                                                        "properties": {
-                                                                                            "test": "${appointment.first}",
-                                                                                            "then": [
-                                                                                                {
-                                                                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
-                                                                                                    "namespace": "convo-core",
-                                                                                                    "properties": {
-                                                                                                        "type": "default",
-                                                                                                        "text": "Besides the ${formatted} appointment, you have ${count( status.appointments) -1} other:",
-                                                                                                        "append": false,
-                                                                                                        "alexa_domain": "normal",
-                                                                                                        "alexa_emotion": "neutral",
-                                                                                                        "alexa_emotion_intensity": "medium",
-                                                                                                        "_component_id": "a85e96d8-21e1-a65a-bece-957fab5b0e8b"
-                                                                                                    }
-                                                                                                }
-                                                                                            ],
-                                                                                            "else_if": [],
-                                                                                            "else": [
-                                                                                                {
-                                                                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
-                                                                                                    "namespace": "convo-core",
-                                                                                                    "properties": {
-                                                                                                        "type": "default",
-                                                                                                        "text": "${formatted}.",
-                                                                                                        "append": false,
-                                                                                                        "alexa_domain": "normal",
-                                                                                                        "alexa_emotion": "neutral",
-                                                                                                        "alexa_emotion_intensity": "medium",
-                                                                                                        "_component_id": "f96cf08f-d5a2-a009-9c4a-f87ee7d14092"
-                                                                                                    }
-                                                                                                }
-                                                                                            ],
-                                                                                            "_component_id": "84f4083f-c326-396a-cbc2-aa35a850fe89"
+                                                                                            "type": "default",
+                                                                                            "text": "Besides the ${formatted} appointment, you have ${count( status.appointments) -1} other:",
+                                                                                            "append": false,
+                                                                                            "alexa_domain": "normal",
+                                                                                            "alexa_emotion": "neutral",
+                                                                                            "alexa_emotion_intensity": "medium",
+                                                                                            "_component_id": "eqaefyap-6uqb-1wav-f2wd-ihuvvgassz5c"
                                                                                         }
                                                                                     }
                                                                                 ],
-                                                                                "offset": null,
-                                                                                "limit": null,
-                                                                                "loop_until": "",
-                                                                                "_component_id": "2679d6bf-4845-12af-b42c-5e495b8508e3"
+                                                                                "else_if": [],
+                                                                                "else": [
+                                                                                    {
+                                                                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                                                                        "namespace": "convo-core",
+                                                                                        "properties": {
+                                                                                            "type": "default",
+                                                                                            "text": "${formatted}.",
+                                                                                            "append": false,
+                                                                                            "alexa_domain": "normal",
+                                                                                            "alexa_emotion": "neutral",
+                                                                                            "alexa_emotion_intensity": "medium",
+                                                                                            "_component_id": "wrn7ti95-vss5-huln-gobv-wcqzareknecy"
+                                                                                        }
+                                                                                    }
+                                                                                ],
+                                                                                "_component_id": "qfrthigt-jwyf-lncy-fyhv-7zyzsucm44xy"
                                                                             }
                                                                         }
                                                                     ],
-                                                                    "_component_id": "fcd88ba9-8c7d-c884-451c-60bca9809392"
+                                                                    "offset": null,
+                                                                    "limit": null,
+                                                                    "loop_until": "",
+                                                                    "_component_id": "u6ntpfuv-zcsj-aok7-zdh0-mcwkkb2anqnt"
                                                                 }
                                                             }
                                                         ],
+                                                        "else_if": [],
                                                         "else": [
                                                             {
                                                                 "class": "\\Convo\\Pckg\\Core\\Elements\\LoopElement",
@@ -7580,9 +7489,6 @@
                 }
             }
         ],
-        "time_updated": 1645022411,
-        "intents_time_updated": 1645021296,
-        "properties": [],
-        "name": "Schedule appointments"
+        "properties": []
     }
 }
