@@ -4,6 +4,11 @@
 
 ## [Releases]
 
+## 1.1.2 - 2022-03-24
+
+* Updated `schedule-appointments` template
+* Add new element Timezone Wrapper Element 
+
 ## 1.1.1 - 2022-02-16
 
 * Fix issues in `schedule-appointments.template`
