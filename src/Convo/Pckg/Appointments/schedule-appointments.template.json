@@ -5456,6 +5456,7 @@
                             "namespace": "convo-alexa",
                             "properties": {
                                 "name": "status",
+                                "profile_type": "CUSTOMER",
                                 "should_get_full_name": true,
                                 "should_get_given_name": false,
                                 "should_get_email_address": true,
