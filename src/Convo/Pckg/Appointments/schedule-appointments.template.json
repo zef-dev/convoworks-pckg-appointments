@@ -1,25 +1,15 @@
 {
     "template_id": "schedule-appointments",
-    "name": "Schedule Appointments",
-    "description": "Template for a service that lets users schedule, reschedule, cancel and check their upcoming appointments.",
+    "name": "Schedule appointments",
+    "description": "A template for a service that lets users schedule, reschedule, cancel and check their upcoming appointments with your company",
     "service": {
         "convo_service_version": 38,
         "packages": [
             "convo-core",
             "convo-appointments",
-            "convo-alexa",
-            "convo-wp-plugin-pack"
+            "convo-alexa"
         ],
         "contexts": [
-            {
-                "class": "\\Convo\\Wp\\Pckg\\WpPluginPack\\SSAAppointmentsContext",
-                "namespace": "convo-wp-plugin-pack",
-                "properties": {
-                    "id": "ssa",
-                    "appointment_type": "Consultation Phone Call",
-                    "_component_id": "3e6391de-78ee-c626-0106-df52a634287e"
-                }
-            },
             {
                 "class": "\\Convo\\Pckg\\Appointments\\DummyAppointmentsContext",
                 "namespace": "convo-appointments",
@@ -1932,7 +1922,7 @@
                                                     "namespace": "convo-core",
                                                     "properties": {
                                                         "type": "default",
-                                                        "text": "Would you like to schedule an appointment?",
+                                                        "text": "Would you like an appointment?",
                                                         "append": false,
                                                         "alexa_domain": "normal",
                                                         "alexa_emotion": "neutral",
@@ -2697,6 +2687,18 @@
                                                                 }
                                                             },
                                                             {
+                                                                "class": "\\Convo\\Pckg\\Core\\Elements\\SetParamElement",
+                                                                "namespace": "convo-core",
+                                                                "properties": {
+                                                                    "scope_type": "session",
+                                                                    "parameters": "service",
+                                                                    "properties": {
+                                                                        "suggestions": "${true}"
+                                                                    },
+                                                                    "_component_id": "vnn6itrp-pf1e-zzbm-ddwu-ff6rslvkcy7u"
+                                                                }
+                                                            },
+                                                            {
                                                                 "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
                                                                 "namespace": "convo-core",
                                                                 "properties": {
@@ -3221,29 +3223,76 @@
                             }
                         },
                         {
-                            "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                            "class": "\\Convo\\Pckg\\Core\\Elements\\IfElement",
                             "namespace": "convo-core",
                             "properties": {
-                                "type": "default",
-                                "text": "${dateformat_formatted} is available.",
-                                "append": false,
-                                "alexa_domain": "normal",
-                                "alexa_emotion": "neutral",
-                                "alexa_emotion_intensity": "medium",
-                                "_component_id": "882de529-10ce-d604-a666-52cf921edcb6"
-                            }
-                        },
-                        {
-                            "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
-                            "namespace": "convo-core",
-                            "properties": {
-                                "type": "default",
-                                "text": "Would you like to book it?",
-                                "append": false,
-                                "alexa_domain": "normal",
-                                "alexa_emotion": "neutral",
-                                "alexa_emotion_intensity": "medium",
-                                "_component_id": "bcb9008e-b37c-0264-8a2a-6c7f336bd0ac"
+                                "test": "${!suggestions}",
+                                "then": [
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "type": "default",
+                                            "text": "That slot is available. <break time=\"1s\"\/>",
+                                            "append": false,
+                                            "alexa_domain": "normal",
+                                            "alexa_emotion": "neutral",
+                                            "alexa_emotion_intensity": "medium",
+                                            "_component_id": "no3nihg6-gwja-gs7z-ngqs-mfdgiv9sozpz"
+                                        }
+                                    },
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\CommentElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "comment": "FULL DETAILS NEEDED FOR SKILL CERIFICATION, WHERE THE APP_NAME IS MERCHANT OR COMPANY NAME",
+                                            "context": null,
+                                            "_component_id": "jaicgnp9-yx7a-yphi-jtze-wk4nnxoduz2d"
+                                        }
+                                    },
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "type": "default",
+                                            "text": "Do you want to book the ${dateformat_formatted} appointment, with ${APP_NAME}?",
+                                            "append": false,
+                                            "alexa_domain": "normal",
+                                            "alexa_emotion": "neutral",
+                                            "alexa_emotion_intensity": "medium",
+                                            "_component_id": "qiqsjjg3-ee9x-2eqq-cccu-gtvrolgdqntd"
+                                        }
+                                    }
+                                ],
+                                "else_if": [],
+                                "else": [
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "type": "default",
+                                            "text": "Just to confirm. That's an appointment with ${APP_NAME}, ${dateformat_formatted}?",
+                                            "append": false,
+                                            "alexa_domain": "normal",
+                                            "alexa_emotion": "neutral",
+                                            "alexa_emotion_intensity": "medium",
+                                            "_component_id": "lliyaoxh-ji6c-6gdn-2fds-be6iq1wrdol2"
+                                        }
+                                    },
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\SetParamElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "scope_type": "session",
+                                            "parameters": "service",
+                                            "properties": {
+                                                "suggestions": "${null}"
+                                            },
+                                            "_component_id": "lzjssrux-yzbh-sfop-me9j-fa636b9fxzfi"
+                                        }
+                                    }
+                                ],
+                                "_component_id": "wvupxp1i-5uzl-hkvt-wite-vfcddptvpfv8"
                             }
                         },
                         {
@@ -3251,7 +3300,7 @@
                             "namespace": "convo-core",
                             "properties": {
                                 "type": "reprompt",
-                                "text": "Sorry, do you want to book the ${dateformat_formatted} appointment?",
+                                "text": "Sorry, do you want to book the ${APP_NAME} ${dateformat_formatted} appointment?",
                                 "append": false,
                                 "alexa_domain": "normal",
                                 "alexa_emotion": "neutral",
@@ -3276,8 +3325,7 @@
                                             "appointment_date": "${new_appointment.date}",
                                             "appointment_time": "${new_appointment.time}",
                                             "payload": {
-                                                "Name": "${user_name}",
-                                                "Phone": "${user_phone}"
+                                                "Name": "${user_name}"
                                             },
                                             "result_var": "status",
                                             "ok": [
@@ -3293,7 +3341,7 @@
                                                     "class": "\\Convo\\Pckg\\Core\\Elements\\ElementRandomizer",
                                                     "namespace": "convo-core",
                                                     "properties": {
-                                                        "name": null,
+                                                        "name": "Appointment confirmation",
                                                         "mode": "wild",
                                                         "elements": [
                                                             {
@@ -3330,42 +3378,43 @@
                                                     }
                                                 },
                                                 {
-                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\RunOnceElement",
+                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\CommentElement",
                                                     "namespace": "convo-core",
                                                     "properties": {
-                                                        "scope_type": "installation",
-                                                        "name": null,
-                                                        "child": [
-                                                            {
-                                                                "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
-                                                                "namespace": "convo-core",
-                                                                "properties": {
-                                                                    "type": "default",
-                                                                    "text": "Next time when you start the app you'll be able to reschedule or cancel.",
-                                                                    "append": false,
-                                                                    "alexa_domain": "normal",
-                                                                    "alexa_emotion": "neutral",
-                                                                    "alexa_emotion_intensity": "medium",
-                                                                    "_component_id": "3a3840a9-edb7-ef55-7272-57dfd3063481"
-                                                                }
-                                                            }
-                                                        ],
-                                                        "else": [
-                                                            {
-                                                                "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
-                                                                "namespace": "convo-core",
-                                                                "properties": {
-                                                                    "type": "default",
-                                                                    "text": "Next time you open ${APP_NAME}, you'll get a reminder.",
-                                                                    "append": false,
-                                                                    "alexa_domain": "normal",
-                                                                    "alexa_emotion": "neutral",
-                                                                    "alexa_emotion_intensity": "medium",
-                                                                    "_component_id": "28302668-77e9-d8da-c318-b8212e1aa88a"
-                                                                }
-                                                            }
-                                                        ],
-                                                        "_component_id": "a74ac6b1-5f49-7e87-a303-aa3a5f3525fa"
+                                                        "comment": "HOME CARD + CONFIRMATION EMAIL NEEDED FOR SKILL CERIFICATION",
+                                                        "context": null,
+                                                        "_component_id": "rxmtxjvr-e1tl-wwrb-detn-2g1k57zg8mpv"
+                                                    }
+                                                },
+                                                {
+                                                    "class": "\\Convo\\Pckg\\Alexa\\Elements\\SimpleCardElement",
+                                                    "namespace": "convo-alexa",
+                                                    "properties": {
+                                                        "title": "Appointment with ${APP_NAME}",
+                                                        "content": "Your ${dateformat_formatted} appointment with ${APP_NAME} is now scheduled. You can reschedule or cancel the next time you open the skill, or, via the confirmation email we've sent you.",
+                                                        "_component_id": "zthwa9gm-11ze-3e1f-luhm-xj57uvrqfuil"
+                                                    }
+                                                },
+                                                {
+                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\CommentElement",
+                                                    "namespace": "convo-core",
+                                                    "properties": {
+                                                        "comment": "CANCELLATION DETAILS NEEDED FOR SKILL CERIFICATION",
+                                                        "context": null,
+                                                        "_component_id": "os3wtalm-fcau-wsw8-si0i-eueaypzmwbhk"
+                                                    }
+                                                },
+                                                {
+                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                                    "namespace": "convo-core",
+                                                    "properties": {
+                                                        "type": "default",
+                                                        "text": "You can cancel or reschedule the next time you open ${APP_NAME}, or, via the confirmation email we've sent you.",
+                                                        "append": false,
+                                                        "alexa_domain": "normal",
+                                                        "alexa_emotion": "neutral",
+                                                        "alexa_emotion_intensity": "medium",
+                                                        "_component_id": "cbulpgmm-bj8s-qcvr-rjye-gm1f7crkxvl5"
                                                     }
                                                 },
                                                 {
@@ -3553,29 +3602,67 @@
                             }
                         },
                         {
-                            "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                            "class": "\\Convo\\Pckg\\Core\\Elements\\IfElement",
                             "namespace": "convo-core",
                             "properties": {
-                                "type": "default",
-                                "text": "It's available.",
-                                "append": false,
-                                "alexa_domain": "normal",
-                                "alexa_emotion": "neutral",
-                                "alexa_emotion_intensity": "medium",
-                                "_component_id": "11b0bd66-e8ae-5e6d-9bf3-53685f795136"
-                            }
-                        },
-                        {
-                            "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
-                            "namespace": "convo-core",
-                            "properties": {
-                                "type": "default",
-                                "text": "Should I reschedule your appointment to ${dateformat_formatted}?",
-                                "append": false,
-                                "alexa_domain": "normal",
-                                "alexa_emotion": "neutral",
-                                "alexa_emotion_intensity": "medium",
-                                "_component_id": "e6ba098b-fbc6-0867-41c6-8c3f8a02a201"
+                                "test": "${!suggestions}",
+                                "then": [
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "type": "default",
+                                            "text": "Right. It's available.",
+                                            "append": false,
+                                            "alexa_domain": "normal",
+                                            "alexa_emotion": "neutral",
+                                            "alexa_emotion_intensity": "medium",
+                                            "_component_id": "11b0bd66-e8ae-5e6d-9bf3-53685f795136"
+                                        }
+                                    },
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "type": "default",
+                                            "text": "Should I reschedule your  appointment with ${APP_NAME} to ${dateformat_formatted}?",
+                                            "append": false,
+                                            "alexa_domain": "normal",
+                                            "alexa_emotion": "neutral",
+                                            "alexa_emotion_intensity": "medium",
+                                            "_component_id": "ilccbxmi-hpfg-jfva-srvl-a4cxnxvdidtz"
+                                        }
+                                    }
+                                ],
+                                "else_if": [],
+                                "else": [
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "type": "default",
+                                            "text": "Just to confirm. Should I reschedule your  appointment to ${dateformat_formatted}?",
+                                            "append": false,
+                                            "alexa_domain": "normal",
+                                            "alexa_emotion": "neutral",
+                                            "alexa_emotion_intensity": "medium",
+                                            "_component_id": "d7lqhvbf-4o2u-oek4-x1ss-b1ndt5tl1dbj"
+                                        }
+                                    },
+                                    {
+                                        "class": "\\Convo\\Pckg\\Core\\Elements\\SetParamElement",
+                                        "namespace": "convo-core",
+                                        "properties": {
+                                            "scope_type": "session",
+                                            "parameters": "service",
+                                            "properties": {
+                                                "suggestions": "${null}"
+                                            },
+                                            "_component_id": "h13d76n9-6wee-puvg-b6os-eqs2brgjg6g1"
+                                        }
+                                    }
+                                ],
+                                "_component_id": "iu5hz0yl-etbd-2ffl-jqzj-m9boob4glbrd"
                             }
                         },
                         {
@@ -3609,8 +3696,7 @@
                                             "appointment_date": "${new_appointment.date}",
                                             "appointment_time": "${new_appointment.time}",
                                             "payload": {
-                                                "Name": "${user_name}",
-                                                "Phone": "${user_phone}"
+                                                "Name": "${user_name}"
                                             },
                                             "result_var": "status",
                                             "ok": [
@@ -3638,6 +3724,28 @@
                                                         "alexa_emotion": "neutral",
                                                         "alexa_emotion_intensity": "medium",
                                                         "_component_id": "854695ed-f73f-efb8-2335-02a62673b9ad"
+                                                    }
+                                                },
+                                                {
+                                                    "class": "\\Convo\\Pckg\\Alexa\\Elements\\SimpleCardElement",
+                                                    "namespace": "convo-alexa",
+                                                    "properties": {
+                                                        "title": "Appointment with ${APP_NAME} - Rescheduled",
+                                                        "content": "Your  appointment with ${APP_NAME} is now rescheduled to ${dateformat_formatted}. You can cancel, or reschedule again using the skill, or via the confirmation email we've sent you.",
+                                                        "_component_id": "8x5rkprt-g9xx-nvyw-rnsm-kkafbuwlhypa"
+                                                    }
+                                                },
+                                                {
+                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                                    "namespace": "convo-core",
+                                                    "properties": {
+                                                        "type": "default",
+                                                        "text": "<break time=\"1s\"\/>I've also sent you a confirmation email with the details.",
+                                                        "append": false,
+                                                        "alexa_domain": "normal",
+                                                        "alexa_emotion": "neutral",
+                                                        "alexa_emotion_intensity": "medium",
+                                                        "_component_id": "6lrbivt8-vmsq-vxjf-0xwb-y4noczhyw0f0"
                                                     }
                                                 },
                                                 {
@@ -3913,7 +4021,7 @@
                                         "namespace": "convo-core",
                                         "properties": {
                                             "type": "default",
-                                            "text": "Would you like to reschedule or cancel the appointment?",
+                                            "text": "Would you like to reschedule or cancel?",
                                             "append": false,
                                             "alexa_domain": "normal",
                                             "alexa_emotion": "neutral",
@@ -3926,7 +4034,7 @@
                                         "namespace": "convo-core",
                                         "properties": {
                                             "type": "reprompt",
-                                            "text": "What do you want to do: reschedule or cancel?",
+                                            "text": "What do you want to do: reschedule or cancel the appointment?",
                                             "append": false,
                                             "alexa_domain": "normal",
                                             "alexa_emotion": "neutral",
@@ -4724,7 +4832,7 @@
                                             "alexa_domain": "normal",
                                             "alexa_emotion": "neutral",
                                             "alexa_emotion_intensity": "medium",
-                                            "_component_id": "db077e13-1193-2891-8528-85e49aeaf947"
+                                            "_component_id": "hvuw3xh4-mtdo-pn0g-uye3-gnq8ljrcjxqb"
                                         }
                                     },
                                     {
@@ -4732,7 +4840,7 @@
                                         "namespace": "convo-core",
                                         "properties": {
                                             "type": "reprompt",
-                                            "text": "Should I cancel your ${dateformat_formatted} appointment?",
+                                            "text": "Should I cancel your ${dateformat_formatted} appointment with ${APP_NAME}?",
                                             "append": false,
                                             "alexa_domain": "normal",
                                             "alexa_emotion": "neutral",
@@ -4836,6 +4944,28 @@
                                                         "is_repeat": "",
                                                         "scope_type": "installation",
                                                         "_component_id": "07a1c60b-5c2e-aa30-9217-7b526dae4c0a"
+                                                    }
+                                                },
+                                                {
+                                                    "class": "\\Convo\\Pckg\\Alexa\\Elements\\SimpleCardElement",
+                                                    "namespace": "convo-alexa",
+                                                    "properties": {
+                                                        "title": "Appointment with ${APP_NAME} - Cancelled",
+                                                        "content": "Your ${dateformat_formatted} appointment with ${APP_NAME} is now canceled. You'll also receive an appointment cancellation email.",
+                                                        "_component_id": "fgeadar5-4fcp-bg74-g0xk-phdhpcuuob1m"
+                                                    }
+                                                },
+                                                {
+                                                    "class": "\\Convo\\Pckg\\Core\\Elements\\TextResponseElement",
+                                                    "namespace": "convo-core",
+                                                    "properties": {
+                                                        "type": "default",
+                                                        "text": "You'll also receive an appointment cancellation email.",
+                                                        "append": false,
+                                                        "alexa_domain": "normal",
+                                                        "alexa_emotion": "neutral",
+                                                        "alexa_emotion_intensity": "medium",
+                                                        "_component_id": "3nqd5mah-rele-k7cs-ay3c-hmdno76zq743"
                                                     }
                                                 },
                                                 {
@@ -5002,7 +5132,7 @@
                             "namespace": "convo-core",
                             "properties": {
                                 "type": "default",
-                                "text": "Are you perhaps interested in info about our company?",
+                                "text": "And are you perhaps interested in info about our company?",
                                 "append": false,
                                 "alexa_domain": "normal",
                                 "alexa_emotion": "neutral",
@@ -5015,7 +5145,7 @@
                             "namespace": "convo-core",
                             "properties": {
                                 "type": "reprompt",
-                                "text": "Are you interested in company info? Say yes or no.",
+                                "text": "Are you interested in learning about our company? Say yes or no.",
                                 "append": false,
                                 "alexa_domain": "normal",
                                 "alexa_emotion": "neutral",
@@ -5456,7 +5586,6 @@
                             "namespace": "convo-alexa",
                             "properties": {
                                 "name": "status",
-                                "profile_type": "CUSTOMER",
                                 "should_get_full_name": true,
                                 "should_get_given_name": false,
                                 "should_get_email_address": true,
@@ -5470,8 +5599,7 @@
                                             "parameters": "service",
                                             "properties": {
                                                 "user_name": "${status.customer_profile.fullName}",
-                                                "user_email": "${status.customer_profile.emailAddress}",
-                                                "user_phone": "${status.customer_profile.phoneNumber.countryCode}"
+                                                "user_email": "${status.customer_profile.emailAddress}"
                                             },
                                             "_component_id": "b0d72bc4-ac7e-7fb3-7c66-710ca082a23a"
                                         }
@@ -5483,7 +5611,7 @@
                                         "namespace": "convo-core",
                                         "properties": {
                                             "type": "default",
-                                            "text": "In order to book and confirm appointments, we need access to your full name, email address and phone number.",
+                                            "text": "In order to book and confirm appointments, we need access to your full name and email address.",
                                             "append": false,
                                             "alexa_domain": "normal",
                                             "alexa_emotion": "neutral",
@@ -5534,7 +5662,8 @@
                                         }
                                     }
                                 ],
-                                "_component_id": "bfbf54ad-d508-ce01-cee4-e90d57b2c3a6"
+                                "_component_id": "bfbf54ad-d508-ce01-cee4-e90d57b2c3a6",
+                                "profile_type": "CUSTOMER"
                             }
                         }
                     ],
