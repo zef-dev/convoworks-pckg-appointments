@@ -4,6 +4,10 @@
 
 ## [Releases]
 
+## 1.1.3 - 2022-06-14
+
+* Updated `schedule-appointments` template
+
 ## 1.1.2 - 2022-03-24
 
 * Updated `schedule-appointments` template
