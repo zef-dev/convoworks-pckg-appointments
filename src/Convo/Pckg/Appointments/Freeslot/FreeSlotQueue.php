@@ -4,45 +4,45 @@ declare(strict_types=1);
 namespace Convo\Pckg\Appointments\Freeslot;
 
 
-class FreeSlotQueue implements \Countable, \IteratorAggregate, IFreeSlotQueue
+class FreeSlotQueue implements \IteratorAggregate, IFreeSlotQueue
 {
-    
+
     /**
      * @var array
      */
     private $_items =   [];
-    
+
     /**
      * @var IFreeSlotValidator[]
      */
     private $_validators =   [];
-    
+
     /**
      * @var int
      */
     private $_maxCount;
-    
+
     /**
      * @var \DateTimeZone
      */
     private $_systemTimezone;
-    
+
     private $_days  =   [];
-    
+
     public function __construct( $systemTimezone, $maxCount)
     {
         $this->_systemTimezone  =   $systemTimezone;
         $this->_maxCount        =   $maxCount;
     }
-    
-    
+
+
     public function addValidator( $validator) {
         $this->_validators[] = $validator;
     }
-    
+
     public function add( $item)
     {
-        foreach ( $this->_validators as $val) 
+        foreach ( $this->_validators as $val)
         {
             if ( $this->_blocked( $item)) {
                 return;
@@ -56,7 +56,7 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate, IFreeSlotQueue
             }
         }
     }
-    
+
     private function _register( $item) {
         $date   =   \DateTimeImmutable::createFromFormat( 'U', strval( $item['timestamp']), $this->_systemTimezone);
         $day    =   $date->format( 'Y-m-d');
@@ -65,7 +65,7 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate, IFreeSlotQueue
         }
         $this->_days[$day]++;
     }
-    
+
     private function _blocked( $item) {
         $date   =   \DateTimeImmutable::createFromFormat( 'U', strval( $item['timestamp']), $this->_systemTimezone);
         $day    =   $date->format( 'Y-m-d');
@@ -73,38 +73,38 @@ class FreeSlotQueue implements \Countable, \IteratorAggregate, IFreeSlotQueue
             return true;
         }
     }
-    
+
     public function values()
     {
         $values =   [];
         foreach ( $this->_validators as $val) {
             $values   =   array_merge( $values, $val->values());
         }
-        
+
         usort( $values, function ( $item1, $item2) {
             return $item1['timestamp'] <=> $item2['timestamp'];
         });
-        
+
         return $values;
     }
-    
+
     public function isFull()
     {
         return $this->count() >= $this->_maxCount;
     }
-    
+
     // COUNTABLE
     public function count()
     {
         return count( $this->values());
     }
-    
+
     // ITERATOR AGREGATE
     public function getIterator()
     {
         return new \ArrayIterator( $this->values());
     }
-    
+
     // UTIL
     public function __toString()
     {
