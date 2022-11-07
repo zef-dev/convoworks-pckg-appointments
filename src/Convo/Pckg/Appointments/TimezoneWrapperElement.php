@@ -42,7 +42,6 @@ class TimezoneWrapperElement extends AbstractAppointmentElement
      */
     public function read(IConvoRequest $request, IConvoResponse $response)
     {
-        $resultVar = $this->evaluateString($this->_resultVar);
         $scope_type   =   IServiceParamsScope::SCOPE_TYPE_REQUEST;
         $params       =   $this->getService()->getComponentParams( $scope_type, $this);
 
@@ -50,7 +49,7 @@ class TimezoneWrapperElement extends AbstractAppointmentElement
 
         $this->_logger->debug('Reading ['.count( $this->_elements).'] elements in timezone ['.$timezone->getName().']');
 
-        $params->setServiceParam($resultVar, ['timezone' => $timezone]);
+        $params->setServiceParam( $this->_resultVar, ['timezone' => $timezone]);
         $this->_readElementsInTimezone($this->_elements, $request, $response);
     }
 
