@@ -692,7 +692,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
                         'editor_properties' => array(),
                         'defaultValue' => 'status',
                         'name' => 'Result Variable Name',
-                        'description' => 'Status variable of the result of appointment update.',
+                        'description' => 'Status variable that contains timezone (string) information. E.g. ${status.timezone}',
                         'valueType' => 'string'
                     ),
                     'elements' => array(
