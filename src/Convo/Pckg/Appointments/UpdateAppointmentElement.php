@@ -89,7 +89,7 @@ class UpdateAppointmentElement extends AbstractAppointmentElement
 		$email          =   $this->evaluateString( $this->_email);
 		$date           =   $this->evaluateString( $this->_appointmentDate);
 		$time           =   $this->evaluateString( $this->_appointmentTime);
-		$payload        =   $this->_evaluateArgs( $this->_payload);
+		$payload        =   $this->getService()->evaluateArgs( $this->_payload, $this);
 
 		$this->_logger->info( 'Updating appointment at ['.$date.']['.$time.'] for customer email [' . $email . ']');
 		$slot_time      =   new \DateTime( $date.' '.$time, $timezone);
