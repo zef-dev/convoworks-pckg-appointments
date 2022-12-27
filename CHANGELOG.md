@@ -4,6 +4,10 @@
 
 ## [Releases]
 
+## 1.2.0 - 2022-12-27
+
+* Suggestions builder changes
+
 ## 1.1.3 - 2022-06-14
 
 * Updated `schedule-appointments` template
