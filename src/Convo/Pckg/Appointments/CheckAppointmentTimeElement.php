@@ -67,7 +67,9 @@ class CheckAppointmentTimeElement extends AbstractAppointmentElement
         $this->_appointmentTime     =   $properties['appointment_time'];
         $this->_suggestionsBuilder  =   $properties['suggestions_builder'];
         
-        $this->addChild( $this->_suggestionsBuilder);
+        if ( $this->_suggestionsBuilder) {
+            $this->addChild( $this->_suggestionsBuilder);
+        }
         
         foreach ( $properties['available_flow'] as $element) {
             $this->_availableFlow[] = $element;
