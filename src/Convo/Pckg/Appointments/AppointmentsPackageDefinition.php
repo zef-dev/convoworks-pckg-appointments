@@ -314,7 +314,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 						'valueType' => 'string'
 					),
 					'limit' => array(
-						'editor_type' => 'number',
+						'editor_type' => 'text',
 						'editor_properties' => array(),
 						'defaultValue' => 10,
 						'name' => 'Number of Appointments to Load',
