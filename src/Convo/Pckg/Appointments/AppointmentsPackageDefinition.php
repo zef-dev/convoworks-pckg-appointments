@@ -176,7 +176,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 					'_preview_angular' => array(
 						'type' => 'html',
 						'template' => '<div class="code">' .
-							'Check time slot <b>{{ component.properties.appointment_date }} {{ component.properties.appointment_time }}</b> for appointment type <b>{{ component.properties.context_id }}</b>' .
+							'<span class="statement">CHECK TIME</span> <b>{{ component.properties.appointment_date }} {{ component.properties.appointment_time }}</b> <span class="statement">IN</span> <b>{{ component.properties.context_id }}</b>' .
 							'</div>'
 					),
 					'_help' =>  array(
@@ -203,7 +203,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 					'_preview_angular' => array(
 						'type' => 'html',
 						'template' => '<div class="code">' .
-							'Build max <b>{{ component.properties.max_suggestions }}</b> suggestions' .
+							'<span class="statement">BUILD FREE SLOTS</span> <b>{{ component.properties.max_suggestions }}</b> <span class="statement">SUGGESTIONS</span>' .
 							'</div>'
 					),
 					'_help' =>  array(
@@ -275,7 +275,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 					'_preview_angular' => array(
 						'type' => 'html',
 						'template' => '<div class="code">' .
-							'Load <b>{{ component.properties.context_id }}</b> <b>{{ component.properties.appointment_id }}</b> for <b>{{ component.properties.email }}</b>' .
+							'<span class="statement">LOAD APPOINTMENT</span> <b>{{ component.properties.context_id }}</b> <b>{{ component.properties.appointment_id }}</b> <span class="statement">FOR</span> <b>{{ component.properties.email }}</b>' .
 							'</div>'
 					),
 					'_help' =>  array(
@@ -387,7 +387,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 					'_preview_angular' => array(
 						'type' => 'html',
 						'template' => '<div class="code">' .
-							'Load <b>{{ component.properties.mode }}</b> <b>{{ component.properties.context_id }}</b> for <b>{{ component.properties.email }}</b>' .
+							'<span class="statement">LOAD APPOINTMENTS</span> <b>{{ component.properties.mode }}</b> <b>{{ component.properties.context_id }}</b> <span class="statement">FOR</span> <b>{{ component.properties.email }}</b>' .
 							'</div>'
 					),
 					'_help' =>  array(
@@ -489,7 +489,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 					'_preview_angular' => array(
 						'type' => 'html',
 						'template' => '<div class="code">' .
-							'Create <b>{{ component.properties.context_id }}</b> for <b>{{ component.properties.email }}</b>' .
+							'<span class="statement">CREATE APPOINTMENT</span> <b>{{ component.properties.context_id }}</b> <span class="statement">FOR</span> <b>{{ component.properties.email }}</b>' .
 							'</div>'
 					),
 					'_help' =>  array(
@@ -599,7 +599,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 					'_preview_angular' => array(
 						'type' => 'html',
 						'template' => '<div class="code">' .
-							'Update <b>{{ component.properties.context_id }}</b> <b>{{ component.properties.appointment_id }}</b> for <b>{{ component.properties.email }}</b> ' .
+							'<span class="statement">UPDATE APPOINTMENT</span> <b>{{ component.properties.context_id }}</b> <b>{{ component.properties.appointment_id }}</b> <span class="statement">FOR</span> <b>{{ component.properties.email }}</b> ' .
 							'</div>'
 					),
 					'_help' =>  array(
@@ -671,7 +671,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 					'_preview_angular' => array(
 						'type' => 'html',
 						'template' => '<div class="code">' .
-							'Cancel <b>{{ component.properties.context_id }}</b> <b>{{ component.properties.appointment_id }}</b> for <b>{{ component.properties.email }}</b>' .
+							'<span class="statement">CANCEL APPOINTMENT</span> <b>{{ component.properties.context_id }}</b> <b>{{ component.properties.appointment_id }}</b> <span class="statement">FOR</span> <b>{{ component.properties.email }}</b>' .
 							'</div>'
 					),
 					'_help' =>  array(
@@ -747,7 +747,7 @@ class AppointmentsPackageDefinition extends AbstractPackageDefinition
 			        '_preview_angular' => array(
 			            'type' => 'html',
 			            'template' => '<div class="code">' .
-			            '<span class="statement">Dummy Appointments </span> <b>[{{ contextElement.properties.id }}]</b>' .
+			            '<span class="statement">DUMMY APPOINTMENTS CONTEXT </span> <b>[{{ contextElement.properties.id }}]</b>' .
 			            '</div>'
 			        ),
 			        '_workflow' => 'datasource',
