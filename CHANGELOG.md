@@ -4,6 +4,10 @@
 
 ## [Releases]
 
+## 1.2.1 - 2023-04-14
+
+* Few preview and editor related fixes
+
 ## 1.2.0 - 2022-12-27
 
 * Suggestions builder changes
