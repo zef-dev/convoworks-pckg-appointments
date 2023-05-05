@@ -2,6 +2,8 @@
 
 ## [Current development]
 
+* Use timezone from timezone aware request if possible
+
 ## [Releases]
 
 ## 1.2.1 - 2023-04-14

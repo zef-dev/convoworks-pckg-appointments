@@ -86,8 +86,12 @@ abstract class AbstractAppointmentElement extends AbstractWorkflowContainerCompo
 	    }
 	    
 	    if ( $mode === self::TIMEZONE_MODE_CLIENT) {
-	        if (is_a($request,\Convo\Core\Adapters\Alexa\AmazonCommandRequest::class)) {
+	        if ( is_a( $request, \Convo\Core\Adapters\Alexa\AmazonCommandRequest::class)) {
 	            return $this->_alexaSettingsApi->getTimezone( $request);
+	        }
+	        if ( is_a( $request, \Convo\Core\Workflow\ITimezoneAwareRequest::class)) {
+	            /* @var \Convo\Core\Workflow\ITimezoneAwareRequest $request */
+	            return $request->getTimeZone();
 	        }
 	        return $this->_getAppointmentsContext()->getDefaultTimezone();
 	    } 
