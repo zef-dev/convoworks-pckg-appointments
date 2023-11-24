@@ -6,6 +6,10 @@
 
 ## [Releases]
 
+## 1.3.0 - 2023-11-24
+
+* Add support for a `ITimezoneAwareRequest` request
+
 ## 1.2.1 - 2023-04-14
 
 * Few preview and editor related fixes
