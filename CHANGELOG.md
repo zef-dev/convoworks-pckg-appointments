@@ -2,9 +2,11 @@
 
 ## [Current development]
 
-* Use timezone from timezone aware request if possible
-
 ## [Releases]
+
+## 1.4.0 - 2024-12-07
+
+* Added `SimpleFreeSlotGenerator` for simple listing of all available slots
 
 ## 1.3.0 - 2023-11-24
 
