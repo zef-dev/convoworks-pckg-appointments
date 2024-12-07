@@ -29,62 +29,63 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
      */
     private $_maxSuggestions;
 
-	public function __construct( $properties)
-	{
-		parent::__construct( $properties);
-		$this->_maxSuggestions    =   $properties['max_suggestions'];
-	}
+    public function __construct($properties)
+    {
+        parent::__construct($properties);
+        $this->_maxSuggestions    =   $properties['max_suggestions'];
+    }
 
-	/**
-	 * {@inheritDoc}
-	 * @see \Convo\Pckg\Appointments\Freeslot\IFreeSlotQueueFactory::createStack()
-	 */
-	public function createStack( $targetTime, $systemTimezone) {
+    /**
+     * {@inheritDoc}
+     * @see \Convo\Pckg\Appointments\Freeslot\IFreeSlotQueueFactory::createStack()
+     */
+    public function createStack($targetTime, $systemTimezone)
+    {
 
-	    $queue    =   new FreeSlotQueue( $systemTimezone, $this->evaluateString( $this->_maxSuggestions));
+        $queue    =   new FreeSlotQueue($systemTimezone, $this->evaluateString($this->_maxSuggestions), 2);
 
-	    $queue->addValidator( $this->_create( self::KEY_FIRST_NEXT, $targetTime));
+        $queue->addValidator($this->_create(self::KEY_FIRST_NEXT, $targetTime));
 
-        $queue->addValidator( $this->_create( self::KEY_SAME_DAY_TIME_BEFORE_REQUEST_TIME, $targetTime));
-        $queue->addValidator( $this->_create( self::KEY_SAME_DAY_TIME_AFTER_REQUEST_TIME, $targetTime));
-        $queue->addValidator( $this->_create( self::KEY_NEXT_DAY_SAME_TIME, $targetTime));
+        $queue->addValidator($this->_create(self::KEY_SAME_DAY_TIME_BEFORE_REQUEST_TIME, $targetTime));
+        $queue->addValidator($this->_create(self::KEY_SAME_DAY_TIME_AFTER_REQUEST_TIME, $targetTime));
+        $queue->addValidator($this->_create(self::KEY_NEXT_DAY_SAME_TIME, $targetTime));
 
-        $queue->addValidator( $this->_create( self::KEY_NEXT_DAY_TIME_BEFORE_REQUEST_TIME_IF_REQUEST_DAY_IS_NOT_PRESENT, $targetTime));
-        $queue->addValidator( $this->_create( self::KEY_NEXT_DAY_TIME_AFTER_REQUEST_TIME_IF_REQUEST_DAY_IS_NOT_PRESENT, $targetTime));
-        $queue->addValidator( $this->_create( self::KEY_NEXT_WEEK_SAME_TIME_IF_REQUEST_DAY_IS_NOT_PRESENT, $targetTime));
+        $queue->addValidator($this->_create(self::KEY_NEXT_DAY_TIME_BEFORE_REQUEST_TIME_IF_REQUEST_DAY_IS_NOT_PRESENT, $targetTime));
+        $queue->addValidator($this->_create(self::KEY_NEXT_DAY_TIME_AFTER_REQUEST_TIME_IF_REQUEST_DAY_IS_NOT_PRESENT, $targetTime));
+        $queue->addValidator($this->_create(self::KEY_NEXT_WEEK_SAME_TIME_IF_REQUEST_DAY_IS_NOT_PRESENT, $targetTime));
 
-        $queue->addValidator( $this->_create( self::KEY_DAY_BEFORE_SAME_TIME_IF_REQUEST_DAY_AND_DAY_AFTER_IS_NOT_PRESENT, $targetTime));
-        $queue->addValidator( $this->_create( self::KEY_NEXT_DAY_TIME_BEFORE_REQUEST_TIME_IF_REQUEST_DAY_AND_DAY_AFTER_IS_NOT_PRESENT, $targetTime));
-        $queue->addValidator( $this->_create( self::KEY_NEXT_DAY_TIME_AFTER_REQUEST_TIME_IF_REQUEST_DAY_AND_DAY_AFTER_IS_NOT_PRESENT, $targetTime));
-        $queue->addValidator( $this->_create( self::KEY_NEXT_WEEK_SAME_TIME_IF_REQUEST_DAY_AND_DAY_AFTER_IS_NOT_PRESENT, $targetTime));
+        $queue->addValidator($this->_create(self::KEY_DAY_BEFORE_SAME_TIME_IF_REQUEST_DAY_AND_DAY_AFTER_IS_NOT_PRESENT, $targetTime));
+        $queue->addValidator($this->_create(self::KEY_NEXT_DAY_TIME_BEFORE_REQUEST_TIME_IF_REQUEST_DAY_AND_DAY_AFTER_IS_NOT_PRESENT, $targetTime));
+        $queue->addValidator($this->_create(self::KEY_NEXT_DAY_TIME_AFTER_REQUEST_TIME_IF_REQUEST_DAY_AND_DAY_AFTER_IS_NOT_PRESENT, $targetTime));
+        $queue->addValidator($this->_create(self::KEY_NEXT_WEEK_SAME_TIME_IF_REQUEST_DAY_AND_DAY_AFTER_IS_NOT_PRESENT, $targetTime));
 
-	    return $queue;
-	}
+        return $queue;
+    }
 
-	private function _create( $key, $targetTime)
-	{
-	    if ( $key == self::KEY_FIRST_NEXT) {
-	        return new DefaultFreeSlotValidator( $targetTime);
-	    }
+    private function _create($key, $targetTime)
+    {
+        if ($key == self::KEY_FIRST_NEXT) {
+            return new DefaultFreeSlotValidator($targetTime);
+        }
 
         if ($key === self::KEY_SAME_DAY_TIME_BEFORE_REQUEST_TIME) {
-            $newClass = new class( $targetTime) extends DefaultFreeSlotValidator {
+            $newClass = new class($targetTime) extends DefaultFreeSlotValidator {
                 /** @var \Psr\Log\LoggerInterface */
                 private $_logger;
                 private $_array = [];
                 private $_daysPassedSinceTargetDay = 0;
                 private $_targetDayAsNumber = 0;
 
-                public function add( $item)
+                public function add($item)
                 {
-                    $itemDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
-                    $requestDay = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->format('Y-m-d');
+                    $itemDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
+                    $requestDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d');
 
-                    $time = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('Y-m-d H:i');
+                    $time = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d H:i');
 
                     if ($itemDay === $requestDay) {
                         $this->_targetDayAsNumber = intval(str_replace('-', '', $itemDay)) + 1;
-                        $targetTime = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d H:i');
+                        $targetTime = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d H:i');
                         $this->_array[] = $targetTime;
                     }
 
@@ -124,7 +125,8 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
                     return $arr[0] * 60 + $arr[1];
                 }
 
-                public function setLogger($logger) {
+                public function setLogger($logger)
+                {
                     $this->_logger = $logger;
                 }
             };
@@ -133,24 +135,24 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
         }
 
         if ($key === self::KEY_SAME_DAY_TIME_AFTER_REQUEST_TIME) {
-            $newClass = new class( $targetTime) extends DefaultFreeSlotValidator {
+            $newClass = new class($targetTime) extends DefaultFreeSlotValidator {
                 /**
                  * @var \Psr\Log\LoggerInterface
                  */
                 private $_logger;
 
-                public function add( $item)
+                public function add($item)
                 {
-                    $requestDay = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->format('Y-m-d');
-                    $time = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('H:i');
+                    $requestDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d');
+                    $time = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('H:i');
 
-                    $itemDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
+                    $itemDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
 
                     if ($itemDay === $requestDay) {
-                        $targetTime = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('H:i');
+                        $targetTime = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('H:i');
                         if ($this->_timeToSeconds($targetTime) > $this->_timeToSeconds($time)) {
                             $this->_logger->info('Adding time slot after requested time slot on the same day.');
-                            return parent::add( $item);
+                            return parent::add($item);
                         }
                     }
                     return false;
@@ -165,7 +167,8 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
                     return $arr[0] * 60 + $arr[1];
                 }
 
-                public function setLogger($logger) {
+                public function setLogger($logger)
+                {
                     $this->_logger = $logger;
                 }
             };
@@ -174,30 +177,31 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
         }
 
         if ($key === self::KEY_NEXT_DAY_SAME_TIME) {
-            $newClass = new class( $targetTime) extends DefaultFreeSlotValidator {
+            $newClass = new class($targetTime) extends DefaultFreeSlotValidator {
                 /**
                  * @var \Psr\Log\LoggerInterface
                  */
                 private $_logger;
 
-                public function add( $item)
+                public function add($item)
                 {
                     $nextDayPeriod = new \DateInterval('P1D');
-                    $nextDay = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
-                    $time = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('H:i');
+                    $nextDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
+                    $time = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('H:i');
 
-                    $itemDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
+                    $itemDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
                     if ($itemDay === $nextDay) {
-                        $targetTime = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('H:i');
+                        $targetTime = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('H:i');
                         if ($time === $targetTime) {
                             $this->_logger->info('Adding same time slot for the next day.');
-                            return parent::add( $item);
+                            return parent::add($item);
                         }
                     }
                     return false;
                 }
 
-                public function setLogger($logger) {
+                public function setLogger($logger)
+                {
                     $this->_logger = $logger;
                 }
             };
@@ -206,30 +210,30 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
         }
 
         if ($key === self::KEY_NEXT_DAY_TIME_BEFORE_REQUEST_TIME_IF_REQUEST_DAY_IS_NOT_PRESENT) {
-            $newClass = new class( $targetTime) extends DefaultFreeSlotValidator {
+            $newClass = new class($targetTime) extends DefaultFreeSlotValidator {
                 /** @var \Psr\Log\LoggerInterface */
                 private $_logger;
                 private $_array;
                 private $_daysPassedSinceTargetDay = 0;
                 private $_isDayReallyMissing = true;
                 private $_targetDayAsNumber = 0;
-                public function add( $item)
+                public function add($item)
                 {
                     $nextDayPeriod = new \DateInterval('P1D');
-                    $nextDay = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
-                    $requestDay = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('Y-m-d');
-                    $time = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('Y-m-d H:i');
+                    $nextDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
+                    $requestDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d');
+                    $time = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d H:i');
 
-                    $itemDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
+                    $itemDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
 
                     if ($requestDay === $itemDay) {
                         $this->_isDayReallyMissing = false;
                     }
 
                     if ($itemDay === $nextDay) {
-                        $targetDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
+                        $targetDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
                         $this->_targetDayAsNumber = intval(str_replace('-', '', $targetDay));
-                        $targetTime = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d H:i');
+                        $targetTime = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d H:i');
                         $this->_array[] = $targetTime;
                     }
 
@@ -267,7 +271,8 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
                     return $arr[0] * 60 + $arr[1];
                 }
 
-                public function setLogger($logger) {
+                public function setLogger($logger)
+                {
                     $this->_logger = $logger;
                 }
             };
@@ -276,7 +281,7 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
         }
 
         if ($key === self::KEY_NEXT_DAY_TIME_AFTER_REQUEST_TIME_IF_REQUEST_DAY_IS_NOT_PRESENT) {
-            $newClass = new class( $targetTime) extends DefaultFreeSlotValidator {
+            $newClass = new class($targetTime) extends DefaultFreeSlotValidator {
                 /**
                  * @var \Psr\Log\LoggerInterface
                  */
@@ -284,23 +289,23 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
 
                 private $_isDayReallyMissing = true;
 
-                public function add( $item)
+                public function add($item)
                 {
                     $nextDayPeriod = new \DateInterval('P1D');
-                    $nextDay = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
-                    $time = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('H:i');
-                    $requestDay = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('Y-m-d');
-                    $itemDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
+                    $nextDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
+                    $time = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('H:i');
+                    $requestDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d');
+                    $itemDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
 
                     if ($requestDay === $itemDay) {
                         $this->_isDayReallyMissing = false;
                     }
 
                     if ($itemDay === $nextDay && $this->_isDayReallyMissing) {
-                        $targetTime = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('H:i');
+                        $targetTime = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('H:i');
                         if ($this->_timeToSeconds($targetTime) >= $this->_timeToSeconds($time)) {
                             $this->_logger->info('Adding time slot after requested time slot on the next day.');
-                            return parent::add( $item);
+                            return parent::add($item);
                         }
                     }
                     return false;
@@ -315,7 +320,8 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
                     return $arr[0] * 60 + $arr[1];
                 }
 
-                public function setLogger($logger) {
+                public function setLogger($logger)
+                {
                     $this->_logger = $logger;
                 }
             };
@@ -324,7 +330,7 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
         }
 
         if ($key === self::KEY_NEXT_WEEK_SAME_TIME_IF_REQUEST_DAY_IS_NOT_PRESENT) {
-            $newClass = new class( $targetTime) extends DefaultFreeSlotValidator {
+            $newClass = new class($targetTime) extends DefaultFreeSlotValidator {
                 /**
                  * @var \Psr\Log\LoggerInterface
                  */
@@ -332,32 +338,33 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
 
                 private $_isDayReallyMissing = true;
 
-                public function add( $item)
+                public function add($item)
                 {
 
                     $nextWeekPeriod = new \DateInterval('P1W');
-                    $nextWeek = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->add($nextWeekPeriod)->getTimestamp();
-                    $time = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('H:i');
-                    $itemDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->getTimestamp();
+                    $nextWeek = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->add($nextWeekPeriod)->getTimestamp();
+                    $time = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('H:i');
+                    $itemDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->getTimestamp();
 
-                    $requestDay = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('Y-m-d');
-                    $itemDayFormatted = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
+                    $requestDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d');
+                    $itemDayFormatted = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
 
                     if ($requestDay === $itemDayFormatted) {
                         $this->_isDayReallyMissing = false;
                     }
 
                     if ($itemDay >= $nextWeek && $this->_isDayReallyMissing) {
-                        $targetTime = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('H:i');
+                        $targetTime = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('H:i');
                         if ($time === $targetTime) {
                             $this->_logger->info('Adding same time slot in one week time period.');
-                            return parent::add( $item);
+                            return parent::add($item);
                         }
                     }
                     return false;
                 }
 
-                public function setLogger($logger) {
+                public function setLogger($logger)
+                {
                     $this->_logger = $logger;
                 }
             };
@@ -366,30 +373,30 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
         }
 
         if ($key === self::KEY_NEXT_DAY_TIME_BEFORE_REQUEST_TIME_IF_REQUEST_DAY_IS_NOT_PRESENT) {
-            $newClass = new class( $targetTime) extends DefaultFreeSlotValidator {
+            $newClass = new class($targetTime) extends DefaultFreeSlotValidator {
                 /** @var \Psr\Log\LoggerInterface */
                 private $_logger;
                 private $_array;
                 private $_daysPassedSinceTargetDay = 0;
                 private $_isRequestDayReallyMissing = true;
                 private $_targetDayAsNumber = 0;
-                public function add( $item)
+                public function add($item)
                 {
                     $nextDayPeriod = new \DateInterval('P1D');
-                    $nextDay = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
-                    $requestDay = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('Y-m-d');
-                    $time = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('Y-m-d H:i');
+                    $nextDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
+                    $requestDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d');
+                    $time = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d H:i');
 
-                    $itemDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
+                    $itemDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
 
                     if ($requestDay === $itemDay) {
                         $this->_isRequestDayReallyMissing = false;
                     }
 
                     if ($itemDay === $nextDay) {
-                        $targetDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
+                        $targetDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
                         $this->_targetDayAsNumber = intval(str_replace('-', '', $targetDay));
-                        $targetTime = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d H:i');
+                        $targetTime = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d H:i');
                         $this->_array[] = $targetTime;
                     }
 
@@ -427,7 +434,8 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
                     return $arr[0] * 60 + $arr[1];
                 }
 
-                public function setLogger($logger) {
+                public function setLogger($logger)
+                {
                     $this->_logger = $logger;
                 }
             };
@@ -436,7 +444,7 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
         }
 
         if ($key === self::KEY_NEXT_DAY_TIME_AFTER_REQUEST_TIME_IF_REQUEST_DAY_IS_NOT_PRESENT) {
-            $newClass = new class( $targetTime) extends DefaultFreeSlotValidator {
+            $newClass = new class($targetTime) extends DefaultFreeSlotValidator {
                 /**
                  * @var \Psr\Log\LoggerInterface
                  */
@@ -444,23 +452,23 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
 
                 private $_isDayReallyMissing = true;
 
-                public function add( $item)
+                public function add($item)
                 {
                     $nextDayPeriod = new \DateInterval('P1D');
-                    $nextDay = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
-                    $time = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('H:i');
-                    $requestDay = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('Y-m-d');
-                    $itemDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
+                    $nextDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
+                    $time = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('H:i');
+                    $requestDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d');
+                    $itemDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
 
                     if ($requestDay === $itemDay) {
                         $this->_isDayReallyMissing = false;
                     }
 
                     if ($itemDay === $nextDay && $this->_isDayReallyMissing) {
-                        $targetTime = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('H:i');
+                        $targetTime = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('H:i');
                         if ($this->_timeToSeconds($targetTime) >= $this->_timeToSeconds($time)) {
                             $this->_logger->info('Adding time slot after requested time slot on the next day if day is booked.');
-                            return parent::add( $item);
+                            return parent::add($item);
                         }
                     }
                     return false;
@@ -475,7 +483,8 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
                     return $arr[0] * 60 + $arr[1];
                 }
 
-                public function setLogger($logger) {
+                public function setLogger($logger)
+                {
                     $this->_logger = $logger;
                 }
             };
@@ -484,7 +493,7 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
         }
 
         if ($key === self::KEY_NEXT_DAY_TIME_BEFORE_REQUEST_TIME_IF_REQUEST_DAY_AND_DAY_AFTER_IS_NOT_PRESENT) {
-            $newClass = new class( $targetTime) extends DefaultFreeSlotValidator {
+            $newClass = new class($targetTime) extends DefaultFreeSlotValidator {
                 /** @var \Psr\Log\LoggerInterface */
                 private $_logger;
 
@@ -498,16 +507,16 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
 
                 private $_targetDayAsNumber = 0;
 
-                public function add( $item)
+                public function add($item)
                 {
                     $nextDayPeriod = new \DateInterval('P1D');
                     $dayAfterNonWorking2DaysPeriod = new \DateInterval('P2D');
-                    $nextDay = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
-                    $dayAfterNonWorking2Days = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->add($dayAfterNonWorking2DaysPeriod)->format('Y-m-d');
-                    $requestDay = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('Y-m-d');
-                    $time = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('Y-m-d H:i');
+                    $nextDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
+                    $dayAfterNonWorking2Days = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->add($dayAfterNonWorking2DaysPeriod)->format('Y-m-d');
+                    $requestDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d');
+                    $time = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d H:i');
 
-                    $itemDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
+                    $itemDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
 
                     if ($requestDay === $itemDay) {
                         $this->_isRequestDayReallyMissing = false;
@@ -518,9 +527,9 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
                     }
 
                     if ($itemDay === $dayAfterNonWorking2Days) {
-                        $targetDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
+                        $targetDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
                         $this->_targetDayAsNumber = intval(str_replace('-', '', $targetDay));
-                        $targetTime = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d H:i');
+                        $targetTime = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d H:i');
                         $this->_array[] = $targetTime;
                     }
 
@@ -558,7 +567,8 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
                     return $arr[0] * 60 + $arr[1];
                 }
 
-                public function setLogger($logger) {
+                public function setLogger($logger)
+                {
                     $this->_logger = $logger;
                 }
             };
@@ -567,7 +577,7 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
         }
 
         if ($key === self::KEY_NEXT_DAY_TIME_AFTER_REQUEST_TIME_IF_REQUEST_DAY_AND_DAY_AFTER_IS_NOT_PRESENT) {
-            $newClass = new class( $targetTime) extends DefaultFreeSlotValidator {
+            $newClass = new class($targetTime) extends DefaultFreeSlotValidator {
                 /** @var \Psr\Log\LoggerInterface */
                 private $_logger;
 
@@ -575,16 +585,16 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
 
                 private $_isDayAfterReallyMissing = true;
 
-                public function add( $item)
+                public function add($item)
                 {
                     $nextDayPeriod = new \DateInterval('P1D');
                     $dayAfterNonWorking2DaysPeriod = new \DateInterval('P2D');
-                    $nextDay = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
-                    $dayAfterNonWorking2Days = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->add($dayAfterNonWorking2DaysPeriod)->format('Y-m-d');
-                    $requestDay = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('Y-m-d');
-                    $time = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('H:i');
+                    $nextDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
+                    $dayAfterNonWorking2Days = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->add($dayAfterNonWorking2DaysPeriod)->format('Y-m-d');
+                    $requestDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d');
+                    $time = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('H:i');
 
-                    $itemDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
+                    $itemDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
 
                     if ($requestDay === $itemDay) {
                         $this->_isRequestDayReallyMissing = false;
@@ -595,10 +605,10 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
                     }
 
                     if ($itemDay === $dayAfterNonWorking2Days && $this->_isRequestDayReallyMissing && $this->_isDayAfterReallyMissing) {
-                        $targetTime = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('H:i');
+                        $targetTime = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('H:i');
                         if ($this->_timeToSeconds($targetTime) >= $this->_timeToSeconds($time)) {
                             $this->_logger->info('Adding time slot before requested time slot on the day after if request day and day after is booked.');
-                            return parent::add( $item);
+                            return parent::add($item);
                         }
                     }
 
@@ -614,7 +624,8 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
                     return $arr[0] * 60 + $arr[1];
                 }
 
-                public function setLogger($logger) {
+                public function setLogger($logger)
+                {
                     $this->_logger = $logger;
                 }
             };
@@ -622,8 +633,8 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
             return $newClass;
         }
 
-        if ( $key == self::KEY_DAY_BEFORE_SAME_TIME_IF_REQUEST_DAY_AND_DAY_AFTER_IS_NOT_PRESENT) {
-            $newClass = new class( $targetTime) extends DefaultFreeSlotValidator {
+        if ($key == self::KEY_DAY_BEFORE_SAME_TIME_IF_REQUEST_DAY_AND_DAY_AFTER_IS_NOT_PRESENT) {
+            $newClass = new class($targetTime) extends DefaultFreeSlotValidator {
                 /**
                  * @var \Psr\Log\LoggerInterface
                  */
@@ -635,18 +646,18 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
 
                 private $_timeSlotBefore = 0;
 
-                public function add( $item)
+                public function add($item)
                 {
                     $nextDayPeriod = new \DateInterval('P1D');
-                    $dayBefore = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->sub($nextDayPeriod)->format('Y-m-d');
-                    $itemDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->getTimestamp();
+                    $dayBefore = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->sub($nextDayPeriod)->format('Y-m-d');
+                    $itemDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->getTimestamp();
 
-                    $time = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('H:i');
+                    $time = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('H:i');
 
-                    $nextDay = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
-                    $requestDay = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('Y-m-d');
-                    $itemDayFormatted = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
-                    $itemTimeFormatted = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('H:i');
+                    $nextDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
+                    $requestDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d');
+                    $itemDayFormatted = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
+                    $itemTimeFormatted = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('H:i');
 
                     if ($itemDayFormatted === $dayBefore) {
                         if ($time === $itemTimeFormatted) {
@@ -665,13 +676,14 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
                     if ($this->_isRequestDayReallyMissing && $this->_isDayAfterReallyMissing) {
                         if (!empty($this->_timeSlotBefore)) {
                             $this->_logger->info('Adding time slot before requested time slot on the day before if request day and day after is booked.');
-                            return parent::add( ['timestamp' => $this->_timeSlotBefore]);
+                            return parent::add(['timestamp' => $this->_timeSlotBefore]);
                         }
                     }
                     return false;
                 }
 
-                public function setLogger($logger) {
+                public function setLogger($logger)
+                {
                     $this->_logger = $logger;
                 }
             };
@@ -679,8 +691,8 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
             return $newClass;
         }
 
-        if ( $key == self::KEY_NEXT_WEEK_SAME_TIME_IF_REQUEST_DAY_AND_DAY_AFTER_IS_NOT_PRESENT) {
-            $newClass = new class( $targetTime) extends DefaultFreeSlotValidator {
+        if ($key == self::KEY_NEXT_WEEK_SAME_TIME_IF_REQUEST_DAY_AND_DAY_AFTER_IS_NOT_PRESENT) {
+            $newClass = new class($targetTime) extends DefaultFreeSlotValidator {
                 /**
                  * @var \Psr\Log\LoggerInterface
                  */
@@ -690,19 +702,19 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
 
                 private $_isDayAfterReallyMissing = true;
 
-                public function add( $item)
+                public function add($item)
                 {
 
                     $nextWeekPeriod = new \DateInterval('P1W');
                     $nextDayPeriod = new \DateInterval('P1D');
-                    $nextWeek = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->add($nextWeekPeriod)->getTimestamp();
-                    $itemDay = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->getTimestamp();
+                    $nextWeek = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->add($nextWeekPeriod)->getTimestamp();
+                    $itemDay = \DateTime::createFromFormat('U', strval($item['timestamp']))->getTimestamp();
 
-                    $time = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('H:i');
+                    $time = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('H:i');
 
-                    $nextDay = \DateTime::createFromFormat( 'U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
-                    $requestDay = \DateTime::createFromFormat( 'U', strval( $this->_time->getTimestamp()))->format('Y-m-d');
-                    $itemDayFormatted = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('Y-m-d');
+                    $nextDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->add($nextDayPeriod)->format('Y-m-d');
+                    $requestDay = \DateTime::createFromFormat('U', strval($this->_time->getTimestamp()))->format('Y-m-d');
+                    $itemDayFormatted = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('Y-m-d');
 
                     if ($requestDay === $itemDayFormatted) {
                         $this->_isRequestDayReallyMissing = false;
@@ -714,17 +726,18 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
 
                     if ($this->_isRequestDayReallyMissing && $this->_isDayAfterReallyMissing) {
                         if ($itemDay >= $nextWeek) {
-                            $targetTime = \DateTime::createFromFormat( 'U', strval($item['timestamp']))->format('H:i');
+                            $targetTime = \DateTime::createFromFormat('U', strval($item['timestamp']))->format('H:i');
                             if ($time === $targetTime) {
                                 $this->_logger->info('Adding time slot in next week period slot on the day before if request day and day after is booked.');
-                                return parent::add( $item);
+                                return parent::add($item);
                             }
                         }
                     }
                     return false;
                 }
 
-                public function setLogger($logger) {
+                public function setLogger($logger)
+                {
                     $this->_logger = $logger;
                 }
             };
@@ -732,14 +745,12 @@ class DefaultFreeSlotQueue extends AbstractWorkflowComponent implements IFreeSlo
             return $newClass;
         }
 
-        throw new \Exception( 'Unexpected key ['.$key.']');
-	}
+        throw new \Exception('Unexpected key [' . $key . ']');
+    }
 
     // UTIL
     public function __toString()
     {
-        return parent::__toString().'['.$this->_maxSuggestions.']';
+        return parent::__toString() . '[' . $this->_maxSuggestions . ']';
     }
-
-
 }
