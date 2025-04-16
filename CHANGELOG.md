@@ -4,6 +4,10 @@
 
 ## [Releases]
 
+## 1.4.1 - 2025-04-16
+
+* Remove service templates
+  
 ## 1.4.0 - 2024-12-07
 
 * Added `SimpleFreeSlotGenerator` for simple listing of all available slots
