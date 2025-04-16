@@ -5,6 +5,5 @@
     "source_for": [
         "elements", "templates"
     ],
-    "description": "Contains conversational workflow elements for managing appointment scheduling scenarios in the Convoworks framework.",
-    "stability": "experimental"
+    "description": "Contains conversational workflow elements for managing appointment scheduling scenarios in the Convoworks framework."
 }
